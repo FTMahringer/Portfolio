@@ -1,65 +1,103 @@
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
+import { getAllProjects, getAllBlogPosts, getAllExperience } from '@/lib/mdx';
+import { getSiteConfig } from '@/lib/config';
+import ProjectGrid from '@/components/projects/ProjectGrid';
+import BlogCard from '@/components/blog/BlogCard';
+import Button from '@/components/ui/Button';
+import Badge from '@/components/ui/Badge';
 
-export default function Home() {
+const HERO_SKILLS = ['Next.js', 'TypeScript', 'Java', 'Spring Boot', 'Docker', 'Linux', 'K3s'];
+
+export default function HomePage() {
+  const allProjects = getAllProjects();
+  const featured = allProjects.filter(p => p.frontmatter.featured);
+  const latestPosts = getAllBlogPosts().slice(0, 3);
+  const allExperience = getAllExperience();
+  const config = getSiteConfig();
+  const { site } = config;
+
+  const stats = [
+    { label: 'Projects', value: allProjects.length },
+    { label: 'Experience entries', value: allExperience.length },
+    { label: 'Blog posts', value: getAllBlogPosts().length },
+  ].filter(s => s.value > 0);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-24">
+      {/* Hero */}
+      <section className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[var(--border)] bg-[var(--muted-bg)] flex-shrink-0">
+          <Image
+            src={site.avatar}
+            alt={site.title}
+            fill
+            className="object-cover"
+            sizes="112px"
+            priority
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="space-y-4 flex-1">
+          <div>
+            <p className="text-sm font-mono text-[var(--accent)] mb-1">Hi, I&apos;m</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-[var(--foreground)] tracking-tight">
+              {site.title}
+            </h1>
+          </div>
+          <p className="text-lg text-[var(--muted)] max-w-2xl leading-relaxed">{site.bio}</p>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {HERO_SKILLS.map(skill => (
+              <Badge key={skill}>{skill}</Badge>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button href="/projects">View Projects</Button>
+            <Button href="/contact" variant="secondary">Get in Touch</Button>
+            <Button href="/resume" variant="ghost">Resume ↓</Button>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Quick stats bar */}
+      {stats.length > 0 && (
+        <section>
+          <div className="flex flex-wrap gap-6 py-4 border-y border-[var(--border)]">
+            {stats.map((s, i) => (
+              <div key={i} className="flex items-center gap-1.5">
+                <span className="text-xl font-bold text-[var(--accent)]">{s.value}</span>
+                <span className="text-sm text-[var(--muted)]">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Featured Projects */}
+      {featured.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-[var(--foreground)]">Featured Projects</h2>
+            <Link href="/projects" className="text-sm text-[var(--accent)] hover:underline">All projects →</Link>
+          </div>
+          <ProjectGrid projects={featured} />
+        </section>
+      )}
+
+      {/* Latest Blog Posts */}
+      {latestPosts.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-[var(--foreground)]">Latest Posts</h2>
+            <Link href="/blog" className="text-sm text-[var(--accent)] hover:underline">All posts →</Link>
+          </div>
+          <div className="grid gap-4">
+            {latestPosts.map(post => (
+              <BlogCard key={post.slug} post={post} />
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
   );
 }

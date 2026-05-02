@@ -1,0 +1,54 @@
+---
+title: "Home Lab Infrastructure"
+slug: "homelab-setup"
+summary: "A self-hosted home lab with OPNsense, VLANs, a K3s Kubernetes cluster, and multiple self-hosted services running on bare metal and VMs."
+category: "Infrastructure / Homelab"
+status: "Work in Progress"
+featured: true
+startDate: "2024-01"
+endDate: null
+stack:
+  - "OPNsense"
+  - "K3s"
+  - "Proxmox"
+  - "Docker"
+  - "Nginx Proxy Manager"
+  - "Linux"
+github: null
+demo: null
+image: null
+---
+
+## Overview
+
+My home lab is a self-hosted infrastructure setup I use for learning, experimenting, and running personal services. It mirrors real-world enterprise setups on a smaller scale.
+
+## Why I built it
+
+I wanted hands-on experience with networking, Linux administration, and container orchestration outside of a purely theoretical environment. The home lab forces me to solve real problems.
+
+## Technical Implementation
+
+### Network
+- **OPNsense** as the main firewall and router
+- Multiple **VLANs** separating trusted devices, IoT, and servers
+- **Nginx Proxy Manager** for reverse proxying services with Let's Encrypt HTTPS
+
+### Compute
+- **Proxmox** on a home server running several virtual machines
+- A **K3s** (lightweight Kubernetes) cluster for containerized workloads
+- **Docker Compose** for simpler single-host services
+
+### Services
+- Self-hosted Git, monitoring stack (Grafana + Prometheus), and media services
+- Internal **DNS** for local resolution of all services
+
+## What I learned
+
+Hands-on network segmentation, Kubernetes workload management, certificate lifecycle management, and how enterprise networking concepts apply in practice.
+
+## Next Steps
+
+- Expand the K3s cluster with additional nodes
+- Set up automated offsite backups
+- Add proper alerting with Grafana Alertmanager
