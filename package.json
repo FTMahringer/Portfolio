@@ -1,5 +1,5 @@
 {
-  "name": "setup",
+  "name": "portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,26 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "@types/js-yaml": "^4.0.9",
+    "@types/marked": "^5.0.2",
+    "fuse.js": "^7.3.0",
+    "gray-matter": "^4.0.3",
+    "js-cookie": "^3.0.5",
+    "js-yaml": "^4.1.1",
+    "marked": "^18.0.3",
     "next": "16.2.4",
+    "next-mdx-remote": "^6.0.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-github-calendar": "^5.0.6",
+    "react-markdown": "^10.1.0",
+    "reading-time": "^1.5.0",
+    "rehype-pretty-code": "^0.14.3",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "resend": "^6.12.2",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -1,0 +1,30 @@
+site:
+  title: "Fynn Mahringer"
+  tagline: "Full-stack developer & open-source contributor"
+  url: "https://portfolio.ftmahringer.com"
+  email: "fynn@ftmahringer.com"
+  location: "Bad Hall, Austria"
+  # Supports any image in public/images/ — jpg, png, webp, etc.
+  avatar: "/images/avatar.jpg"
+  bio: "I develop for the web, working on open source projects, developer tools, and structured, maintainable systems."
+
+social:
+  github: "FTMahringer"
+  linkedin: "yourusername"
+  twitter: ""
+  instagram: ""
+  youtube: ""
+  email: "fynn@ftmahringer.com"
+
+contact:
+  resend_from: "Portfolio Contact <noreply@resend.dev>"
+  to: "contact@ftmahringer.com"
+
+# Skills shown in the About page sidebar (keep it short — 4–6 per category)
+sidebar_skills:
+  - category: "Frontend"
+    items: ["TypeScript", "React", "Next.js", "Tailwind CSS"]
+  - category: "Backend"
+    items: ["Java", "Spring Boot", "Node.js"]
+  - category: "Infrastructure"
+    items: ["Docker", "K3s", "Linux", "GitHub Actions"]
