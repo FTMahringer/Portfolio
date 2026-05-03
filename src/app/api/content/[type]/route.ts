@@ -68,6 +68,10 @@ export async function POST(
   if (!slug || typeof slug !== 'string') {
     return NextResponse.json({ error: '`slug` is required.' }, { status: 400 })
   }
+  // Prevent path traversal: only allow safe slug characters
+  if (!/^[a-zA-Z0-9_-]+$/.test(slug)) {
+    return NextResponse.json({ error: '`slug` may only contain letters, numbers, hyphens, and underscores.' }, { status: 400 })
+  }
   if (!content || typeof content !== 'string') {
     return NextResponse.json({ error: '`content` is required.' }, { status: 400 })
   }
@@ -75,7 +79,11 @@ export async function POST(
   const dir = path.join(process.cwd(), TYPE_PATHS[contentType])
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 
-  const filePath = path.join(dir, `${slug}.mdx`)
+  const filePath = path.resolve(dir, `${slug}.mdx`)
+  // Belt-and-suspenders: ensure resolved path stays inside dir
+  if (!filePath.startsWith(path.resolve(dir) + path.sep)) {
+    return NextResponse.json({ error: 'Invalid slug.' }, { status: 400 })
+  }
   if (fs.existsSync(filePath) && !overwrite) {
     return NextResponse.json({ error: `File "${slug}.mdx" already exists. Set overwrite: true to replace.` }, { status: 409 })
   }
