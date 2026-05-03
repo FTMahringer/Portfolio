@@ -81,17 +81,9 @@ export default function HomePage() {
 
       {/* Now Playing */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-[var(--foreground)]">
-            Currently Listening
-          </h2>
-          <Link
-            href="/music"
-            className="text-sm text-[var(--accent)] hover:underline"
-          >
-            View all →
-          </Link>
-        </div>
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">
+          Currently Listening
+        </h2>
         <SpotifyNowPlaying />
       </section>
 

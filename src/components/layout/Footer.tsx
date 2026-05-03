@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { VersionInfo } from './VersionInfo';
 
 export default function Footer() {
   return (
@@ -37,9 +38,13 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--muted)]">
-            © {new Date().getFullYear()} Fynn M. Built with Next.js &amp; Tailwind CSS.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+            <p className="text-xs text-[var(--muted)]">
+              © {new Date().getFullYear()} Fynn M. Built with Next.js &amp; Tailwind CSS.
+            </p>
+            <span className="hidden sm:inline text-xs text-[var(--muted)]">•</span>
+            <VersionInfo />
+          </div>
           <div className="flex items-center gap-4">
             <Link href="/contact" className="text-xs font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
               Get in touch

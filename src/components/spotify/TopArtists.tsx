@@ -116,7 +116,7 @@ export default function SpotifyTopArtists({ limit = 5, timeRange = 'medium_term'
                 {artist.name}
               </p>
               <p className="text-xs text-muted-foreground truncate">
-                {artist.genres.slice(0, 2).join(', ') || 'Artist'}
+                {artist.genres?.slice(0, 2).join(', ') || 'Artist'}
               </p>
             </div>
           </a>
