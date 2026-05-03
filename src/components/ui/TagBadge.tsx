@@ -1,7 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { TAG_COLORS, hashTagColor, slugifyTag, getTagColor } from '@/lib/tag-utils';
+import Link from "next/link";
+import {
+  TAG_COLORS,
+  hashTagColor,
+  slugifyTag,
+  getTagColor,
+} from "@/lib/tag-utils";
 
 interface TagBadgeProps {
   name: string;
@@ -12,7 +17,14 @@ interface TagBadgeProps {
   count?: number;
 }
 
-export function TagBadge({ name, colorIndex, href, onClick, className = '', count }: TagBadgeProps) {
+export function TagBadge({
+  name,
+  colorIndex,
+  href,
+  onClick,
+  className = "",
+  count,
+}: TagBadgeProps) {
   const slug = slugifyTag(name);
   const ci = colorIndex ?? hashTagColor(slug);
   const color = getTagColor(ci);
@@ -28,7 +40,11 @@ export function TagBadge({ name, colorIndex, href, onClick, className = '', coun
   );
 
   const commonCls = `inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border transition-opacity hover:opacity-75 ${className}`;
-  const style = { background: color.bg, borderColor: color.border, color: color.text };
+  const style = {
+    background: color.bg,
+    borderColor: color.border,
+    color: color.text,
+  };
 
   if (!to) {
     return (
@@ -46,14 +62,26 @@ export function TagBadge({ name, colorIndex, href, onClick, className = '', coun
 }
 
 // Non-linked variant (for inside card links)
-export function TagPill({ name, colorIndex, className = '' }: { name: string; colorIndex?: number; className?: string }) {
+export function TagPill({
+  name,
+  colorIndex,
+  className = "",
+}: {
+  name: string;
+  colorIndex?: number;
+  className?: string;
+}) {
   const slug = slugifyTag(name);
   const ci = colorIndex ?? hashTagColor(slug);
   const color = TAG_COLORS[ci % TAG_COLORS.length] ?? TAG_COLORS[0];
   return (
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${className}`}
-      style={{ background: color.bg, borderColor: color.border, color: color.text }}
+      style={{
+        background: color.bg,
+        borderColor: color.border,
+        color: color.text,
+      }}
     >
       {name}
     </span>

@@ -1,31 +1,37 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-const READING_ROUTES = ['/blog/', '/experience/']
+const READING_ROUTES = ["/blog/", "/experience/"];
 
 export function ReadingProgress() {
-  const pathname = usePathname()
-  const [progress, setProgress] = useState(0)
+  const pathname = usePathname();
+  const [progress, setProgress] = useState(0);
 
-  const active = READING_ROUTES.some(r => pathname.startsWith(r))
+  const active = READING_ROUTES.some((r) => pathname.startsWith(r));
 
   useEffect(() => {
-    if (!active) { setProgress(0); return }
-
-    function update() {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      setProgress(docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0)
+    if (!active) {
+      setProgress(0);
+      return;
     }
 
-    update()
-    window.addEventListener('scroll', update, { passive: true })
-    return () => window.removeEventListener('scroll', update)
-  }, [active, pathname])
+    function update() {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(
+        docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0,
+      );
+    }
 
-  if (!active) return null
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [active, pathname]);
+
+  if (!active) return null;
 
   return (
     <div className="fixed top-14 left-0 right-0 h-0.5 z-40 bg-[var(--border)]">
@@ -34,5 +40,5 @@ export function ReadingProgress() {
         style={{ width: `${progress}%` }}
       />
     </div>
-  )
+  );
 }

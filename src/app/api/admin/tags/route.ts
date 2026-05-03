@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateSession, SESSION_COOKIE_NAME } from '@/lib/auth';
-import { syncAndGetAllTags, createTag, deleteTag, getTagUsage } from '@/lib/tags';
-import { db } from '@/db';
-import { tags } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { syncAndGetAllTags, createTag, deleteTag } from '@/lib/tags';
 
 async function requireAuth(req: NextRequest) {
   const cookie = req.headers.get('cookie') ?? '';
@@ -37,6 +34,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(tag, { status: 201 });
   } catch (e) {
     console.error('POST /api/admin/tags', e);
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+  }
+}
+
+// DELETE — delete a tag by id (body: { id: number })
+export async function DELETE(req: NextRequest) {
+  if (!await requireAuth(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const { id } = await req.json();
+    if (!id || typeof id !== 'number') return NextResponse.json({ error: 'id required' }, { status: 400 });
+    await deleteTag(id);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error('DELETE /api/admin/tags', e);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

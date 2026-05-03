@@ -18,6 +18,7 @@ const NAV: { label: string | null; items: { href: string; label: string; icon: s
       { href: '/admin/new/blog',       label: 'New Blog Post',    icon: '📝' },
       { href: '/admin/new/projects',   label: 'New Project',      icon: '🚀' },
       { href: '/admin/new/experience', label: 'New Experience',   icon: '💼' },
+      { href: '/admin/tags',           label: 'Tags',             icon: '🏷️' },
     ],
   },
   {
