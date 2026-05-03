@@ -4,9 +4,9 @@
 
 ## Current State ✅
 
-The portfolio is fully built and deployed. All core phases are complete, including Phase 3 content pages.
+The portfolio is fully built and deployed. **Phases 1-4 complete**.
 
-**Stack:** Next.js 16, TypeScript, Tailwind CSS, MDX, SQLite + Drizzle ORM, Docker
+**Stack:** Next.js 16, TypeScript, Tailwind CSS, MDX, SQLite + Drizzle ORM, Docker, Framer Motion
 
 **Completed features:**
 - All public pages: Home, About, Projects (grid/list/filter), Experience (expandable detail), Skills, Blog, Contact (form + email), Resume, Tags (`/tags/[tag]`)
@@ -16,21 +16,19 @@ The portfolio is fully built and deployed. All core phases are complete, includi
 - Table of contents: Auto-generated from MDX headings, sticky sidebar on desktop, intersection observer for active state
 - Admin dashboard (`/admin`): session + OIDC auth, content creation wizards (blog/project/experience), DB viewer, API docs, auth providers, tag management
 - Tag system: centralized DB, color-coded pills, filter bars on /projects and /blog, CSV import/export, `config/initial-tags.csv` seed file
-- Settings drawer: theme (dark/light/auto), accent color, font size slider, reduced motion, project view (grid/list/card size), colorblind modes — saved in cookies, draggable panel
+- Settings drawer: theme (dark/light/auto), accent color, **font family (serif/sans/mono)**, font size slider, reduced motion, project view (grid/list/card size), colorblind modes, **comments toggle** — saved in cookies, draggable panel
+- **Page transitions**: Smooth route changes with framer-motion AnimatePresence, respects reduced motion
+- **Comments**: Giscus (GitHub Discussions) on blog posts and project pages with theme sync and settings toggle
 - Site-wide search: Cmd+K command palette + Fuse.js
 - OpenGraph images (next/og), sitemap.xml, JSON-LD structured data
 - Docker + GHCR/Docker Hub publishing, auto-release CI/CD on `package.json` version bump
-- `config/site.yaml`: central config for name, title, contact links, social URLs
+- `config/site.yaml`: central config for name, title, contact links, social URLs, giscus settings
 
 ---
 
-## Planned: Phase 4 — Settings & Polish
+## Future Ideas
 
-| ID | Feature | Description | Status |
-|----|---------|-------------|--------|
-| `font-selector` | **Font family selector** | Serif / sans / mono toggle in SettingsDrawer. CSS variable on body. | Planned |
-| `page-transitions` | **Page transitions** | framer-motion `AnimatePresence` for route changes. | Planned |
-| `giscus-comments` | **Comments** | Giscus (GitHub Discussions) on `/blog/[slug]`. Config in `site.yaml`. Toggle in settings. | Planned |
+See `IDEAS.md` for additional feature ideas and enhancements.
 
 ---
 

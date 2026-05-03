@@ -26,7 +26,7 @@ A living document of ideas for future iterations.
 
 ## UX & Design
 
-- **Animated page transitions** — Smooth route transitions using `framer-motion` `AnimatePresence`
+- ✅ **Animated page transitions** — Smooth route transitions using `framer-motion` `AnimatePresence`
 - ✅ **Reading progress bar** — Thin bar at top of blog/experience detail pages
 - ✅ **Table of contents** — Auto-generated from headings in long MDX pages (sticky sidebar on desktop)
 - **Dark mode image variants** — Serve `/images/project-dark.png` when in dark mode using `<picture>` + `prefers-color-scheme`
@@ -57,7 +57,7 @@ A living document of ideas for future iterations.
 ## Settings & Personalization
 
 - **Language / i18n** — German + English toggle; content in `content/de/` and `content/en/`; detect browser language on first visit
-- **Font family selector** — Let users pick between serif, sans-serif, and monospace for body text
+- ✅ **Font family selector** — Let users pick between serif, sans-serif, and monospace for body text
 - ✅ **Motion reduced mode** — Honour `prefers-reduced-motion` globally; toggle in accessibility settings (`SettingsDrawer` + `SettingsContext`)
 - **Custom accent color per page** — Allow MDX frontmatter to specify an accent color override for that page
 
@@ -66,7 +66,7 @@ A living document of ideas for future iterations.
 ## Analytics & Engagement
 
 - **Privacy-respecting analytics** — Self-hosted Plausible or Umami for page views / popular content
-- **Comment system** — Giscus (GitHub Discussions-backed) comments on blog posts and project pages
+- ✅ **Comment system** — Giscus (GitHub Discussions-backed) comments on blog posts and project pages
 - **View counter** — Simple Redis/KV-backed view counter per blog post (Vercel KV or Upstash)
 - **"Sponsor me" / support links** — Ko-fi or GitHub Sponsors link in footer / settings
 
