@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db';
-import { users } from '@/db/schema';
-import { createSession, SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from '@/lib/auth';
+import { users, oidcProviders } from '@/db/schema';
+import { createSession, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { extractClientIP } from '@/lib/cidr';
+import { eq } from 'drizzle-orm';
 
 const OIDC_CV_COOKIE = 'oidc_cv';
 const OIDC_STATE_COOKIE = 'oidc_state';
@@ -26,6 +27,11 @@ interface IdTokenPayload {
   sub?: string;
 }
 
+interface StateCookie {
+  state: string;
+  providerId: number | 'env';
+}
+
 async function fetchDiscovery(issuer: string): Promise<OidcDiscovery> {
   const res = await fetch(`${issuer}/.well-known/openid-configuration`, {
     next: { revalidate: 0 },
@@ -41,24 +47,29 @@ function decodeIdToken(idToken: string): IdTokenPayload {
   return JSON.parse(payload) as IdTokenPayload;
 }
 
+function parseStateCookie(raw: string): StateCookie {
+  try {
+    const parsed = JSON.parse(raw) as StateCookie;
+    if (typeof parsed.state === 'string') return parsed;
+  } catch {
+    // fall through
+  }
+  // backward compat: raw value is just the state string
+  return { state: raw, providerId: 'env' };
+}
+
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+  const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   const stateParam = searchParams.get('state');
 
-  const issuer = process.env.OIDC_ISSUER;
-  const clientId = process.env.OIDC_CLIENT_ID;
-  const clientSecret = process.env.OIDC_CLIENT_SECRET;
-  const redirectUri = process.env.OIDC_REDIRECT_URI;
-  const allowedEmail = process.env.OIDC_ALLOWED_EMAIL;
-
-  if (!issuer || !clientId || !clientSecret) {
+  const rawStateCookie = request.cookies.get(OIDC_STATE_COOKIE)?.value;
+  if (!stateParam || !rawStateCookie) {
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
 
-  // Validate state
-  const storedState = request.cookies.get(OIDC_STATE_COOKIE)?.value;
-  if (!stateParam || !storedState || stateParam !== storedState) {
+  const parsedState = parseStateCookie(rawStateCookie);
+  if (stateParam !== parsedState.state) {
     console.error('[callback] state mismatch');
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
@@ -69,6 +80,36 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
 
+  let issuer: string;
+  let clientId: string;
+  let clientSecret: string;
+  let redirectUri: string;
+  let allowedEmail: string | null | undefined;
+
+  if (parsedState.providerId === 'env') {
+    const envIssuer = process.env.OIDC_ISSUER;
+    const envClientId = process.env.OIDC_CLIENT_ID;
+    const envClientSecret = process.env.OIDC_CLIENT_SECRET;
+    if (!envIssuer || !envClientId || !envClientSecret) {
+      return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
+    }
+    issuer = envIssuer;
+    clientId = envClientId;
+    clientSecret = envClientSecret;
+    redirectUri = process.env.OIDC_REDIRECT_URI ?? `${origin}/api/admin/auth/callback`;
+    allowedEmail = process.env.OIDC_ALLOWED_EMAIL;
+  } else {
+    const [p] = await db.select().from(oidcProviders).where(eq(oidcProviders.id, parsedState.providerId)).limit(1);
+    if (!p) {
+      return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
+    }
+    issuer = p.issuerUrl;
+    clientId = p.clientId;
+    clientSecret = p.clientSecret;
+    redirectUri = p.redirectUri ?? `${origin}/api/admin/auth/callback`;
+    allowedEmail = p.allowedEmail;
+  }
+
   let discovery: OidcDiscovery;
   try {
     discovery = await fetchDiscovery(issuer);
@@ -77,13 +118,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
 
-  // Exchange code for tokens
   let tokenData: TokenResponse;
   try {
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
       code,
-      redirect_uri: redirectUri ?? `${process.env.NEXTAUTH_URL ?? ''}/api/admin/auth/callback`,
+      redirect_uri: redirectUri,
       client_id: clientId,
       client_secret: clientSecret,
       code_verifier: codeVerifier,
@@ -109,7 +149,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
 
-  // Decode and validate JWT payload
   let payload: IdTokenPayload;
   try {
     payload = decodeIdToken(tokenData.id_token);
@@ -138,7 +177,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
 
-  // Fetch first admin user from DB
   const adminUsers = await db.select().from(users).limit(1);
   const adminUser = adminUsers[0];
   if (!adminUser) {
@@ -160,7 +198,6 @@ export async function GET(request: NextRequest) {
     path: '/',
   });
 
-  // Clear PKCE/state cookies
   response.cookies.set(OIDC_CV_COOKIE, '', { maxAge: 0, path: '/' });
   response.cookies.set(OIDC_STATE_COOKIE, '', { maxAge: 0, path: '/' });
 

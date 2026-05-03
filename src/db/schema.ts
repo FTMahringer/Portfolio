@@ -15,3 +15,16 @@ export const sessions = sqliteTable('sessions', {
   ip: text('ip'),
   userAgent: text('user_agent'),
 });
+
+export const oidcProviders = sqliteTable('oidc_providers', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  type: text('type').notNull().default('oidc'),
+  issuerUrl: text('issuer_url').notNull(),
+  clientId: text('client_id').notNull(),
+  clientSecret: text('client_secret').notNull(),
+  redirectUri: text('redirect_uri'),
+  allowedEmail: text('allowed_email'),
+  enabled: integer('enabled').notNull().default(1),
+  createdAt: integer('created_at').notNull().$defaultFn(() => Math.floor(Date.now() / 1000)),
+});

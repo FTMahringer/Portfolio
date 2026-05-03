@@ -25,9 +25,15 @@ const NAV: { label: string | null; items: { href: string; label: string; icon: s
     items: [
       { href: '/admin/api-docs',  label: 'API Docs',  icon: '📖' },
       { href: '/admin/db',        label: 'Database',  icon: '🗄️' },
+      { href: '/admin/content',   label: 'Content',   icon: '📂' },
+    ],
+  },
+  {
+    label: 'Security',
+    items: [
+      { href: '/admin/auth-providers', label: 'Auth Providers', icon: '🔒' },
       { href: '/admin/sessions',  label: 'Sessions',  icon: '🔑' },
       { href: '/admin/settings',  label: 'Settings',  icon: '⚙️' },
-      { href: '/admin/content',   label: 'Content',   icon: '📂' },
     ],
   },
 ]
