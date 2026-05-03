@@ -6,7 +6,7 @@ import ProjectGrid from '@/components/projects/ProjectGrid'
 import { ProjectList } from '@/components/projects/ProjectList'
 import { TagBadge } from '@/components/ui/TagBadge'
 import type { Project } from '@/lib/types'
-import { slugifyTag } from '@/lib/tag-utils'
+import { slugifyTag } from '@/lib/constants'
 
 interface Props {
   projects: Project[]

@@ -6,7 +6,7 @@ import {
   hashTagColor,
   slugifyTag,
   getTagColor,
-} from "@/lib/tag-utils";
+} from "@/lib/constants";
 
 interface TagBadgeProps {
   name: string;

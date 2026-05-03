@@ -2,8 +2,8 @@ import { db } from '@/db';
 import { sessions } from '@/db/schema';
 import { eq, and, gt } from 'drizzle-orm';
 
-export { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from './auth-constants';
-import { SESSION_MAX_AGE_SECONDS } from './auth-constants';
+export { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from './constants';
+import { SESSION_MAX_AGE_SECONDS } from './constants';
 
 const SESSION_MAX_AGE = SESSION_MAX_AGE_SECONDS;
 

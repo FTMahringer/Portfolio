@@ -32,6 +32,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  alternates: {
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
+  },
+
   title: {
     default: "Fynn M. – Software Developer",
     template: "%s | Fynn M.",

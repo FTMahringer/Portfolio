@@ -1,28 +1,32 @@
-import { db } from '@/db';
-import { tags } from '@/db/schema';
-import { eq } from 'drizzle-orm';
-import { getAllProjects, getAllBlogPosts } from './mdx';
-import { slugifyTag, hashTagColor } from './tag-utils';
-import path from 'path';
-import fs from 'fs';
-
-// Re-export client-safe utilities so server code can import from one place
-export { TAG_COLORS, hashTagColor, slugifyTag, getTagColor } from './tag-utils';
-export type { TagColor } from './tag-utils';
+import { db } from "@/db";
+import { tags } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import path from "path";
+import fs from "fs";
+import { getAllProjects, getAllBlogPosts } from "./mdx";
+import { slugifyTag, hashTagColor } from "./constants";
+export { TAG_COLORS, hashTagColor, slugifyTag, getTagColor } from "./constants";
+export type { TagColor } from "./constants";
 
 // Seeds tags from config/initial-tags.csv (name-only, one per line, # = comment)
 export async function seedInitialTags() {
-  const csvPath = path.join(process.cwd(), 'config', 'initial-tags.csv');
+  const csvPath = path.join(process.cwd(), "config", "initial-tags.csv");
   if (!fs.existsSync(csvPath)) return;
-  const lines = fs.readFileSync(csvPath, 'utf-8').split('\n');
+  const lines = fs.readFileSync(csvPath, "utf-8").split("\n");
   for (const raw of lines) {
     const name = raw.trim();
-    if (!name || name.startsWith('#')) continue;
+    if (!name || name.startsWith("#")) continue;
     const slug = slugifyTag(name);
     const colorIndex = hashTagColor(slug);
     await db
       .insert(tags)
-      .values({ name, slug, colorIndex, usageCount: 0, createdAt: Math.floor(Date.now() / 1000) })
+      .values({
+        name,
+        slug,
+        colorIndex,
+        usageCount: 0,
+        createdAt: Math.floor(Date.now() / 1000),
+      })
       .onConflictDoNothing();
   }
 }
@@ -36,12 +40,12 @@ export async function syncAndGetAllTags() {
   const counts = new Map<string, number>();
   try {
     for (const p of getAllProjects()) {
-      for (const t of (p.frontmatter.tags ?? [])) {
+      for (const t of p.frontmatter.tags ?? []) {
         counts.set(t, (counts.get(t) ?? 0) + 1);
       }
     }
     for (const p of getAllBlogPosts()) {
-      for (const t of (p.frontmatter.tags ?? [])) {
+      for (const t of p.frontmatter.tags ?? []) {
         counts.set(t, (counts.get(t) ?? 0) + 1);
       }
     }
@@ -54,8 +58,17 @@ export async function syncAndGetAllTags() {
     const colorIndex = hashTagColor(slug);
     await db
       .insert(tags)
-      .values({ name, slug, colorIndex, usageCount: count, createdAt: Math.floor(Date.now() / 1000) })
-      .onConflictDoUpdate({ target: tags.slug, set: { usageCount: count, name } });
+      .values({
+        name,
+        slug,
+        colorIndex,
+        usageCount: count,
+        createdAt: Math.floor(Date.now() / 1000),
+      })
+      .onConflictDoUpdate({
+        target: tags.slug,
+        set: { usageCount: count, name },
+      });
   }
 
   return getAllTagsFromDb();
@@ -67,18 +80,34 @@ export async function getAllTagsFromDb() {
 }
 
 export async function getTagBySlug(slug: string) {
-  const result = await db.select().from(tags).where(eq(tags.slug, slug)).limit(1);
+  const result = await db
+    .select()
+    .from(tags)
+    .where(eq(tags.slug, slug))
+    .limit(1);
   return result[0] ?? null;
 }
 
-export async function createTag(name: string): Promise<typeof tags.$inferSelect> {
+export async function createTag(
+  name: string,
+): Promise<typeof tags.$inferSelect> {
   const slug = slugifyTag(name);
   const colorIndex = hashTagColor(slug);
   await db
     .insert(tags)
-    .values({ name, slug, colorIndex, usageCount: 0, createdAt: Math.floor(Date.now() / 1000) })
+    .values({
+      name,
+      slug,
+      colorIndex,
+      usageCount: 0,
+      createdAt: Math.floor(Date.now() / 1000),
+    })
     .onConflictDoUpdate({ target: tags.slug, set: { name } });
-  const result = await db.select().from(tags).where(eq(tags.slug, slug)).limit(1);
+  const result = await db
+    .select()
+    .from(tags)
+    .where(eq(tags.slug, slug))
+    .limit(1);
   return result[0];
 }
 
@@ -88,18 +117,29 @@ export async function deleteTag(id: number) {
 
 // Bulk-import from a CSV string (name-only, one per line, # = comment).
 // Returns { created, skipped }.
-export async function importTagsFromCsv(csv: string): Promise<{ created: number; skipped: number }> {
+export async function importTagsFromCsv(
+  csv: string,
+): Promise<{ created: number; skipped: number }> {
   let created = 0;
   let skipped = 0;
-  const lines = csv.split('\n');
+  const lines = csv.split("\n");
   for (const raw of lines) {
     const name = raw.trim();
-    if (!name || name.startsWith('#')) { skipped++; continue; }
+    if (!name || name.startsWith("#")) {
+      skipped++;
+      continue;
+    }
     const slug = slugifyTag(name);
     const colorIndex = hashTagColor(slug);
     const result = await db
       .insert(tags)
-      .values({ name, slug, colorIndex, usageCount: 0, createdAt: Math.floor(Date.now() / 1000) })
+      .values({
+        name,
+        slug,
+        colorIndex,
+        usageCount: 0,
+        createdAt: Math.floor(Date.now() / 1000),
+      })
       .onConflictDoNothing();
     if ((result as { changes?: number }).changes) created++;
     else skipped++;
@@ -111,10 +151,20 @@ export async function importTagsFromCsv(csv: string): Promise<{ created: number;
 export function getTagUsage(tagName: string) {
   const slug = slugifyTag(tagName);
   const projects = getAllProjects()
-    .filter(p => (p.frontmatter.tags ?? []).some(t => slugifyTag(t) === slug))
-    .map(p => ({ slug: p.slug, title: p.frontmatter.title, type: 'project' as const }));
+    .filter((p) =>
+      (p.frontmatter.tags ?? []).some((t) => slugifyTag(t) === slug),
+    )
+    .map((p) => ({
+      slug: p.slug,
+      title: p.frontmatter.title,
+      type: "project" as const,
+    }));
   const posts = getAllBlogPosts()
-    .filter(p => p.frontmatter.tags.some(t => slugifyTag(t) === slug))
-    .map(p => ({ slug: p.slug, title: p.frontmatter.title, type: 'post' as const }));
+    .filter((p) => p.frontmatter.tags.some((t) => slugifyTag(t) === slug))
+    .map((p) => ({
+      slug: p.slug,
+      title: p.frontmatter.title,
+      type: "post" as const,
+    }));
   return [...projects, ...posts];
-}
+}

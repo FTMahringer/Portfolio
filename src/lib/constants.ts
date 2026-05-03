@@ -1,4 +1,4 @@
-// Client-safe tag utilities (no DB, no fs imports)
+// Lightweight constants safe for Edge Runtime — no db imports here
 
 export const TAG_COLORS = [
   { bg: 'rgba(0,117,202,0.12)',   border: 'rgba(0,117,202,0.4)',   text: '#0075ca' },
@@ -26,3 +26,6 @@ export function slugifyTag(name: string): string {
 export function getTagColor(colorIndex: number): TagColor {
   return TAG_COLORS[colorIndex % TAG_COLORS.length] ?? TAG_COLORS[0];
 }
+
+export const SESSION_COOKIE_NAME = 'admin_sid';
+export const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60; // 7 days

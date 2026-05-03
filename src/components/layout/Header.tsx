@@ -3,11 +3,9 @@ import NavLink from './NavLink';
 import { SearchButton } from '@/components/search/SearchButton';
 
 const NAV_LINKS = [
-  { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
-  { href: '/experience', label: 'Experience' },
-  { href: '/skills', label: 'Skills' },
   { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
 

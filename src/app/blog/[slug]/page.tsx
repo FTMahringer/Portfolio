@@ -1,9 +1,11 @@
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/mdx';
+import { TableOfContents } from '@/components/mdx/TableOfContents';
+import { extractHeadings } from '@/lib/toc-utils';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { mdxComponents } from '@/components/mdx/MDXComponents';
 import Badge from '@/components/ui/Badge';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -27,27 +29,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
-  if (!post) notFound();
-
+  if (!post) return null;
   const { frontmatter, content, readingTime } = post;
+  const headings = extractHeadings(post.content);
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <JsonLd data={blogPostSchema(post)} />
+      <TableOfContents headings={headings} />
       <Button href="/blog" variant="ghost" className="mb-8 -ml-1">
         ← Back to Blog
       </Button>
 
       <header className="mb-10">
         <div className="flex items-center gap-2 text-sm text-[var(--muted)] mb-3">
-          <time dateTime={frontmatter.publishedAt}>{formatDate(frontmatter.publishedAt)}</time>
+          <time dateTime={post.frontmatter.publishedAt}>{formatDate(post.frontmatter.publishedAt)}</time>
           <span>·</span>
-          <span>{readingTime}</span>
+          <span>{post.readingTime}</span>
         </div>
-        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-3">{frontmatter.title}</h1>
-        <p className="text-[var(--muted)] leading-relaxed mb-4">{frontmatter.summary}</p>
+        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-3">{post.frontmatter.title}</h1>
+        <p className="text-[var(--muted)] leading-relaxed mb-4">{post.frontmatter.summary}</p>
         <div className="flex flex-wrap gap-1.5">
-          {frontmatter.tags.map(tag => (
+          {post.frontmatter.tags.map(tag => (
             <Badge key={tag}>{tag}</Badge>
           ))}
         </div>
@@ -56,7 +58,7 @@ export default async function BlogPostPage({ params }: Props) {
       <hr className="border-[var(--border)] mb-10" />
 
       <article>
-        <MDXRemote source={content} components={mdxComponents} />
+        <MDXRemote source={post.content} components={mdxComponents} />
       </article>
     </main>
   );

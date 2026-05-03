@@ -1,49 +1,74 @@
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
-interface ButtonProps {
-  href?: string;
-  onClick?: () => void;
-  variant?: "primary" | "secondary" | "ghost";
-  external?: boolean;
-  children: React.ReactNode;
-  className?: string;
+// Extend Button to support href (anchor-like usage) in addition to button behavior
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  VariantProps<typeof buttonVariants> {
+  href?: string
+  external?: boolean
+  asChild?: boolean
 }
 
-export default function Button({
-  href,
-  onClick,
-  variant = "primary",
-  external,
-  children,
-  className,
-}: ButtonProps) {
-  const classes = cn(
-    "inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
-    variant === "primary" &&
-      "bg-[var(--accent)] text-[#0a0a0a] hover:opacity-90 font-semibold",
-    variant === "secondary" &&
-      "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted-bg)]",
-    variant === "ghost" && "text-[var(--muted)] hover:text-[var(--foreground)]",
-    className,
-  );
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2",
+        sm: "h-8 rounded-md px-3 text-xs",
+        lg: "h-10 rounded-md px-8",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
 
+export interface ButtonPropsExt {
+  className?: string
+}
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+  const { className, variant, size, href, external, asChild, ...rest } = props
+  // If href is provided, render as anchor element
   if (href) {
     return (
-      <Link
+      <a
+        className={cn(buttonVariants({ variant, size, className }))}
         href={href}
-        className={classes}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
-      >
-        {children}
-      </Link>
-    );
+        ref={ref as any}
+        {...(rest as any)}
+      />
+    )
   }
-
+  const Comp = asChild ? Slot : "button" as any
   return (
-    <button onClick={onClick} className={classes}>
-      {children}
-    </button>
-  );
-}
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref}
+      {...rest}
+    />
+  )
+})
+Button.displayName = "Button"
+export { Button, buttonVariants }

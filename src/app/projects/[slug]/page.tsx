@@ -1,9 +1,10 @@
 import { getProjectBySlug, getAllProjects, getExperienceBySlug } from '@/lib/mdx';
+// TableOfContents and extractHeadings are now handled by ProjectContentWrapper
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { mdxComponents } from '@/components/mdx/MDXComponents';
 import Badge from '@/components/ui/Badge';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { formatDateRange } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -29,11 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+import ProjectContentWrapper from './ProjectContentWrapper';
+
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
-
   const { frontmatter, content } = project;
 
   // Resolve related experience
@@ -48,7 +50,8 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <JsonLd data={softwareSchema(project)} />
+      <ProjectContentWrapper content={content} frontmatter={frontmatter} />
+      {/* TableOfContents is inside ProjectContentWrapper */}
       <Button href="/projects" variant="ghost" className="mb-8 -ml-1">
         ← Back to Projects
       </Button>
@@ -113,9 +116,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       <hr className="border-[var(--border)] mb-10" />
 
-      <article>
-        <MDXRemote source={content} components={mdxComponents} />
-      </article>
+      {/* Content and TableOfContents are handled by ProjectContentWrapper above */}
 
       {/* Related Experience */}
       {relatedExperience.length > 0 && (

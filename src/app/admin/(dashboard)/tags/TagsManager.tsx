@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { TagBadge } from '@/components/ui/TagBadge'
-import { getTagColor, slugifyTag, TAG_COLORS } from '@/lib/tag-utils'
+import { getTagColor, slugifyTag, TAG_COLORS } from '@/lib/constants'
 
 type TagRow = {
   id: number

@@ -1,0 +1,42 @@
+---
+title: "Homelab"
+summary: "My self-hosted infrastructure, services, and network topology"
+publishedAt: "2026-05-03"
+tags:
+  - Homelab
+---
+
+## Overview
+
+My homelab runs a mix of self-hosted services on a small Kubernetes (K3s) cluster behind a reverse proxy.
+
+## Hardware
+
+| Device | Role | Specs |
+|--------|------|-------|
+| Mini PC | K3s master + worker | Intel N100, 16 GB RAM, 500 GB NVMe |
+
+## Services
+
+- **Reverse Proxy** — Traefik with automatic TLS via Let's Encrypt
+- **Auth** — PocketID for SSO / OIDC across all services
+- **Monitoring** — Uptime Kuma for health checks
+- **Git** — Gitea for private repos and CI runners
+- **DNS** — Pi-hole for ad blocking and local DNS
+
+## Network Topology
+
+```
+Internet
+  └─ Router / Firewall
+       └─ VLAN 10 — Server network
+            ├─ K3s Node 1 (master)
+            └─ K3s Node 2 (worker)
+       └─ VLAN 20 — Client devices
+```
+
+## Future Plans
+
+- Add dedicated NAS for backups and media
+- Migrate to Talos Linux for immutable OS
+- Set up Grafana + Prometheus for deeper monitoring
