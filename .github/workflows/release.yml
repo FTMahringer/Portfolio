@@ -57,7 +57,7 @@ jobs:
           REST="${VERSION#*.}"
           MINOR="${REST%%.*}"
 
-          GHCR_IMAGE="ghcr.io/$REPO"
+          GHCR_IMAGE="ghcr.io/${REPO,,}"
           TAGS="$GHCR_IMAGE:$VERSION
           $GHCR_IMAGE:$MAJOR.$MINOR
           $GHCR_IMAGE:$MAJOR
