@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Badge from '@/components/ui/Badge';
-import { TagPill } from '@/components/ui/TagBadge';
 import type { Project } from '@/lib/types';
 
 interface ProjectCardProps {
@@ -35,15 +34,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <Badge>+{frontmatter.stack.length - 4}</Badge>
           )}
         </div>
-
-        {/* Topic tags */}
-        {frontmatter.tags && frontmatter.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-2">
-            {frontmatter.tags.map(tag => (
-              <TagPill key={tag} name={tag} />
-            ))}
-          </div>
-        )}
 
         {frontmatter.github && (
           <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center gap-1 text-xs text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors">

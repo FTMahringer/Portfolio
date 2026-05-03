@@ -1,0 +1,59 @@
+# Initial tags to seed on first startup.
+# Format: name
+# Lines starting with # are ignored.
+# Add one tag name per line. Slugs are derived automatically.
+#
+# ─── Web & Frontend ─────────────────────────────────────────────────────────
+Next.js
+React
+TypeScript
+JavaScript
+HTML
+CSS
+Tailwind CSS
+Vue.js
+Svelte
+# ─── Backend ────────────────────────────────────────────────────────────────
+Node.js
+Python
+Java
+Spring Boot
+FastAPI
+Django
+Express
+REST API
+GraphQL
+# ─── Infrastructure & DevOps ────────────────────────────────────────────────
+Docker
+Kubernetes
+Homelab
+Linux
+CI/CD
+GitHub Actions
+Ansible
+Terraform
+Nginx
+# ─── Databases ──────────────────────────────────────────────────────────────
+PostgreSQL
+SQLite
+MySQL
+Redis
+MongoDB
+# ─── Cloud & Networking ─────────────────────────────────────────────────────
+Self-hosted
+Cloudflare
+Vercel
+AWS
+VPS
+Networking
+# ─── Tooling & Workflow ─────────────────────────────────────────────────────
+Git
+Open Source
+CLI
+Automation
+# ─── Topics ─────────────────────────────────────────────────────────────────
+Portfolio
+School Project
+Internship
+Side Project
+Tutorial

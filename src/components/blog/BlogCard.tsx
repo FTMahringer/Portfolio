@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
-import { TagPill } from "@/components/ui/TagBadge";
 import { formatDate } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types";
 
@@ -24,16 +23,9 @@ export default function BlogCard({ post }: BlogCardProps) {
         <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors mb-2">
           {frontmatter.title}
         </h3>
-        <p className="text-base text-[var(--muted)] line-clamp-2 mb-3">
+        <p className="text-base text-[var(--muted)] line-clamp-2">
           {frontmatter.summary}
         </p>
-        {frontmatter.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {frontmatter.tags.map((tag) => (
-              <TagPill key={tag} name={tag} />
-            ))}
-          </div>
-        )}
       </article>
     </Link>
   );

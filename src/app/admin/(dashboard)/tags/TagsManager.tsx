@@ -29,6 +29,43 @@ export default function TagsManager({ initialTags }: Props) {
   const [newTagName, setNewTagName] = useState('')
   const [adding, setAdding] = useState(false)
   const [addError, setAddError] = useState('')
+  const [importing, setImporting] = useState(false)
+  const [importResult, setImportResult] = useState<{ created: number; skipped: number } | null>(null)
+
+  async function handleExport() {
+    const res = await fetch('/api/admin/tags/csv')
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'tags.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  async function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImporting(true)
+    setImportResult(null)
+    const text = await file.text()
+    try {
+      const res = await fetch('/api/admin/tags/csv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: text,
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setImportResult(data)
+        // Refresh list
+        const listRes = await fetch('/api/admin/tags')
+        if (listRes.ok) setTagsList(await listRes.json())
+      }
+    } catch { /* ignore */ }
+    setImporting(false)
+    e.target.value = '' // reset file input
+  }
 
   const filtered = tagsList.filter(t =>
     t.name.toLowerCase().includes(search.toLowerCase())
@@ -84,14 +121,32 @@ export default function TagsManager({ initialTags }: Props) {
   return (
     <div className="space-y-6">
       {/* Toolbar */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <input
           type="text"
           placeholder="Search tags…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="flex-1 bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+          className="flex-1 min-w-[180px] bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
         />
+        {/* Import */}
+        <label className="flex items-center gap-2 px-3 py-2 bg-[var(--muted-bg)] text-[var(--muted)] border border-[var(--border)] rounded-lg text-sm hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors cursor-pointer">
+          {importing ? 'Importing…' : '↑ Import CSV'}
+          <input
+            type="file"
+            accept=".csv,text/csv,text/plain"
+            className="sr-only"
+            onChange={handleImport}
+            disabled={importing}
+          />
+        </label>
+        {/* Export */}
+        <button
+          onClick={handleExport}
+          className="flex items-center gap-2 px-3 py-2 bg-[var(--muted-bg)] text-[var(--muted)] border border-[var(--border)] rounded-lg text-sm hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors cursor-pointer"
+        >
+          ↓ Export CSV
+        </button>
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 px-4 py-2 bg-green-400/10 text-green-400 border border-green-400/30 rounded-lg text-sm font-medium hover:bg-green-400/20 transition-colors cursor-pointer"
@@ -99,6 +154,14 @@ export default function TagsManager({ initialTags }: Props) {
           + New Tag
         </button>
       </div>
+
+      {/* Import result banner */}
+      {importResult && (
+        <div className="flex items-center justify-between text-xs bg-green-400/10 border border-green-400/20 text-green-400 rounded-lg px-4 py-2">
+          <span>Imported {importResult.created} new tag{importResult.created !== 1 ? 's' : ''} · {importResult.skipped} already existed / skipped</span>
+          <button onClick={() => setImportResult(null)} className="ml-4 opacity-60 hover:opacity-100 cursor-pointer">✕</button>
+        </div>
+      )}
 
       {/* Stats */}
       <p className="text-xs text-[var(--muted)]">
