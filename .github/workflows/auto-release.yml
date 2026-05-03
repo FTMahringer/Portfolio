@@ -1,0 +1,84 @@
+name: Auto Release (version bump)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Tag on version change
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect version change
+        id: vars
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "No before SHA (new branch). Skipping." >&2
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          OLD_VERSION=$(git show "$BEFORE:package.json" | python -c "import sys, json; print(json.load(sys.stdin).get('version',''))" || true)
+          NEW_VERSION=$(python -c "import json; print(json.load(open('package.json')).get('version',''))")
+
+          echo "old=$OLD_VERSION" >> "$GITHUB_OUTPUT"
+          echo "new=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+          if [ -z "$NEW_VERSION" ]; then
+            echo "Could not read version from package.json" >&2
+            exit 1
+          fi
+
+          if [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
+            echo "Version unchanged ($NEW_VERSION). No release." >&2
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "package.json version must be semver X.Y.Z, got '$NEW_VERSION'" >&2
+            exit 1
+          fi
+
+          TAG="v$NEW_VERSION"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag
+        if: steps.vars.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TAG="${{ steps.vars.outputs.tag }}"
+
+          if git ls-remote --tags origin "$TAG" | grep -q "refs/tags/$TAG"; then
+            echo "Tag $TAG already exists on origin. Skipping." >&2
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag "$TAG"
+          git push origin "$TAG"
