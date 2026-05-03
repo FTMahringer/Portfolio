@@ -4,12 +4,16 @@
 
 ## Current State ✅
 
-The portfolio is fully built and deployed. All core phases are complete.
+The portfolio is fully built and deployed. All core phases are complete, including Phase 3 content pages.
 
 **Stack:** Next.js 16, TypeScript, Tailwind CSS, MDX, SQLite + Drizzle ORM, Docker
 
 **Completed features:**
 - All public pages: Home, About, Projects (grid/list/filter), Experience (expandable detail), Skills, Blog, Contact (form + email), Resume, Tags (`/tags/[tag]`)
+- Content pages: Now (`/now`), Uses (`/uses`), Homelab (`/homelab`) — nownownow.com style pages
+- Legal pages: Datenschutz (`/datenschutz`), Impressum (`/impressum`)
+- RSS feed: `/feed.xml` with blog post syndication and `<link rel="alternate">` in layout
+- Table of contents: Auto-generated from MDX headings, sticky sidebar on desktop, intersection observer for active state
 - Admin dashboard (`/admin`): session + OIDC auth, content creation wizards (blog/project/experience), DB viewer, API docs, auth providers, tag management
 - Tag system: centralized DB, color-coded pills, filter bars on /projects and /blog, CSV import/export, `config/initial-tags.csv` seed file
 - Settings drawer: theme (dark/light/auto), accent color, font size slider, reduced motion, project view (grid/list/card size), colorblind modes — saved in cookies, draggable panel
@@ -20,23 +24,13 @@ The portfolio is fully built and deployed. All core phases are complete.
 
 ---
 
-## Planned: Phase 3 — Content & Discovery
-
-| ID | Feature | Description |
-|----|---------|-------------|
-| `rss-feed` | **RSS feed** `/feed.xml` | Blog posts syndication. Add `<link rel="alternate">` to layout. |
-| `toc-mdx` | **Table of contents** | Auto-generated from MDX headings, sticky sidebar on desktop. |
-| `homelab-page` | **Homelab page** `/homelab` | Self-hosted services, hardware, network topology. Content via MDX/YAML. |
-| `now-page` | **Now page** `/now` | nownownow.com style — current projects/reading/learning. Content in `content/pages/now.mdx`. |
-| `uses-page` | **Uses page** `/uses` | Hardware, software, editor, tools list. Content in `content/pages/uses.mdx`. |
-
 ## Planned: Phase 4 — Settings & Polish
 
-| ID | Feature | Description |
-|----|---------|-------------|
-| `font-selector` | **Font family selector** | Serif / sans / mono toggle in SettingsDrawer. CSS variable on body. |
-| `page-transitions` | **Page transitions** | framer-motion `AnimatePresence` for route changes. |
-| `giscus-comments` | **Comments** | Giscus (GitHub Discussions) on `/blog/[slug]`. Config in `site.yaml`. Toggle in settings. |
+| ID | Feature | Description | Status |
+|----|---------|-------------|--------|
+| `font-selector` | **Font family selector** | Serif / sans / mono toggle in SettingsDrawer. CSS variable on body. | Planned |
+| `page-transitions` | **Page transitions** | framer-motion `AnimatePresence` for route changes. | Planned |
+| `giscus-comments` | **Comments** | Giscus (GitHub Discussions) on `/blog/[slug]`. Config in `site.yaml`. Toggle in settings. | Planned |
 
 ---
 
