@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
+import { CodeBlock } from './CodeBlock';
 
 export const mdxComponents: MDXComponents = {
   h1: (props) => <h1 className="text-3xl font-bold mt-8 mb-4 text-[var(--foreground)]" {...props} />,
@@ -19,8 +20,22 @@ export const mdxComponents: MDXComponents = {
   ul: (props) => <ul className="list-disc pl-6 mb-4 space-y-1" {...props} />,
   ol: (props) => <ol className="list-decimal pl-6 mb-4 space-y-1" {...props} />,
   li: (props) => <li className="leading-7 text-[var(--foreground)]" {...props} />,
-  code: (props) => <code className="font-mono text-sm bg-[var(--muted-bg)] text-[var(--accent)] px-1.5 py-0.5 rounded" {...props} />,
-  pre: (props) => <pre className="bg-[var(--muted-bg)] border border-[var(--border)] rounded-lg p-4 overflow-x-auto mb-4 font-mono text-sm" {...props} />,
+  code: (props) => {
+    // Inline code
+    if (!props.className) {
+      return <code className="font-mono text-sm bg-[var(--muted-bg)] text-[var(--accent)] px-1.5 py-0.5 rounded" {...props} />;
+    }
+    // Block code - handled by pre
+    return <code {...props} />;
+  },
+  pre: (props: any) => {
+    const code = props.children?.props?.children || '';
+    const className = props.children?.props?.className || '';
+    const filename = props.children?.props?.filename;
+    const terminal = props.children?.props?.terminal === 'true' || props.children?.props?.terminal === true;
+    
+    return <CodeBlock className={className} filename={filename} terminal={terminal}>{code}</CodeBlock>;
+  },
   blockquote: (props) => <blockquote className="border-l-4 border-[var(--accent)] pl-4 italic text-[var(--muted)] mb-4" {...props} />,
   hr: () => <hr className="border-[var(--border)] my-8" />,
   strong: (props) => <strong className="font-semibold text-[var(--foreground)]" {...props} />,
