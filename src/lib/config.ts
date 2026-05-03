@@ -37,6 +37,19 @@ export interface SiteConfig {
     theme: string
     lang: string
   }
+  analytics?: {
+    provider: 'umami' | 'plausible' | 'none'
+    umami?: {
+      enabled: boolean
+      websiteId: string
+      scriptUrl: string
+    }
+    plausible?: {
+      enabled: boolean
+      domain: string
+      scriptUrl: string
+    }
+  }
   sidebar_skills?: { category: string; items: string[] }[]
 }
 

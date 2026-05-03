@@ -65,7 +65,7 @@ A living document of ideas for future iterations.
 
 ## Analytics & Engagement
 
-- **Privacy-respecting analytics** — Self-hosted Plausible or Umami for page views / popular content
+- ✅ **Privacy-respecting analytics** — Self-hosted Plausible or Umami for page views / popular content
 - ✅ **Comment system** — Giscus (GitHub Discussions-backed) comments on blog posts and project pages
 - **View counter** — Simple Redis/KV-backed view counter per blog post (Vercel KV or Upstash)
 - **"Sponsor me" / support links** — Ko-fi or GitHub Sponsors link in footer / settings
@@ -75,7 +75,7 @@ A living document of ideas for future iterations.
 ## Developer Experience
 
 - **Storybook** — Component library documentation for all UI components
-- **Playwright E2E tests** — Critical path tests: homepage loads, contact form submits, settings persist
+- ✅ **Playwright E2E tests** — Critical path tests: homepage loads, contact form submits, settings persist
 - **Lighthouse CI** — Automated Lighthouse score checks on every PR
 - **Content validation script** — Pre-commit hook that validates MDX frontmatter against TypeScript types
 

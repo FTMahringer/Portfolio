@@ -35,6 +35,19 @@ giscus:
   theme: "preferred_color_scheme"
   lang: "en"
 
+# Analytics - Privacy-respecting self-hosted analytics
+# Supports Umami or Plausible
+analytics:
+  provider: "umami"  # "umami", "plausible", or "none"
+  umami:
+    enabled: false  # Set to true when you have a Umami instance
+    websiteId: ""  # Your Umami website ID
+    scriptUrl: "https://analytics.yourdomain.com/script.js"  # Your Umami script URL
+  plausible:
+    enabled: false  # Set to true when you have a Plausible instance
+    domain: ""  # Your domain (e.g., "portfolio.ftmahringer.com")
+    scriptUrl: "https://plausible.io/js/script.js"  # Default or self-hosted URL
+
 # Skills shown in the About page sidebar (keep it short — 4–6 per category)
 sidebar_skills:
   - category: "Frontend"

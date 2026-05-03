@@ -10,6 +10,8 @@ import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
 import { SearchModal } from "@/components/search/SearchModal";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import { PageTransition } from "@/components/layout/PageTransition";
+import { Analytics } from "@/components/analytics/Analytics";
+import { getSiteConfig } from "@/lib/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -64,6 +66,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const config = getSiteConfig();
+  
   return (
     <html
       lang="en"
@@ -84,6 +88,7 @@ export default function RootLayout({
             </SearchProvider>
           </DevProvider>
         </SettingsProvider>
+        {config.analytics && <Analytics config={config.analytics} />}
       </body>
     </html>
   );
