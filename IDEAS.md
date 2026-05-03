@@ -58,7 +58,7 @@ A living document of ideas for future iterations.
 
 - **Language / i18n** — German + English toggle; content in `content/de/` and `content/en/`; detect browser language on first visit
 - **Font family selector** — Let users pick between serif, sans-serif, and monospace for body text
-- **Motion reduced mode** — Honour `prefers-reduced-motion` globally; toggle in accessibility settings
+- ✅ **Motion reduced mode** — Honour `prefers-reduced-motion` globally; toggle in accessibility settings (`SettingsDrawer` + `SettingsContext`)
 - **Custom accent color per page** — Allow MDX frontmatter to specify an accent color override for that page
 
 ---
@@ -85,7 +85,7 @@ A living document of ideas for future iterations.
 
 - ✅ **Edge caching for API routes** — Cache `/api/content/projects` (GET) with `Cache-Control` or Vercel Edge Config
 - **Image CDN** — Move project/blog images to Cloudflare R2 or similar for better performance globally
-- **Self-hosted deployment** — Dockerfile + Caddy config for running on a VPS/homelab alongside other services
+- ✅ **Self-hosted deployment** — Dockerfile + docker-compose for running on a VPS/homelab; published to Docker Hub + GHCR
 
 ---
 

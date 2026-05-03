@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { getAllProjects, getAllBlogPosts, getAllExperience } from '@/lib/mdx';
 import { getSiteConfig } from '@/lib/config';
 import ProjectGrid from '@/components/projects/ProjectGrid';
@@ -30,36 +29,27 @@ export default function HomePage() {
       <JsonLd data={personSchema()} />
       <JsonLd data={websiteSchema()} />
       {/* Hero */}
-      <section className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[var(--border)] bg-[var(--muted-bg)] flex-shrink-0">
-          <Image
-            src={site.avatar}
-            alt={site.title}
-            fill
-            className="object-cover"
-            sizes="112px"
-            priority
-          />
+      <section className="space-y-4">
+        <div>
+          <p className="text-sm font-mono text-[var(--accent)] mb-1">Hi, I&apos;m</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-[var(--foreground)] tracking-tight">
+            {site.title}
+          </h1>
         </div>
-
-        <div className="space-y-4 flex-1">
-          <div>
-            <p className="text-sm font-mono text-[var(--accent)] mb-1">Hi, I&apos;m</p>
-            <h1 className="text-4xl md:text-5xl font-bold text-[var(--foreground)] tracking-tight">
-              {site.title}
-            </h1>
-          </div>
-          <p className="text-lg text-[var(--muted)] max-w-2xl leading-relaxed">{site.bio}</p>
-          <div className="flex flex-wrap gap-2 pt-1">
-            {HERO_SKILLS.map(skill => (
-              <Badge key={skill}>{skill}</Badge>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Button href="/projects">View Projects</Button>
-            <Button href="/contact" variant="secondary">Get in Touch</Button>
-            <Button href="/resume" variant="ghost">Resume ↓</Button>
-          </div>
+        <p className="text-lg text-[var(--muted)] max-w-2xl leading-relaxed">{site.bio}</p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          {HERO_SKILLS.map(skill => (
+            <Badge key={skill}>{skill}</Badge>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Button href="/projects">View Projects</Button>
+          <Button href="/contact" variant="secondary">Get in Touch</Button>
+          <Button href="/resume" variant="ghost">Resume ↓</Button>
+        </div>
+        <div className="pt-1">
+          <span className="text-sm text-[var(--muted)]">Want to know more about me? </span>
+          <Button href="/about" variant="ghost">About me →</Button>
         </div>
       </section>
 
