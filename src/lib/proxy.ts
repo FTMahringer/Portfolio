@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { SESSION_COOKIE_NAME } from './auth';
+import { SESSION_COOKIE_NAME } from './auth-constants';
 import { isInternalIP, extractClientIP } from './cidr';
 
 export function adminMiddleware(request: NextRequest): NextResponse | null {

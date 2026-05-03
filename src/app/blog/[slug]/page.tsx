@@ -6,6 +6,8 @@ import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { blogPostSchema } from '@/lib/jsonld';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -31,6 +33,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+      <JsonLd data={blogPostSchema(post)} />
       <Button href="/blog" variant="ghost" className="mb-8 -ml-1">
         ← Back to Blog
       </Button>

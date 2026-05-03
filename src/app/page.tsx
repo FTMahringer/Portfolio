@@ -6,6 +6,8 @@ import ProjectGrid from '@/components/projects/ProjectGrid';
 import BlogCard from '@/components/blog/BlogCard';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { personSchema, websiteSchema } from '@/lib/jsonld';
 
 const HERO_SKILLS = ['Next.js', 'TypeScript', 'Java', 'Spring Boot', 'Docker', 'Linux', 'K3s'];
 
@@ -25,6 +27,8 @@ export default function HomePage() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-24">
+      <JsonLd data={personSchema()} />
+      <JsonLd data={websiteSchema()} />
       {/* Hero */}
       <section className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-[var(--border)] bg-[var(--muted-bg)] flex-shrink-0">

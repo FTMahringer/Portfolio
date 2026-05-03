@@ -8,6 +8,8 @@ import { formatDateRange } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { softwareSchema } from '@/lib/jsonld';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -46,6 +48,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+      <JsonLd data={softwareSchema(project)} />
       <Button href="/projects" variant="ghost" className="mb-8 -ml-1">
         ← Back to Projects
       </Button>
