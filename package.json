@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "engines": {
     "node": ">=24"
@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "validate:content": "node scripts/validate-content.mjs",
+    "spotify:auth": "node scripts/spotify-auth.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
