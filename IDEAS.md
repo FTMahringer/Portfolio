@@ -6,12 +6,12 @@ A living document of ideas for future iterations.
 
 ## Content & Features
 
-- **RSS feed** — `/feed.xml` for blog posts; useful for syndication and Hermes/OpenClaw subscriptions
+- ✅ **RSS feed** — `/feed.xml` for blog posts; useful for syndication and Hermes/OpenClaw subscriptions
 - ✅ **Print / PDF resume** — Dedicated `/resume` route that renders a print-optimized view; download button triggers `window.print()`
-- **Homelab page** — `/homelab` showcasing self-hosted services, hardware, and network topology diagrams
+- ✅ **Homelab page** — `/homelab` showcasing self-hosted services, hardware, and network topology diagrams
 - ✅ **Skills page** — Radar chart or visual skill matrix grouped by category with self-assessed proficiency
-- **Now page** — `/now` inspired by nownownow.com; what you're currently working on / reading / learning
-- **Uses page** — `/uses` listing hardware, software, editor setup, and preferred tools
+- ✅ **Now page** — `/now` inspired by nownownow.com; what you're currently working on / reading / learning
+- ✅ **Uses page** — `/uses` listing hardware, software, editor setup, and preferred tools
 - **Recommendations / References** — Section on `/about` or separate page for testimonials and peer reviews
 
 ---
@@ -28,7 +28,7 @@ A living document of ideas for future iterations.
 
 - **Animated page transitions** — Smooth route transitions using `framer-motion` `AnimatePresence`
 - ✅ **Reading progress bar** — Thin bar at top of blog/experience detail pages
-- **Table of contents** — Auto-generated from headings in long MDX pages (sticky sidebar on desktop)
+- ✅ **Table of contents** — Auto-generated from headings in long MDX pages (sticky sidebar on desktop)
 - **Dark mode image variants** — Serve `/images/project-dark.png` when in dark mode using `<picture>` + `prefers-color-scheme`
 - ✅ **Spotlight / command palette** — `Cmd+K` opens a searchable command palette (projects, pages, settings)
 - **Confetti easter egg** — Hidden interaction (e.g., Konami code) that triggers a fun confetti animation
