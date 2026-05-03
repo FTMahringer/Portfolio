@@ -22,6 +22,8 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+
       - name: Determine version tag + docker tags
         id: vars
         shell: bash
@@ -38,13 +40,11 @@ jobs:
             TAG="$RELEASE_TAG"
           elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_TAG" ]; then
             TAG="$INPUT_TAG"
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            VERSION_FROM_PACKAGE=$(python -c "import json; print(json.load(open('package.json'))['version'])")
+            TAG="v$VERSION_FROM_PACKAGE"
           else
             TAG="$REF_NAME"
-          fi
-
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "For manual runs, either select a tag ref (vX.Y.Z) or provide inputs.tag=vX.Y.Z. Got '$TAG'." >&2
-            exit 1
           fi
 
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -82,8 +82,6 @@ jobs:
             echo "$TAGS"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-
-      - uses: actions/checkout@v6
 
       - name: Set up QEMU (for multi-platform)
         uses: docker/setup-qemu-action@v4
