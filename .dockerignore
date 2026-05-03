@@ -1,0 +1,12 @@
+.git
+.github
+.next
+node_modules
+data
+.env*
+coverage
+*.md
+!README.md
+.DS_Store
+.superpowers
+docs

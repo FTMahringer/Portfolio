@@ -1,0 +1,26 @@
+services:
+  portfolio:
+    image: portfolio:latest   # replace with your Docker Hub image e.g. yourname/portfolio:latest
+    build: .                  # or remove this line to use pre-built image
+    ports:
+      - "3000:3000"
+    volumes:
+      - portfolio-data:/app/data
+      - ./content:/app/content   # optional: mount content for live editing
+      - ./config:/app/config     # optional: mount config for live editing
+    environment:
+      # Required: admin credentials (created on first start)
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: change_me_immediately
+      # Required: Bearer token for the content API
+      API_SECRET: change_me_api_secret
+      # Optional: OIDC/SSO
+      # OIDC_ISSUER: https://your-provider.example.com
+      # OIDC_CLIENT_ID: portfolio-admin
+      # OIDC_CLIENT_SECRET: your-secret
+      # OIDC_REDIRECT_URI: https://your-domain.example.com/api/admin/auth/callback
+      # OIDC_ALLOWED_EMAIL: admin@example.com
+    restart: unless-stopped
+
+volumes:
+  portfolio-data:
