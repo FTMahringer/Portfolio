@@ -23,6 +23,7 @@ const NAV: { label: string | null; items: { href: string; label: string; icon: s
   {
     label: 'Tools',
     items: [
+      { href: '/admin/tags',      label: 'Tags',      icon: '🏷️' },
       { href: '/admin/api-docs',  label: 'API Docs',  icon: '📖' },
       { href: '/admin/db',        label: 'Database',  icon: '🗄️' },
       { href: '/admin/content',   label: 'Content',   icon: '📂' },

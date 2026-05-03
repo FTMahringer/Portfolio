@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   const projects = getAllProjects();
+  const allTags = [...new Set(projects.flatMap(p => p.frontmatter.tags ?? []))].sort();
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
@@ -16,7 +17,7 @@ export default function ProjectsPage() {
       <p className="text-[var(--muted)] mb-10">
         Things I&apos;ve built, am building, or plan to build.
       </p>
-      <ProjectsClient projects={projects} />
+      <ProjectsClient projects={projects} allTags={allTags} />
     </main>
   );
 }

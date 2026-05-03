@@ -11,6 +11,7 @@ export interface ProjectFrontmatter {
   startDate: string;
   endDate: string | null;
   stack: string[];
+  tags?: string[];
   github: string | null;
   demo: string | null;
   image: string | null;

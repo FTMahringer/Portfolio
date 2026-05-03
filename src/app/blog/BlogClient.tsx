@@ -1,34 +1,25 @@
 'use client'
 
 import { useState } from 'react'
-import { useSettings } from '@/context/SettingsContext'
-import ProjectGrid from '@/components/projects/ProjectGrid'
-import { ProjectList } from '@/components/projects/ProjectList'
+import BlogCard from '@/components/blog/BlogCard'
 import { TagBadge } from '@/components/ui/TagBadge'
-import type { Project } from '@/lib/types'
+import type { BlogPost } from '@/lib/types'
 import { slugifyTag } from '@/lib/tag-utils'
 
 interface Props {
-  projects: Project[]
+  posts: BlogPost[]
   allTags: string[]
 }
 
-const SIZE_COLS: Record<string, string> = {
-  sm: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
-  md: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
-  lg: 'grid-cols-1 sm:grid-cols-2',
-}
-
-export default function ProjectsClient({ projects, allTags }: Props) {
-  const { settings } = useSettings()
+export default function BlogClient({ posts, allTags }: Props) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   const filtered = selectedTag
-    ? projects.filter(p => (p.frontmatter.tags ?? []).some(t => slugifyTag(t) === selectedTag))
-    : projects
+    ? posts.filter(p => p.frontmatter.tags.some(t => slugifyTag(t) === selectedTag))
+    : posts
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {allTags.length > 0 && (
         <div className="flex flex-wrap gap-2 items-center">
           <button
@@ -53,10 +44,14 @@ export default function ProjectsClient({ projects, allTags }: Props) {
         </div>
       )}
 
-      {settings.projectsView === 'list' ? (
-        <ProjectList projects={filtered} />
+      {filtered.length > 0 ? (
+        <div className="space-y-4">
+          {filtered.map(post => (
+            <BlogCard key={post.slug} post={post} />
+          ))}
+        </div>
       ) : (
-        <ProjectGrid projects={filtered} colsClass={SIZE_COLS[settings.projectsCardSize]} />
+        <p className="text-[var(--muted)]">No posts with this tag.</p>
       )}
     </div>
   )

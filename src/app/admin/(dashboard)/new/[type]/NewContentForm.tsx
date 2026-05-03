@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Fuse from 'fuse.js'
 import { MarkdownEditor } from '@/components/ui/MarkdownEditor'
+import { TagPill } from '@/components/ui/TagBadge'
+import { slugifyTag } from '@/lib/tag-utils'
 
 export type FormType = 'blog' | 'project' | 'experience'
 
@@ -58,6 +60,7 @@ const INITIAL_STATE: Record<FormType, FormState> = {
     summary: '',
     category: '',
     stack: '',
+    tags: '',
     github: '',
     demo: '',
     featured: false,
@@ -116,6 +119,111 @@ function Grid({ children }: { children: React.ReactNode }) {
 
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
+// ─── TagAutocomplete ──────────────────────────────────────────────────────────
+
+interface TagAutocompleteProps {
+  value: string        // comma-separated
+  onChange: (v: string) => void
+}
+
+function TagAutocomplete({ value, onChange }: TagAutocompleteProps) {
+  const [input, setInput] = useState('')
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [allTags, setAllTags] = useState<string[]>([])
+
+  const selected = value ? value.split(',').map(t => t.trim()).filter(Boolean) : []
+
+  useEffect(() => {
+    fetch('/api/tags')
+      .then(r => r.json())
+      .then((data: { name: string }[]) => setAllTags(data.map(t => t.name)))
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (!input.trim()) { setSuggestions([]); return }
+    const q = input.toLowerCase()
+    const filtered = allTags.filter(t => t.toLowerCase().includes(q) && !selected.includes(t))
+    setSuggestions(filtered.slice(0, 8))
+  }, [input, allTags, selected])
+
+  function addTag(name: string) {
+    const trimmed = name.trim()
+    if (!trimmed || selected.includes(trimmed)) return
+    const next = [...selected, trimmed]
+    onChange(next.join(', '))
+    setInput('')
+    setSuggestions([])
+  }
+
+  function removeTag(name: string) {
+    onChange(selected.filter(t => t !== name).join(', '))
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if ((e.key === 'Enter' || e.key === ',') && input.trim()) {
+      e.preventDefault()
+      addTag(input)
+    }
+    if (e.key === 'Backspace' && !input && selected.length > 0) {
+      removeTag(selected[selected.length - 1])
+    }
+  }
+
+  const isNew = input.trim() && !allTags.some(t => t.toLowerCase() === input.trim().toLowerCase())
+
+  return (
+    <div className="space-y-2">
+      {selected.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {selected.map(tag => (
+            <span key={tag} className="inline-flex items-center gap-1">
+              <TagPill name={tag} />
+              <button
+                type="button"
+                onClick={() => removeTag(tag)}
+                className="text-[var(--muted)] hover:text-red-400 transition-colors cursor-pointer text-xs leading-none"
+              >✕</button>
+            </span>
+          ))}
+        </div>
+      )}
+      <div className="relative">
+        <input
+          className={inputCls}
+          placeholder="Type a tag and press Enter or comma…"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        {(suggestions.length > 0 || isNew) && (
+          <div className="absolute z-20 top-full mt-1 left-0 right-0 bg-[var(--card)] border border-[var(--border)] rounded-lg shadow-xl overflow-hidden">
+            {suggestions.map(s => (
+              <button
+                key={s}
+                type="button"
+                onMouseDown={e => { e.preventDefault(); addTag(s) }}
+                className="w-full text-left px-3 py-2 text-sm hover:bg-[var(--muted-bg)] text-[var(--foreground)] transition-colors cursor-pointer flex items-center gap-2"
+              >
+                <TagPill name={s} />
+              </button>
+            ))}
+            {isNew && (
+              <button
+                type="button"
+                onMouseDown={e => { e.preventDefault(); addTag(input.trim()) }}
+                className="w-full text-left px-3 py-2 text-sm hover:bg-[var(--muted-bg)] text-[var(--muted)] transition-colors cursor-pointer"
+              >
+                + Add &ldquo;{input.trim()}&rdquo; as new tag
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 // ─── DatePicker ───────────────────────────────────────────────────────────────
@@ -872,12 +980,10 @@ function BlogSteps({ step, form, set }: StepProps) {
           />
         </FieldWrapper>
         <FieldWrapper full>
-          <FieldLabel>Tags (comma separated)</FieldLabel>
-          <input
-            className={inputCls}
-            placeholder="next.js, tutorial, web-dev"
+          <FieldLabel>Tags</FieldLabel>
+          <TagAutocomplete
             value={form.tags as string}
-            onChange={(e) => set('tags', e.target.value)}
+            onChange={(v) => set('tags', v)}
           />
         </FieldWrapper>
       </Grid>
@@ -973,6 +1079,13 @@ function ProjectSteps({ step, form, set }: StepProps) {
             placeholder="Next.js, TypeScript, Tailwind, PostgreSQL"
             value={form.stack as string}
             onChange={(e) => set('stack', e.target.value)}
+          />
+        </FieldWrapper>
+        <FieldWrapper full>
+          <FieldLabel>Tags</FieldLabel>
+          <TagAutocomplete
+            value={form.tags as string}
+            onChange={(v) => set('tags', v)}
           />
         </FieldWrapper>
         <FieldWrapper>

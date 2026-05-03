@@ -19,7 +19,7 @@ A living document of ideas for future iterations.
 ## Search & Discovery
 
 - ✅ **Site-wide search** — Fuzzy search across projects, blog posts, and experience (e.g. using Fuse.js or Pagefind)
-- **Tag-based filtering** — Unified tag system across blog + projects with tag index pages `/tags/[tag]`
+- ✅ **Tag-based filtering** — Unified tag system across blog + projects with tag index pages `/tags/[tag]`
 - ✅ **Project status badges** — Visual indicators (Completed / WIP / Archived) with filter in project grid
 
 ---

@@ -1,6 +1,6 @@
 import { getAllBlogPosts } from '@/lib/mdx';
-import BlogCard from '@/components/blog/BlogCard';
 import type { Metadata } from 'next';
+import BlogClient from './BlogClient';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllBlogPosts();
+  const allTags = [...new Set(posts.flatMap(p => p.frontmatter.tags))].sort();
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
@@ -17,11 +18,7 @@ export default function BlogPage() {
         Thoughts on tech, home lab, and software development.
       </p>
       {posts.length > 0 ? (
-        <div className="space-y-4">
-          {posts.map(post => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
-        </div>
+        <BlogClient posts={posts} allTags={allTags} />
       ) : (
         <p className="text-[var(--muted)]">No posts yet — coming soon.</p>
       )}

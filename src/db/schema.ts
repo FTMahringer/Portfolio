@@ -28,3 +28,12 @@ export const oidcProviders = sqliteTable('oidc_providers', {
   enabled: integer('enabled').notNull().default(1),
   createdAt: integer('created_at').notNull().$defaultFn(() => Math.floor(Date.now() / 1000)),
 });
+
+export const tags = sqliteTable('tags', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull().unique(),
+  slug: text('slug').notNull().unique(),
+  colorIndex: integer('color_index').notNull().default(0),
+  usageCount: integer('usage_count').notNull().default(0),
+  createdAt: integer('created_at').notNull().$defaultFn(() => Math.floor(Date.now() / 1000)),
+});
