@@ -5,6 +5,7 @@ import { SearchButton } from '@/components/search/SearchButton';
 const NAV_LINKS = [
   { href: '/projects', label: 'Projects' },
   { href: '/blog', label: 'Blog' },
+  { href: '/music', label: 'Music' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
