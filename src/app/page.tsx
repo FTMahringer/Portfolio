@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema, websiteSchema } from "@/lib/jsonld";
+import { PortfolioStats } from "@/components/home/PortfolioStats";
+import { getPortfolioStats } from "@/lib/stats";
 
 const HERO_SKILLS = [
   "Next.js",
@@ -25,12 +27,7 @@ export default function HomePage() {
   const allExperience = getAllExperience();
   const config = getSiteConfig();
   const { site } = config;
-
-  const stats = [
-    { label: "Projects", value: allProjects.length },
-    { label: "Experience entries", value: allExperience.length },
-    { label: "Blog posts", value: getAllBlogPosts().length },
-  ].filter((s) => s.value > 0);
+  const stats = getPortfolioStats();
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-24">
@@ -73,21 +70,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Quick stats bar */}
-      {stats.length > 0 && (
-        <section>
-          <div className="flex flex-wrap gap-6 py-4 border-y border-[var(--border)]">
-            {stats.map((s, i) => (
-              <div key={i} className="flex items-center gap-1.5">
-                <span className="text-xl font-bold text-[var(--accent)]">
-                  {s.value}
-                </span>
-                <span className="text-sm text-[var(--muted)]">{s.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Portfolio Stats */}
+      <section className="py-8">
+        <PortfolioStats
+          totalProjects={stats.totalProjects}
+          totalBlogPosts={stats.totalBlogPosts}
+          yearsOfExperience={stats.yearsOfExperience}
+        />
+      </section>
 
       {/* Featured Projects */}
       {featured.length > 0 && (

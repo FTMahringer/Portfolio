@@ -5,6 +5,8 @@ import readingTime from 'reading-time';
 import { cache } from 'react';
 import type { Project, BlogPost, Experience, ProjectFrontmatter, BlogFrontmatter, ExperienceFrontmatter } from './types';
 
+export type { BlogPost, Project, Experience };
+
 const contentDir = path.join(process.cwd(), 'content');
 
 function getFiles(dir: string): string[] {

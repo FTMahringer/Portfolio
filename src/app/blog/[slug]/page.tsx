@@ -9,6 +9,8 @@ import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { GiscusComments } from '@/components/comments/GiscusComments';
 import { getSiteConfig } from '@/lib/config';
+import { getRelatedPosts } from '@/lib/related';
+import { RelatedPosts } from '@/components/blog/RelatedPosts';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -31,6 +33,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) return null;
   const headings = extractHeadings(post.content);
   const { giscus } = getSiteConfig();
+  const relatedPosts = getRelatedPosts(slug, post.frontmatter.tags || []);
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
@@ -60,7 +63,15 @@ export default async function BlogPostPage({ params }: Props) {
         <MDXRemote source={post.content} components={mdxComponents} />
       </article>
 
-      <GiscusComments config={giscus} />
+      {/* Related Posts */}
+      <RelatedPosts posts={relatedPosts} />
+
+      {/* Comments */}
+      {giscus?.enabled && (
+        <div className="mt-16">
+          <GiscusComments config={giscus} />
+        </div>
+      )}
     </main>
   );
 }
