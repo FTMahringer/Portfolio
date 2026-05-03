@@ -17,7 +17,10 @@ export async function GET(request: NextRequest) {
     // Exchange code for tokens
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const redirectUri = `${request.nextUrl.origin}/api/spotify/callback`;
+    // Use configured redirect URI instead of request.nextUrl.origin
+    // This ensures the redirect URI matches what's configured in Spotify app settings
+    // Falls back to the public domain if not configured
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI || 'https://portfolio.ftmahringer.com/api/spotify/callback';
 
     if (!clientId || !clientSecret) {
       return NextResponse.json({ error: 'Spotify credentials not configured' }, { status: 500 });

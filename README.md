@@ -120,19 +120,22 @@ To enable the Spotify "Now Playing" widget, configure the following environment 
 | `SPOTIFY_CLIENT_ID` | Spotify app client ID | `829beffbf6fe...` |
 | `SPOTIFY_CLIENT_SECRET` | Spotify app client secret | `19c278a670...` |
 | `SPOTIFY_REFRESH_TOKEN` | OAuth refresh token | Get via authorization flow (see below) |
+| `SPOTIFY_REDIRECT_URI` | Public OAuth callback URL | `https://portfolio.ftmahringer.com/api/spotify/callback` |
 
 **Getting the Spotify refresh token:**
 
 1. Create a Spotify app at https://developer.spotify.com/dashboard
 2. Add redirect URI: `https://your-domain.com/api/spotify/callback`
-3. Set `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in your environment
-4. Visit this URL (replace `YOUR_CLIENT_ID` and `your-domain.com`):
+3. Set `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, and `SPOTIFY_REDIRECT_URI` in your environment
+4. Visit this URL (replace `YOUR_CLIENT_ID` and use the same domain as `SPOTIFY_REDIRECT_URI`):
    ```
    https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://your-domain.com/api/spotify/callback&scope=user-read-currently-playing+user-read-recently-played+user-top-read
    ```
 5. Authorize the app
 6. Copy the refresh token from the success page
 7. Add it to your environment as `SPOTIFY_REFRESH_TOKEN`
+
+**Important:** The `SPOTIFY_REDIRECT_URI` must match exactly what's configured in your Spotify app settings. Use your public domain (e.g., `https://portfolio.ftmahringer.com/api/spotify/callback`), not internal/VPN domains.
 
 **Note:** If these variables are not set, Spotify features will be automatically disabled.
 

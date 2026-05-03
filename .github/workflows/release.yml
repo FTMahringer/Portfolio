@@ -7,6 +7,9 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Auto Release (version bump)"]
+    types: [completed]
 
 permissions:
   contents: write
@@ -16,11 +19,16 @@ jobs:
   docker:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
+    if: (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success') && (github.event_name != 'release' || github.event.release.author.login != 'github-actions[bot]')
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+      version: ${{ steps.vars.outputs.version }}
+      should_run: ${{ steps.vars.outputs.should_run }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
 
       - name: Determine version tag + docker tags
         id: vars
@@ -33,11 +41,32 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
+          set -euo pipefail
+
           if [ "$EVENT_NAME" = "release" ]; then
             TAG="$RELEASE_TAG"
           elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             VERSION_FROM_PACKAGE=$(python -c "import json; print(json.load(open('package.json'))['version'])")
             TAG="v$VERSION_FROM_PACKAGE"
+          elif [ "$EVENT_NAME" = "workflow_run" ]; then
+            VERSION_FROM_PACKAGE=$(python -c "import json; print(json.load(open('package.json'))['version'])")
+            TAG="v$VERSION_FROM_PACKAGE"
+
+            git fetch --tags --force
+
+            if ! git show-ref --tags --verify --quiet "refs/tags/$TAG"; then
+              echo "Tag $TAG not found for this commit. Nothing to release." >&2
+              echo "should_run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            TAG_COMMIT=$(git rev-list -n 1 "$TAG")
+            HEAD_COMMIT=$(git rev-parse HEAD)
+            if [ "$TAG_COMMIT" != "$HEAD_COMMIT" ]; then
+              echo "Tag $TAG points to $TAG_COMMIT, expected $HEAD_COMMIT. Nothing to release." >&2
+              echo "should_run=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
           else
             TAG="$REF_NAME"
           fi
@@ -46,6 +75,8 @@ jobs:
             echo "Expected tag like v1.2.3, got '$TAG'" >&2
             exit 1
           fi
+
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
 
           VERSION="${TAG#v}"
           MAJOR="${VERSION%%.*}"
@@ -79,19 +110,22 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU (for multi-platform)
+        if: steps.vars.outputs.should_run == 'true'
         uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
+        if: steps.vars.outputs.should_run == 'true'
         uses: docker/setup-buildx-action@v4
 
       - name: Log in to Docker Hub
-        if: steps.vars.outputs.dockerhub_enabled == 'true'
+        if: steps.vars.outputs.should_run == 'true' && steps.vars.outputs.dockerhub_enabled == 'true'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Log in to GitHub Container Registry
+        if: steps.vars.outputs.should_run == 'true'
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
@@ -99,6 +133,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        if: steps.vars.outputs.should_run == 'true'
         uses: docker/build-push-action@v7
         with:
           context: .
@@ -116,29 +151,30 @@ jobs:
           cache-to: type=gha,mode=max
 
   release:
-    name: GitHub Release (tag push)
-    if: github.event_name == 'push'
+    name: GitHub Release
+    if: (github.event_name == 'push' || github.event_name == 'workflow_run') && needs.docker.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     needs: docker
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ needs.docker.outputs.tag }}
           generate_release_notes: true
           body_prefix: |
             ## Docker Images
 
             Pull from Docker Hub:
             ```sh
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ github.ref_name }}
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/portfolio:${{ needs.docker.outputs.version }}
             ```
 
             Pull from GitHub Container Registry:
             ```sh
-            docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            docker pull ghcr.io/${{ github.repository }}:${{ needs.docker.outputs.version }}
             ```

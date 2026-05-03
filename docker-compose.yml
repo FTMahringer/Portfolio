@@ -24,6 +24,7 @@ services:
       # SPOTIFY_CLIENT_ID: your-spotify-client-id
       # SPOTIFY_CLIENT_SECRET: your-spotify-client-secret
       # SPOTIFY_REFRESH_TOKEN: your-spotify-refresh-token
+      # SPOTIFY_REDIRECT_URI: https://your-domain.com/api/spotify/callback
       # Optional: Analytics
       # NEXT_PUBLIC_UMAMI_WEBSITE_ID: your-umami-id
       # NEXT_PUBLIC_UMAMI_URL: https://analytics.example.com
