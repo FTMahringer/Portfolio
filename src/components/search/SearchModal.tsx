@@ -143,7 +143,7 @@ function SearchContent({ close }: SearchContentProps) {
                     <div className="px-5 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--muted)]">
                       {TYPE_CONFIG[type].label}s
                     </div>
-                    {items.map((item, i) => {
+                    {items.map((item) => {
                       const flatIndex = results.indexOf(item)
                       return (
                         <ResultRow

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { marked } from "marked";
 import { MarkdownEditor } from "@/components/ui/MarkdownEditor";
 
 type Status = "idle" | "sending" | "success" | "error";
@@ -12,12 +11,9 @@ export function ContactForm() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
-  const [preview, setPreview] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
-
-  const previewHtml = preview ? (marked.parse(message) as string) : "";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,7 +59,7 @@ export function ContactForm() {
         Send a Message
       </h2>
       <p className="text-sm text-[var(--muted)] mb-6">
-        I'll get back to you as soon as I can.
+        I&apos;ll get back to you as soon as I can.
       </p>
 
       {status === "success" ? (
@@ -71,7 +67,7 @@ export function ContactForm() {
           <div className="text-2xl mb-2">✅</div>
           <p className="text-green-400 font-medium">Message sent!</p>
           <p className="text-sm text-[var(--muted)] mt-1">
-            I'll reply to {email} shortly.
+            I&apos;ll reply to {email} shortly.
           </p>
           <button
             onClick={() => setStatus("idle")}

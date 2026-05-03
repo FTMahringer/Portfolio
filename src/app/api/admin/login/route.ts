@@ -3,7 +3,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import argon2 from 'argon2';
-import { createSession, SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from '@/lib/auth';
+import { createSession, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { extractClientIP } from '@/lib/cidr';
 
 export async function POST(request: NextRequest) {
