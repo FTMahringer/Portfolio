@@ -56,12 +56,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
-        ref={ref as any}
-        {...(rest as any)}
+        ref={ref as React.Ref<HTMLAnchorElement>}
+        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       />
     )
   }
-  const Comp = asChild ? Slot : "button" as any
+  const Comp = asChild ? Slot : ("button" as React.ElementType)
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}

@@ -1,18 +1,14 @@
 import { getProjectBySlug, getAllProjects, getExperienceBySlug } from '@/lib/mdx';
-// TableOfContents and extractHeadings are now handled by ProjectContentWrapper
 import { notFound } from 'next/navigation';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import { mdxComponents } from '@/components/mdx/MDXComponents';
 import Badge from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatDateRange } from '@/lib/utils';
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Metadata } from 'next';
-import { JsonLd } from '@/components/seo/JsonLd';
-import { softwareSchema } from '@/lib/jsonld';
 import { GiscusComments } from '@/components/comments/GiscusComments';
 import { getSiteConfig } from '@/lib/config';
+import { ProjectImageGallery } from '@/components/projects/ProjectImageGallery';
+import ProjectContentWrapper from './ProjectContentWrapper';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -31,8 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: project.frontmatter.summary,
   };
 }
-
-import ProjectContentWrapper from './ProjectContentWrapper';
 
 export default async function ProjectDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -87,35 +81,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </header>
 
       {/* Image gallery */}
-      {gallery.length > 0 && (
-        <div className="mb-10">
-          {gallery.length === 1 ? (
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-[var(--border)]">
-              <Image
-                src={gallery[0]}
-                alt={frontmatter.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 768px"
-              />
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-3">
-              {gallery.map((img, i) => (
-                <div key={i} className="relative aspect-video rounded-lg overflow-hidden border border-[var(--border)]">
-                  <Image
-                    src={img}
-                    alt={`${frontmatter.title} image ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 384px"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <ProjectImageGallery images={gallery} title={frontmatter.title} />
 
       <hr className="border-[var(--border)] mb-10" />
 

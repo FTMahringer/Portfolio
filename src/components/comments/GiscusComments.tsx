@@ -25,7 +25,8 @@ export function GiscusComments({ config }: GiscusCommentsProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current || !settings.showComments || !config.enabled) return;
+    const node = ref.current;
+    if (!node || !settings.showComments || !config.enabled) return;
 
     // Determine theme based on current settings
     const giscusTheme = settings.theme === 'light' 
@@ -50,11 +51,11 @@ export function GiscusComments({ config }: GiscusCommentsProps) {
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
 
-    ref.current.appendChild(script);
+    node.appendChild(script);
 
     return () => {
-      if (ref.current) {
-        ref.current.innerHTML = '';
+      if (node) {
+        node.innerHTML = '';
       }
     };
   }, [settings.showComments, settings.theme, config]);

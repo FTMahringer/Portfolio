@@ -1,15 +1,12 @@
 import { getBlogPostBySlug, getAllBlogPosts } from '@/lib/mdx';
 import { TableOfContents } from '@/components/mdx/TableOfContents';
 import { extractHeadings } from '@/lib/toc-utils';
-import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { mdxComponents } from '@/components/mdx/MDXComponents';
 import Badge from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
-import { JsonLd } from '@/components/seo/JsonLd';
-import { blogPostSchema } from '@/lib/jsonld';
 import { GiscusComments } from '@/components/comments/GiscusComments';
 import { getSiteConfig } from '@/lib/config';
 
@@ -32,7 +29,6 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) return null;
-  const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(post.content);
   const { giscus } = getSiteConfig();
 
