@@ -3,32 +3,13 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { revalidatePath } from 'next/cache'
-
-const ALLOWED_TYPES = ['projects', 'blog', 'experience'] as const
-type ContentType = (typeof ALLOWED_TYPES)[number]
-
-const TYPE_PATHS: Record<ContentType, string> = {
-  projects: 'content/projects',
-  blog: 'content/blog',
-  experience: 'content/experience',
-}
-
-const ROUTE_PATHS: Record<ContentType, string> = {
-  projects: '/projects',
-  blog: '/blog',
-  experience: '/experience',
-}
+import { ALLOWED_TYPES, TYPE_PATHS, ROUTE_PATHS, resolveType, serializeFrontmatter } from '@/lib/content-api'
 
 function checkAuth(req: NextRequest): boolean {
   const secret = process.env.API_SECRET
   if (!secret) return false
   const auth = req.headers.get('authorization') ?? ''
   return auth === `Bearer ${secret}`
-}
-
-function resolveType(type: string): ContentType | null {
-  if (ALLOWED_TYPES.includes(type as ContentType)) return type as ContentType
-  return null
 }
 
 // GET /api/content/[type] — list all entries
@@ -99,15 +80,11 @@ export async function POST(
     return NextResponse.json({ error: `File "${slug}.mdx" already exists. Set overwrite: true to replace.` }, { status: 409 })
   }
 
-  // Build MDX string with frontmatter
-  const fm = Object.entries(frontmatter ?? {})
-    .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
-    .join('\n')
+  const fm = serializeFrontmatter(frontmatter ?? {})
   const mdxContent = `---\n${fm}\n---\n\n${content}`
 
   fs.writeFileSync(filePath, mdxContent, 'utf-8')
 
-  // Revalidate affected routes
   revalidatePath(ROUTE_PATHS[contentType])
   revalidatePath(`${ROUTE_PATHS[contentType]}/${slug}`)
 

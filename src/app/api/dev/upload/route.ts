@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { validateSession } from '@/lib/auth'
+import { SESSION_COOKIE_NAME } from '@/lib/auth'
 import sharp from 'sharp'
 import fs from 'fs'
 import path from 'path'
 
-function checkAuth(req: NextRequest): boolean {
+async function checkAuth(req: NextRequest): Promise<boolean> {
   const cookie = req.headers.get('cookie') ?? ''
-  return cookie.split(';').some(c => c.trim() === 'dev_session=1')
+  const match = cookie.split(';').map(c => c.trim()).find(c => c.startsWith(`${SESSION_COOKIE_NAME}=`))
+  if (!match) return false
+  const sid = match.split('=')[1]
+  const session = await validateSession(sid)
+  return session !== null
 }
 
 export async function POST(req: NextRequest) {
-  if (!checkAuth(req)) {
+  if (!await checkAuth(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

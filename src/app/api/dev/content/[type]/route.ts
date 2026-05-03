@@ -3,36 +3,21 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { revalidatePath } from 'next/cache'
+import { validateSession, SESSION_COOKIE_NAME } from '@/lib/auth'
+import { ALLOWED_TYPES, TYPE_PATHS, ROUTE_PATHS, resolveType, serializeFrontmatter } from '@/lib/content-api'
 
-const ALLOWED_TYPES = ['projects', 'blog', 'experience'] as const
-type ContentType = (typeof ALLOWED_TYPES)[number]
-
-const TYPE_PATHS: Record<ContentType, string> = {
-  projects: 'content/projects',
-  blog: 'content/blog',
-  experience: 'content/experience',
-}
-
-const ROUTE_PATHS: Record<ContentType, string> = {
-  projects: '/projects',
-  blog: '/blog',
-  experience: '/experience',
-}
-
-function checkDevSession(req: NextRequest): boolean {
-  const cookieHeader = req.headers.get('cookie') ?? ''
-  return cookieHeader.split(';').some(c => c.trim().startsWith('dev_session=1'))
-}
-
-function resolveType(type: string): ContentType | null {
-  return ALLOWED_TYPES.includes(type as ContentType) ? (type as ContentType) : null
+async function checkDevSession(req: NextRequest): Promise<boolean> {
+  const sessionId = req.cookies.get(SESSION_COOKIE_NAME)?.value
+  if (!sessionId) return false
+  const session = await validateSession(sessionId)
+  return session !== null
 }
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ type: string }> }
 ) {
-  if (!checkDevSession(req)) {
+  if (!await checkDevSession(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -59,7 +44,7 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ type: string }> }
 ) {
-  if (!checkDevSession(req)) {
+  if (!await checkDevSession(req)) {
     return NextResponse.json({ error: 'Unauthorized — dev session required.' }, { status: 401 })
   }
 
@@ -95,20 +80,7 @@ export async function POST(
     )
   }
 
-  // Serialize frontmatter to YAML
-  const fm = Object.entries(frontmatter ?? {})
-    .map(([k, v]) => {
-      if (Array.isArray(v)) {
-        if (v.length === 0) return `${k}: []`
-        return `${k}:\n${v.map(i => `  - ${JSON.stringify(i)}`).join('\n')}`
-      }
-      if (v === null || v === undefined) return `${k}: null`
-      if (typeof v === 'boolean') return `${k}: ${v}`
-      if (typeof v === 'number') return `${k}: ${v}`
-      return `${k}: ${JSON.stringify(String(v))}`
-    })
-    .join('\n')
-
+  const fm = serializeFrontmatter(frontmatter ?? {})
   const mdxContent = `---\n${fm}\n---\n\n${content}`
   fs.writeFileSync(filePath, mdxContent, 'utf-8')
 
