@@ -1,21 +1,27 @@
 'use client';
 
 import { useState, useEffect, FormEvent, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+
+interface SsoProvider { id: string; name: string; type: string }
+
+const PROVIDER_ICONS: Record<string, string> = {
+  google: '🔵', microsoft: '🟦', entra: '🔷', okta: '⭕',
+  zitadel: '🟣', pocketid: '🪪', authentik: '🔴', keycloak: '🔐', oidc: '🔑',
+}
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState(() =>
     searchParams.get('error') === 'sso_failed' ? 'SSO authentication failed — please try again' : ''
   );
   const [loading, setLoading] = useState(false);
-  const [ssoAvailable, setSsoAvailable] = useState(false);
+  const [providers, setProviders] = useState<SsoProvider[]>([]);
 
   useEffect(() => {
     fetch('/api/admin/auth/sso-available')
       .then((r) => r.json())
-      .then((d: { available: boolean }) => setSsoAvailable(d.available))
+      .then((d: { available: boolean; providers?: SsoProvider[] }) => setProviders(d.providers ?? []))
       .catch(() => {});
   }, []);
 
@@ -36,14 +42,15 @@ function LoginForm() {
       });
 
       if (res.ok) {
-        router.push('/admin');
+        // Full reload so DevContext re-checks auth status with the new cookie
+        window.location.href = '/admin';
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error ?? 'Invalid credentials');
+        setError((data as { error?: string }).error ?? 'Invalid credentials');
+        setLoading(false);
       }
     } catch {
       setError('Network error — please try again');
-    } finally {
       setLoading(false);
     }
   }
@@ -57,17 +64,23 @@ function LoginForm() {
         Admin
       </h1>
 
-      {ssoAvailable && (
+      {providers.length > 0 && (
         <>
-          <a
-            href="/api/admin/auth/sso"
-            className="flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:opacity-80"
-            style={{ borderColor: 'var(--border)', color: 'var(--foreground)', background: 'var(--background)' }}
-          >
-            Continue with SSO
-          </a>
+          <div className="flex flex-col gap-2 mb-1">
+            {providers.map((p) => (
+              <a
+                key={p.id}
+                href={`/api/admin/auth/sso${p.id !== 'env' ? `?provider_id=${p.id}` : ''}`}
+                className="flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:opacity-80"
+                style={{ borderColor: 'var(--border)', color: 'var(--foreground)', background: 'var(--background)' }}
+              >
+                <span>{PROVIDER_ICONS[p.type] ?? '🔑'}</span>
+                Continue with {p.name}
+              </a>
+            ))}
+          </div>
 
-          <div className="flex items-center gap-3 my-1">
+          <div className="flex items-center gap-3 my-4">
             <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
             <span className="text-xs" style={{ color: 'var(--muted)' }}>or</span>
             <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
@@ -87,11 +100,7 @@ function LoginForm() {
             required
             autoComplete="email"
             className="rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-[var(--accent)]"
-            style={{
-              background: 'var(--background)',
-              borderColor: 'var(--border)',
-              color: 'var(--foreground)',
-            }}
+            style={{ background: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
           />
         </div>
 
@@ -106,11 +115,7 @@ function LoginForm() {
             required
             autoComplete="current-password"
             className="rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:border-[var(--accent)]"
-            style={{
-              background: 'var(--background)',
-              borderColor: 'var(--border)',
-              color: 'var(--foreground)',
-            }}
+            style={{ background: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
           />
         </div>
 
