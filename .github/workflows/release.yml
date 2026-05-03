@@ -59,15 +59,11 @@ jobs:
 
           GHCR_IMAGE="ghcr.io/${REPO,,}"
           TAGS="$GHCR_IMAGE:$VERSION
-          $GHCR_IMAGE:$MAJOR.$MINOR
-          $GHCR_IMAGE:$MAJOR
           $GHCR_IMAGE:latest"
 
           if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
             DH_IMAGE="$DOCKERHUB_USERNAME/portfolio"
             TAGS="$DH_IMAGE:$VERSION
-          $DH_IMAGE:$MAJOR.$MINOR
-          $DH_IMAGE:$MAJOR
           $DH_IMAGE:latest
           $TAGS"
             echo "dockerhub_enabled=true" >> "$GITHUB_OUTPUT"

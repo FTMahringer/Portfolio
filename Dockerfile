@@ -3,7 +3,7 @@ FROM node:24-alpine AS deps
 RUN apk add --no-cache libc6-compat python3 make g++
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --no-audit --no-fund --loglevel=error
 
 # ─── Stage 2: builder ───────────────────────────────────────────────────────
 FROM node:24-alpine AS builder
