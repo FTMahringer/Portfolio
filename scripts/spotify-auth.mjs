@@ -33,7 +33,8 @@ envContent.split('\n').forEach(line => {
 
 const CLIENT_ID = env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'http://localhost:3888/callback';
+// Use env var if set, otherwise default to localhost for local development
+const REDIRECT_URI = env.SPOTIFY_REDIRECT_URI || 'http://localhost:3888/callback';
 const SCOPES = 'user-read-currently-playing user-read-recently-played user-top-read';
 
 if (!CLIENT_ID || !CLIENT_SECRET) {
@@ -41,16 +42,46 @@ if (!CLIENT_ID || !CLIENT_SECRET) {
   process.exit(1);
 }
 
-console.log('🎵 Spotify OAuth Helper\n');
-console.log('📋 Before continuing, make sure you have added this redirect URI to your Spotify app:');
-console.log(`   ${REDIRECT_URI}\n`);
-console.log('   1. Go to https://developer.spotify.com/dashboard');
-console.log('   2. Select your app');
-console.log('   3. Click "Edit Settings"');
-console.log('   4. Add the redirect URI above to "Redirect URIs"');
-console.log('   5. Save\n');
+// Check if using production redirect URI
+const isProduction = REDIRECT_URI !== 'http://localhost:3888/callback';
 
-// Create HTTP server to handle OAuth callback
+console.log('🎵 Spotify OAuth Helper\n');
+
+if (isProduction) {
+  console.log('⚠️  Production mode detected!');
+  console.log(`   Using redirect URI: ${REDIRECT_URI}\n`);
+  console.log('   This script will generate an authorization URL.');
+  console.log('   Visit the URL in your browser to complete OAuth.\n');
+} else {
+  console.log('📋 Before continuing, make sure you have added this redirect URI to your Spotify app:');
+  console.log(`   ${REDIRECT_URI}\n`);
+  console.log('   1. Go to https://developer.spotify.com/dashboard');
+  console.log('   2. Select your app');
+  console.log('   3. Click "Edit Settings"');
+  console.log('   4. Add the redirect URI above to "Redirect URIs"');
+  console.log('   5. Save\n');
+}
+
+// For production mode, just print the URL and exit
+if (isProduction) {
+  const authUrl = new URL('https://accounts.spotify.com/authorize');
+  authUrl.searchParams.set('client_id', CLIENT_ID);
+  authUrl.searchParams.set('response_type', 'code');
+  authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
+  authUrl.searchParams.set('scope', SCOPES);
+
+  console.log('🔗 Authorization URL:\n');
+  console.log(authUrl.toString());
+  console.log('\n');
+  console.log('📋 Next steps:');
+  console.log('   1. Visit the URL above in your browser');
+  console.log('   2. Authorize the app');
+  console.log('   3. Copy the refresh token from the success page');
+  console.log('   4. Add it to your environment as SPOTIFY_REFRESH_TOKEN\n');
+  process.exit(0);
+}
+
+// Create HTTP server to handle OAuth callback (local development only)
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   

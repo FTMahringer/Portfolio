@@ -57,7 +57,7 @@ docker run -d \
 Or use **docker-compose.yml**:
 
 ```yaml
-version: ''3.8''
+version: '3.8'
 services:
   portfolio:
     image: ftmahringer/portfolio:latest
@@ -67,6 +67,11 @@ services:
       ADMIN_EMAIL: admin@example.com
       ADMIN_PASSWORD: secure-password
       API_SECRET: random-secret-key
+      # Optional: Spotify Integration
+      # SPOTIFY_CLIENT_ID: your-spotify-client-id
+      # SPOTIFY_CLIENT_SECRET: your-spotify-client-secret
+      # SPOTIFY_REFRESH_TOKEN: your-spotify-refresh-token
+      # SPOTIFY_REDIRECT_URI: https://your-domain.com/api/spotify/callback
       # Optional: SSO via env vars
       # OIDC_ISSUER: https://accounts.google.com
       # OIDC_CLIENT_ID: your-client-id
