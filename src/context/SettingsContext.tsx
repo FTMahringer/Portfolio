@@ -8,6 +8,7 @@ export interface Settings {
   accentColor: "cyan" | "purple" | "orange" | "green";
   reduceMotion: boolean;
   fontSize: number; // 80–130 (percent)
+  fontFamily: "sans" | "serif" | "mono";
   colorBlindMode:
     | "none"
     | "deuteranopia"
@@ -17,6 +18,7 @@ export interface Settings {
   projectsView: "grid" | "list";
   projectsCardSize: "sm" | "md" | "lg";
   experienceExpanded: boolean;
+  showComments: boolean;
   locale: "en";
 }
 
@@ -25,10 +27,12 @@ const DEFAULTS: Settings = {
   accentColor: "cyan",
   reduceMotion: false,
   fontSize: 100,
+  fontFamily: "sans",
   colorBlindMode: "none",
   projectsView: "grid",
   projectsCardSize: "md",
   experienceExpanded: false,
+  showComments: true,
   locale: "en",
 };
 
@@ -77,6 +81,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     // Accent
     root.setAttribute("data-accent", settings.accentColor);
+
+    // Font family
+    root.setAttribute("data-font", settings.fontFamily);
 
     // Colorblind
     if (settings.colorBlindMode === "none") {

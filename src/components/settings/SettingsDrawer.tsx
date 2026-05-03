@@ -143,6 +143,20 @@ export function SettingsDrawer() {
                   onChange={(v) => update("reduceMotion", v)}
                 />
               </SettingRow>
+
+              <SettingRow label="Font Family" hint="Body text font style">
+                <select
+                  value={settings.fontFamily}
+                  onChange={(e) =>
+                    update("fontFamily", e.target.value as Settings["fontFamily"])
+                  }
+                  className="settings-select"
+                >
+                  <option value="sans">Sans-serif</option>
+                  <option value="serif">Serif</option>
+                  <option value="mono">Monospace</option>
+                </select>
+              </SettingRow>
             </>
           )}
 
@@ -182,12 +196,21 @@ export function SettingsDrawer() {
           )}
 
           {section === "experience" && (
-            <SettingRow label="Auto-expand" hint="Show full content by default">
-              <Toggle
-                checked={settings.experienceExpanded}
-                onChange={(v) => update("experienceExpanded", v)}
-              />
-            </SettingRow>
+            <>
+              <SettingRow label="Auto-expand" hint="Show full content by default">
+                <Toggle
+                  checked={settings.experienceExpanded}
+                  onChange={(v) => update("experienceExpanded", v)}
+                />
+              </SettingRow>
+
+              <SettingRow label="Show Comments" hint="Display Giscus comments">
+                <Toggle
+                  checked={settings.showComments}
+                  onChange={(v) => update("showComments", v)}
+                />
+              </SettingRow>
+            </>
           )}
 
           {section === "accessibility" && (

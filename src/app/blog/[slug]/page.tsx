@@ -10,6 +10,8 @@ import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { blogPostSchema } from '@/lib/jsonld';
+import { GiscusComments } from '@/components/comments/GiscusComments';
+import { getSiteConfig } from '@/lib/config';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -32,6 +34,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) return null;
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(post.content);
+  const { giscus } = getSiteConfig();
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
@@ -60,6 +63,8 @@ export default async function BlogPostPage({ params }: Props) {
       <article>
         <MDXRemote source={post.content} components={mdxComponents} />
       </article>
+
+      <GiscusComments config={giscus} />
     </main>
   );
 }

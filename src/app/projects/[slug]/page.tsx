@@ -11,6 +11,8 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { softwareSchema } from '@/lib/jsonld';
+import { GiscusComments } from '@/components/comments/GiscusComments';
+import { getSiteConfig } from '@/lib/config';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -37,6 +39,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   const project = getProjectBySlug(slug);
   if (!project) notFound();
   const { frontmatter, content } = project;
+  const { giscus } = getSiteConfig();
 
   // Resolve related experience
   const relatedExperience = (frontmatter.relatedExperience ?? [])
@@ -147,6 +150,8 @@ export default async function ProjectDetailPage({ params }: Props) {
           </div>
         </div>
       )}
+
+      <GiscusComments config={giscus} />
     </main>
   );
 }

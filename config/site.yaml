@@ -20,6 +20,21 @@ contact:
   resend_from: "Portfolio Contact <noreply@resend.dev>"
   to: "contact@ftmahringer.com"
 
+# Giscus comments (GitHub Discussions-backed)
+# Get these values from https://giscus.app after setting up GitHub Discussions
+giscus:
+  enabled: true
+  repo: "FTMahringer/Portfolio"
+  repoId: ""  # Get from giscus.app
+  category: "Comments"
+  categoryId: ""  # Get from giscus.app
+  mapping: "pathname"
+  reactionsEnabled: true
+  emitMetadata: false
+  inputPosition: "bottom"
+  theme: "preferred_color_scheme"
+  lang: "en"
+
 # Skills shown in the About page sidebar (keep it short — 4–6 per category)
 sidebar_skills:
   - category: "Frontend"

@@ -24,6 +24,19 @@ export interface SiteConfig {
     resend_from: string
     to: string
   }
+  giscus: {
+    enabled: boolean
+    repo: string
+    repoId: string
+    category: string
+    categoryId: string
+    mapping: string
+    reactionsEnabled: boolean
+    emitMetadata: boolean
+    inputPosition: string
+    theme: string
+    lang: string
+  }
   sidebar_skills?: { category: string; items: string[] }[]
 }
 

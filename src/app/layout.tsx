@@ -9,6 +9,7 @@ import { SearchProvider } from "@/context/SearchContext";
 import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
 import { SearchModal } from "@/components/search/SearchModal";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
+import { PageTransition } from "@/components/layout/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,7 +75,9 @@ export default function RootLayout({
             <SearchProvider>
               <Header />
               <ReadingProgress />
-              <div className="flex-1">{children}</div>
+              <PageTransition>
+                <div className="flex-1">{children}</div>
+              </PageTransition>
               <Footer />
               <SettingsDrawer />
               <SearchModal />
