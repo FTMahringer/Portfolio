@@ -111,7 +111,42 @@ Visit [http://localhost:3000](http://localhost:3000) for the public site and [ht
 | `ADMIN_PASSWORD` | Default admin password | `secure-password` |
 | `API_SECRET` | Secret for API authentication | `random-secret-key` |
 
-### Optional
+### Optional: Spotify Integration
+
+To enable the Spotify "Now Playing" widget, configure the following environment variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `SPOTIFY_CLIENT_ID` | Spotify app client ID | `829beffbf6fe...` |
+| `SPOTIFY_CLIENT_SECRET` | Spotify app client secret | `19c278a670...` |
+| `SPOTIFY_REFRESH_TOKEN` | OAuth refresh token | Get via authorization flow (see below) |
+
+**Getting the Spotify refresh token:**
+
+1. Create a Spotify app at https://developer.spotify.com/dashboard
+2. Add redirect URI: `https://your-domain.com/api/spotify/callback`
+3. Set `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in your environment
+4. Visit this URL (replace `YOUR_CLIENT_ID` and `your-domain.com`):
+   ```
+   https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://your-domain.com/api/spotify/callback&scope=user-read-currently-playing+user-read-recently-played+user-top-read
+   ```
+5. Authorize the app
+6. Copy the refresh token from the success page
+7. Add it to your environment as `SPOTIFY_REFRESH_TOKEN`
+
+**Note:** If these variables are not set, Spotify features will be automatically disabled.
+
+### Optional: Analytics
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | Umami website ID | `abc-123-def` |
+| `NEXT_PUBLIC_UMAMI_URL` | Umami analytics server URL | `https://analytics.example.com` |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Plausible domain | `your-domain.com` |
+
+Analytics are only loaded in production and require configuration in `config/site.yaml`.
+
+### Optional: Other
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `DATABASE_URL` | SQLite database path | `file:./data/portfolio.db` |
