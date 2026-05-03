@@ -6,12 +6,6 @@ on:
       - "v*.*.*"
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: "Semver tag to release (e.g. v1.2.3). Required if running on a branch."
-        required: false
-        type: string
 
 permissions:
   contents: write
