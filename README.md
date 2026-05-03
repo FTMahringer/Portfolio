@@ -30,7 +30,7 @@ A modern, self-hosted portfolio website built with Next.js 16, featuring a full 
 - **Session Management** — SQLite-backed sessions with configurable expiry
 
 ### 🐳 Production-Ready
-- **Docker** — Multi-platform images (amd64, arm64) on Docker Hub and GitHub Container Registry
+- **Docker** — Optimized amd64 images on Docker Hub and GitHub Container Registry
 - **CI/CD** — Automated linting, type-checking, builds, and releases via GitHub Actions
 - **CodeQL Security Scanning** — Automated vulnerability detection
 - **Dependabot** — Auto-merge for minor/patch dependency updates
@@ -159,16 +159,16 @@ Analytics are only loaded in production and require configuration in `config/sit
 
 ## 🐳 Docker Tags
 
-We publish multi-platform images (amd64, arm64) to both Docker Hub and GitHub Container Registry:
+We publish amd64 images to both Docker Hub and GitHub Container Registry:
 
 | Tag | Description | Example |
 |-----|-------------|---------|
 | `latest` | Latest stable release | `ftmahringer/portfolio:latest` |
-| `X.Y.Z` | Exact version | `ftmahringer/portfolio:0.1.0` |
-| `X.Y` | Latest patch in X.Y.* | `ftmahringer/portfolio:0.1` |
-| `X` | Latest minor/patch in X.* | `ftmahringer/portfolio:0` |
+| `X.Y.Z` | Exact version | `ftmahringer/portfolio:2.1.0` |
+| `X.Y` | Latest patch in X.Y.* | `ftmahringer/portfolio:2.1` |
+| `X` | Latest minor/patch in X.* | `ftmahringer/portfolio:2` |
 
-**Recommendation:** Use `X.Y` for production (e.g., `0.1`) to get patch updates automatically while avoiding breaking changes.
+**Recommendation:** Use `X.Y` for production (e.g., `2.1`) to get patch updates automatically while avoiding breaking changes.
 
 ## 🛠️ Tech Stack
 
