@@ -77,7 +77,7 @@ A living document of ideas for future iterations.
 - **Storybook** — Component library documentation for all UI components
 - ✅ **Playwright E2E tests** — Critical path tests: homepage loads, contact form submits, settings persist
 - **Lighthouse CI** — Automated Lighthouse score checks on every PR
-- **Content validation script** — Pre-commit hook that validates MDX frontmatter against TypeScript types
+- ✅ **Content validation script** — Pre-commit hook that validates MDX frontmatter against TypeScript types
 
 ---
 
