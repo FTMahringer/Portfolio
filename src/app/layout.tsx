@@ -7,7 +7,6 @@ import { SettingsProvider } from "@/context/SettingsContext";
 import { DevProvider } from "@/context/DevContext";
 import { SearchProvider } from "@/context/SearchContext";
 import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
-import { DevPanel } from "@/components/dev/DevPanel";
 import { SearchModal } from "@/components/search/SearchModal";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
 
@@ -72,7 +71,6 @@ export default function RootLayout({
               <div className="flex-1">{children}</div>
               <Footer />
               <SettingsDrawer />
-              <DevPanel />
               <SearchModal />
             </SearchProvider>
           </DevProvider>

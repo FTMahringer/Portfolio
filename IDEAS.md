@@ -37,9 +37,9 @@ A living document of ideas for future iterations.
 
 ## Performance & SEO
 
-- **OpenGraph images** — Dynamic OG image generation per-page using `next/og` with `ImageResponse`
-- **Sitemap** — Auto-generated `sitemap.xml` from all routes and MDX content
-- **JSON-LD structured data** — `Person`, `WebSite`, `SoftwareSourceCode` schemas on relevant pages
+- ✅ **OpenGraph images** — Dynamic OG image generation per-page using `next/og` with `ImageResponse`
+- ✅ **Sitemap** — Auto-generated `sitemap.xml` from all routes and MDX content
+- ✅ **JSON-LD structured data** — `Person`, `WebSite`, `SoftwareSourceCode` schemas on relevant pages
 - ✅ **Image optimization pipeline** — Images auto-converted to WebP + resized on upload via `sharp`
 
 ---
@@ -86,3 +86,9 @@ A living document of ideas for future iterations.
 - ✅ **Edge caching for API routes** — Cache `/api/content/projects` (GET) with `Cache-Control` or Vercel Edge Config
 - **Image CDN** — Move project/blog images to Cloudflare R2 or similar for better performance globally
 - **Self-hosted deployment** — Dockerfile + Caddy config for running on a VPS/homelab alongside other services
+
+---
+
+## Security & Auth
+
+- ✅ **SSO / OIDC admin login** — Generic OIDC integration for admin login; works with PocketID, Authentik, and any standard OIDC provider (PKCE flow, see `docs/SSO.md`)

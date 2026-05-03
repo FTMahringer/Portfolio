@@ -2,7 +2,6 @@
 
 import { useSettings } from '@/context/SettingsContext'
 import type { Settings } from '@/context/SettingsContext'
-import { useDevMode } from '@/context/DevContext'
 import React, { useState } from 'react'
 
 const ACCENT_OPTIONS = [
@@ -23,7 +22,7 @@ const COLORBLIND_OPTIONS: { value: Settings['colorBlindMode']; label: string }[]
 export function SettingsDrawer() {
   const { settings, update } = useSettings()
   const [open, setOpen] = useState(false)
-  const [section, setSection] = useState<'appearance' | 'projects' | 'experience' | 'accessibility' | 'developer'>('appearance')
+  const [section, setSection] = useState<'appearance' | 'projects' | 'experience' | 'accessibility'>('appearance')
 
   return (
     <>
@@ -69,13 +68,13 @@ export function SettingsDrawer() {
 
         {/* Section tabs */}
         <div className="flex border-b border-[var(--border)] text-xs overflow-x-auto">
-          {(['appearance', 'projects', 'experience', 'accessibility', 'developer'] as const).map(s => (
+          {(['appearance', 'projects', 'experience', 'accessibility'] as const).map(s => (
             <button
               key={s}
               onClick={() => setSection(s)}
               className={`flex-1 py-2.5 capitalize cursor-pointer transition-colors text-xs font-medium whitespace-nowrap px-1 ${section === s ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--muted)] hover:text-[var(--foreground)]'}`}
             >
-              {s === 'accessibility' ? 'A11y' : s === 'developer' ? '</>' : s}
+              {s === 'accessibility' ? 'A11y' : s}
             </button>
           ))}
         </div>
@@ -152,8 +151,7 @@ export function SettingsDrawer() {
             </SettingRow>
           )}
 
-          {section === 'accessibility' && (
-            <>
+          {section === 'accessibility' && (            <>
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-[var(--foreground)]">Font Size</span>
@@ -215,10 +213,6 @@ export function SettingsDrawer() {
                 <Toggle checked={settings.reduceMotion} onChange={v => update('reduceMotion', v)} />
               </SettingRow>
             </>
-          )}
-
-          {section === 'developer' && (
-            <DevSection />
           )}
         </div>
 
@@ -299,83 +293,3 @@ function ListIcon() {
   )
 }
 
-function DevSection() {
-  const { isDevMode, loading, login, logout } = useDevMode()
-  const [key, setKey] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
-  const [msg, setMsg] = useState('')
-
-  async function handleUnlock(e: React.FormEvent) {
-    e.preventDefault()
-    setStatus('loading')
-    const ok = await login(key)
-    if (ok) {
-      setStatus('idle')
-      setKey('')
-    } else {
-      setStatus('error')
-      setMsg('Invalid key.')
-    }
-  }
-
-  if (loading) {
-    return <div className="text-sm text-[var(--muted)]">Loading…</div>
-  }
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <div className="text-sm font-medium text-[var(--foreground)] mb-0.5">Dev Mode</div>
-        <div className="text-xs text-[var(--muted)]">
-          {isDevMode
-            ? 'Active — a DEV panel is visible on the left edge of every page.'
-            : 'Enter your key to unlock the developer panel and API docs.'}
-        </div>
-      </div>
-
-      {isDevMode ? (
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm text-green-400">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span>Dev session active (30 min, refreshes on activity)</span>
-          </div>
-          <a
-            href="/api-docs"
-            className="block w-full text-center py-2 rounded-lg bg-[var(--accent)] text-white text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            Open API Docs →
-          </a>
-          <div className="flex items-center justify-between">
-            <a href="/api/openapi" target="_blank" className="text-xs text-[var(--accent)] hover:underline">
-              Raw OpenAPI spec ↗
-            </a>
-            <button
-              onClick={logout}
-              className="text-xs text-[var(--muted)] hover:text-red-400 transition-colors cursor-pointer"
-            >
-              End session
-            </button>
-          </div>
-        </div>
-      ) : (
-        <form onSubmit={handleUnlock} className="space-y-2">
-          <input
-            type="password"
-            value={key}
-            onChange={e => setKey(e.target.value)}
-            placeholder="DEV_KEY"
-            className="w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--muted-bg)] text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--accent)] text-sm"
-          />
-          {status === 'error' && <p className="text-xs text-red-400">{msg}</p>}
-          <button
-            type="submit"
-            disabled={status === 'loading' || !key}
-            className="w-full py-2 rounded-lg bg-[var(--accent)] text-white text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-40 cursor-pointer"
-          >
-            {status === 'loading' ? 'Checking…' : 'Unlock Dev Mode'}
-          </button>
-        </form>
-      )}
-    </div>
-  )
-}

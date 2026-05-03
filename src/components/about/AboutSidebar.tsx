@@ -42,14 +42,14 @@ export function AboutSidebar() {
   return (
     <aside className="w-full md:w-64 lg:w-72 flex-shrink-0">
       {/* Avatar — supports jpg, png, webp, etc. */}
-      <div className="mb-4">
-        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-[var(--border)] bg-[var(--muted-bg)]">
+      <div className="mb-5">
+        <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-[var(--border)] bg-[var(--muted-bg)] shadow-lg">
           <Image
             src={site.avatar}
             alt={site.title}
             fill
             className="object-cover"
-            sizes="112px"
+            sizes="160px"
           />
         </div>
       </div>

@@ -5,12 +5,12 @@ site:
   email: "fynn@ftmahringer.com"
   location: "Bad Hall, Austria"
   # Supports any image in public/images/ — jpg, png, webp, etc.
-  avatar: "/images/avatar.jpg"
+  avatar: "/images/avatar.png"
   bio: "I develop for the web, working on open source projects, developer tools, and structured, maintainable systems."
 
 social:
   github: "FTMahringer"
-  linkedin: "yourusername"
+  linkedin: "fynn-mahringer-30a36b285"
   twitter: ""
   instagram: ""
   youtube: ""

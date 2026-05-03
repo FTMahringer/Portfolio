@@ -41,5 +41,8 @@ yarn-error.log*
 next-env.d.ts
 
 .superpowers
+
+# SQLite database
+/data/
 # docs (uncommenting to allow spec files)
 # docs

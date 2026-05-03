@@ -5,63 +5,40 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 interface DevContextValue {
   isDevMode: boolean
   loading: boolean
-  login: (key: string) => Promise<boolean>
-  logout: () => void
+  login: (email: string, password: string) => Promise<boolean>
+  logout: () => Promise<void>
 }
 
 const DevContext = createContext<DevContextValue>({
   isDevMode: false,
   loading: true,
   login: async () => false,
-  logout: () => {},
+  logout: async () => {},
 })
-
-const COOKIE_NAME = 'dev_session'
-const SESSION_SECONDS = 1800 // 30 min
-
-function readDevCookie(): boolean {
-  if (typeof document === 'undefined') return false
-  return document.cookie.split(';').some(c => c.trim().startsWith(`${COOKIE_NAME}=1`))
-}
-
-export function setDevCookie() {
-  document.cookie = `${COOKIE_NAME}=1; max-age=${SESSION_SECONDS}; SameSite=Lax; path=/`
-}
-
-function clearDevCookie() {
-  document.cookie = `${COOKIE_NAME}=; max-age=0; path=/`
-}
 
 export function DevProvider({ children }: { children: React.ReactNode }) {
   const [isDevMode, setIsDevMode] = useState(false)
   const [loading, setLoading] = useState(true)
 
+  // Check auth state on mount by calling the status endpoint
   useEffect(() => {
-    setIsDevMode(readDevCookie())
-    setLoading(false)
+    fetch('/api/admin/status')
+      .then(r => r.json())
+      .then((data: { authenticated: boolean }) => {
+        setIsDevMode(data.authenticated === true)
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
-  // Refresh cookie on any user activity while in dev mode
-  useEffect(() => {
-    if (!isDevMode) return
-    const refresh = () => {
-      if (readDevCookie()) setDevCookie()
-    }
-    const events = ['mousemove', 'keydown', 'click', 'scroll'] as const
-    events.forEach(e => window.addEventListener(e, refresh, { passive: true }))
-    return () => events.forEach(e => window.removeEventListener(e, refresh))
-  }, [isDevMode])
-
-  const login = useCallback(async (key: string): Promise<boolean> => {
+  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     try {
-      const res = await fetch('/api/auth/dev', {
+      const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key }),
+        body: JSON.stringify({ email, password }),
       })
-      const data = await res.json()
-      if (data.ok) {
-        setDevCookie()
+      if (res.ok) {
         setIsDevMode(true)
         return true
       }
@@ -71,11 +48,13 @@ export function DevProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const logout = useCallback(() => {
-    clearDevCookie()
-    // Also clear legacy api_docs_access cookie
-    document.cookie = 'api_docs_access=; max-age=0; path=/'
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' })
+    } catch {}
     setIsDevMode(false)
+    // Redirect to admin login
+    window.location.href = '/admin'
   }, [])
 
   return (

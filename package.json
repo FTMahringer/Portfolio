@@ -6,14 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
-    "@types/js-cookie": "^3.0.6",
-    "@types/js-yaml": "^4.0.9",
-    "@types/marked": "^5.0.2",
+    "argon2": "^0.44.0",
+    "better-sqlite3": "^12.9.0",
+    "drizzle-orm": "^0.45.2",
     "fuse.js": "^7.3.0",
     "gray-matter": "^4.0.3",
+    "jose": "^6.2.3",
     "js-cookie": "^3.0.5",
     "js-yaml": "^4.1.1",
     "marked": "^18.0.3",
@@ -32,12 +38,18 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/js-cookie": "^3.0.6",
+    "@types/js-yaml": "^4.0.9",
+    "@types/marked": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

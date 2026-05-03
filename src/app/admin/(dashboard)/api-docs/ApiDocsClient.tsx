@@ -5,59 +5,28 @@ import { useState } from "react";
 
 /* ─── Gate component ─── */
 function ApiDocsGate({ children }: { children: React.ReactNode }) {
-  const { isDevMode, loading, login } = useDevMode();
-  const [key, setKey] = useState("");
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const { isDevMode, loading } = useDevMode();
 
   if (loading) return null;
   if (isDevMode) return <>{children}</>;
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setSubmitting(true);
-    const ok = await login(key);
-    if (!ok) setError("Invalid key.");
-    setSubmitting(false);
-  }
-
   return (
     <main className="max-w-md mx-auto px-4 py-24 flex flex-col items-center gap-6 text-center">
-      <div className="text-4xl">🔑</div>
+      <div className="text-4xl">🔒</div>
       <div>
         <h1 className="text-2xl font-bold text-[var(--foreground)] mb-2">
-          Developer Access
+          Admin Access Required
         </h1>
         <p className="text-[var(--muted)] text-sm">
-          Enter your DEV_KEY to view the API documentation.
+          You need to be logged in as admin to view the API documentation.
         </p>
       </div>
-      <form onSubmit={handleSubmit} className="w-full space-y-3">
-        <input
-          type="password"
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
-          placeholder="DEV_KEY"
-          className="w-full px-4 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--muted-bg)] text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--accent)] text-sm"
-          autoFocus
-        />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading || !key}
-          className="w-full py-2.5 rounded-lg bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-40 cursor-pointer"
-        >
-          {submitting ? "Checking…" : "Unlock"}
-        </button>
-      </form>
-      <p className="text-xs text-[var(--muted)]">
-          set via the{" "}
-        <code className="font-mono bg-[var(--muted-bg)] px-1 py-0.5 rounded">
-          DEV_KEY
-        </code>{" "}
-        environment variable.
-      </p>
+      <a
+        href="/admin"
+        className="inline-block px-6 py-2.5 rounded-lg bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 transition-opacity"
+      >
+        Go to Admin Login →
+      </a>
     </main>
   );
 }
@@ -410,7 +379,11 @@ function ApiDocsInner({ spec }: { spec: any }) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ApiDocsClient({ spec }: { spec: any }) {
+export default function ApiDocsClient({ spec, embedded = false }: { spec: any; embedded?: boolean }) {
+  if (embedded) {
+    // Inside dev layout — skip the auth gate, no outer chrome
+    return <ApiDocsInner spec={spec} />;
+  }
   return (
     <ApiDocsGate>
       <ApiDocsInner spec={spec} />

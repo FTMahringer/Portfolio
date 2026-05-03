@@ -96,6 +96,7 @@ html[data-colorblind="high-contrast"] {
 
 html {
   font-size: var(--base-font-size, 100%);
+  scrollbar-gutter: stable;
 }
 
 body {
