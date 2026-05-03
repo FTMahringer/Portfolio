@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Badge from '@/components/ui/Badge';
 
 export const metadata: Metadata = {
   title: 'Skills',

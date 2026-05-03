@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllProjects, getAllBlogPosts, getAllExperience } from "@/lib/mdx";
+import { getAllProjects, getAllBlogPosts } from "@/lib/mdx";
 import { getSiteConfig } from "@/lib/config";
 import ProjectGrid from "@/components/projects/ProjectGrid";
 import BlogCard from "@/components/blog/BlogCard";
@@ -24,7 +24,6 @@ export default function HomePage() {
   const allProjects = getAllProjects();
   const featured = allProjects.filter((p) => p.frontmatter.featured);
   const latestPosts = getAllBlogPosts().slice(0, 3);
-  const allExperience = getAllExperience();
   const config = getSiteConfig();
   const { site } = config;
   const stats = getPortfolioStats();

@@ -28,11 +28,12 @@ export const mdxComponents: MDXComponents = {
     // Block code - handled by pre
     return <code {...props} />;
   },
-  pre: (props: any) => {
-    const code = props.children?.props?.children || '';
-    const className = props.children?.props?.className || '';
-    const filename = props.children?.props?.filename;
-    const terminal = props.children?.props?.terminal === 'true' || props.children?.props?.terminal === true;
+  pre: (props: React.HTMLAttributes<HTMLPreElement>) => {
+    const code = (props.children as { props?: { children?: string } })?.props?.children || '';
+    const className = (props.children as { props?: { className?: string } })?.props?.className || '';
+    const filename = (props.children as { props?: { filename?: string } })?.props?.filename;
+    const terminal = (props.children as { props?: { terminal?: string | boolean } })?.props?.terminal === 'true' || 
+                     (props.children as { props?: { terminal?: string | boolean } })?.props?.terminal === true;
     
     return <CodeBlock className={className} filename={filename} terminal={terminal}>{code}</CodeBlock>;
   },

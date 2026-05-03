@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Badge from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
 import type { BlogPost } from "@/lib/types";
 

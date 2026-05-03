@@ -16,7 +16,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
       <Quote className="w-8 h-8 text-[var(--accent)] mb-4 opacity-50" />
       
       <div className="text-[var(--foreground)] leading-relaxed mb-6">
-        "{content.trim()}"
+        &ldquo;{content.trim()}&rdquo;
       </div>
 
       <div className="flex items-center gap-4">
