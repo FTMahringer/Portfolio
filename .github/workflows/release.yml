@@ -6,6 +6,7 @@ on:
       - "v*.*.*"
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,7 +17,7 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Determine version tag + docker tags
         id: vars
@@ -25,15 +26,12 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           REF_NAME: ${{ github.ref_name }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-          INPUT_TAG: ${{ inputs.tag }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
           if [ "$EVENT_NAME" = "release" ]; then
             TAG="$RELEASE_TAG"
-          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_TAG" ]; then
-            TAG="$INPUT_TAG"
           elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             VERSION_FROM_PACKAGE=$(python -c "import json; print(json.load(open('package.json'))['version'])")
             TAG="v$VERSION_FROM_PACKAGE"
