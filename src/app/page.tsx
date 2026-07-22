@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema, websiteSchema } from "@/lib/jsonld";
 import { PortfolioStats } from "@/components/home/PortfolioStats";
 import { getPortfolioStats } from "@/lib/stats";
-import { SpotifyNowPlaying } from "@/components/spotify";
+
 
 const HERO_SKILLS = [
   "Next.js",
@@ -79,13 +79,7 @@ export default function HomePage() {
         />
       </section>
 
-      {/* Now Playing */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold text-[var(--foreground)]">
-          Currently Listening
-        </h2>
-        <SpotifyNowPlaying />
-      </section>
+
 
       {/* Featured Projects */}
       {featured.length > 0 && (

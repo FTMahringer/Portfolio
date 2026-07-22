@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import argon2 from 'argon2';
 import { createSession, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { extractClientIP } from '@/lib/cidr';
+import { shouldUseSecureCookies } from '@/lib/request-security';
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({ ok: true });
     response.cookies.set(SESSION_COOKIE_NAME, sessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: shouldUseSecureCookies(request),
       sameSite: 'strict',
       expires: new Date(expiresAt * 1000),
       path: '/',

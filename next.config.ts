@@ -7,13 +7,6 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'i.scdn.co',
-        pathname: '/image/**',
-      },
-    ],
   },
 };
 

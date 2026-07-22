@@ -5,7 +5,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import type { Metadata } from 'next';
 import { AboutSidebar } from '@/components/about/AboutSidebar';
-import { SpotifyTopArtists, SpotifyTopTracks } from '@/components/spotify';
+
 
 export const metadata: Metadata = {
   title: 'About Me',
@@ -35,11 +35,7 @@ export default async function AboutPage() {
             <p className="text-[var(--muted)]">About content coming soon.</p>
           )}
         </div>
-        <div className="lg:w-80 flex-shrink-0 space-y-6">
-          <h3 className="text-lg font-semibold mb-4">Music Taste</h3>
-          <SpotifyTopArtists limit={5} timeRange="medium_term" />
-          <SpotifyTopTracks limit={5} timeRange="medium_term" />
-        </div>
+
       </div>
     </main>
   );

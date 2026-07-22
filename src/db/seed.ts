@@ -3,7 +3,19 @@ import { users } from './schema';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 
+function loadLocalEnvFiles() {
+  // Load .env first, then .env.local so local overrides take precedence.
+  for (const file of ['.env', '.env.local']) {
+    try {
+      process.loadEnvFile(file);
+    } catch {
+      // Ignore missing env files.
+    }
+  }
+}
+
 async function seed() {
+  loadLocalEnvFiles();
   const email = process.env.ADMIN_EMAIL;
   const password = process.env.ADMIN_PASSWORD;
 

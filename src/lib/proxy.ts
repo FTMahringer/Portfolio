@@ -4,14 +4,23 @@ import { isInternalIP, extractClientIP } from './cidr';
 
 export function adminMiddleware(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
-  const isAdminPage = pathname.startsWith('/admin');
-  const isAdminApi = pathname.startsWith('/api/admin');
+  const normalizedPath = pathname.replace(/\/+$/, '') || '/';
+  const isAdminPage = normalizedPath.startsWith('/admin');
+  const isAdminApi = normalizedPath.startsWith('/api/admin');
 
   if (!isAdminPage && !isAdminApi) return null;
 
-  // Allow login page and public API endpoints without auth
-  const isLoginPage = pathname === '/admin' || pathname === '/admin/';
-  const isPublicApi = pathname === '/api/admin/login' || pathname === '/api/admin/status';
+  // Allow login and public auth/status endpoints without an existing admin session.
+  const isLoginPage = normalizedPath === '/admin/login';
+  const publicAdminApi = new Set([
+    '/api/admin/login',
+    '/api/admin/status',
+    '/api/admin/auth/sso',
+    '/api/admin/auth/callback',
+    '/api/admin/auth/sso-available',
+  ]);
+  const isPublicApi = publicAdminApi.has(normalizedPath);
+
   if (isLoginPage || isPublicApi) return null;
 
   // CIDR bypass — skip cookie check for internal IPs
@@ -25,7 +34,7 @@ export function adminMiddleware(request: NextRequest): NextResponse | null {
     if (isAdminApi) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
-    return NextResponse.redirect(new URL('/admin', request.url));
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   return null; // Cookie present — let the request through; server components will validate DB

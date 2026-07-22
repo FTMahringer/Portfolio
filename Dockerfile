@@ -42,7 +42,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/config ./config
 COPY --from=builder --chown=nextjs:nodejs /app/scripts/init.cjs ./scripts/init.cjs
 # Copy entrypoint
 COPY --chown=nextjs:nodejs scripts/docker-entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+# Ensure Unix line endings to avoid "no such file or directory" on exec
+RUN sed -i 's/\r$//' ./entrypoint.sh && chmod +x ./entrypoint.sh
 
 # SQLite data volume
 RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
@@ -53,4 +54,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]

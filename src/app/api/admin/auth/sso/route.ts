@@ -3,10 +3,15 @@ import crypto from 'crypto';
 import { db } from '@/db';
 import { oidcProviders } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { shouldUseSecureCookies } from '@/lib/request-security';
 
 const OIDC_CV_COOKIE = 'oidc_cv';
 const OIDC_STATE_COOKIE = 'oidc_state';
 const PKCE_MAX_AGE = 60 * 10;
+
+function normalizeIssuer(issuer: string): string {
+  return issuer.trim().replace(/\/+$/, '');
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url);
@@ -54,10 +59,11 @@ export async function GET(req: NextRequest) {
   }
 
   const callbackUri = redirectUri ?? `${origin}/api/admin/auth/callback`;
+  const normalizedIssuer = normalizeIssuer(issuer);
 
   let authorizationEndpoint: string;
   try {
-    const disc = await fetch(`${issuer}/.well-known/openid-configuration`, { next: { revalidate: 0 } });
+    const disc = await fetch(`${normalizedIssuer}/.well-known/openid-configuration`, { next: { revalidate: 0 } });
     if (!disc.ok) throw new Error(`Discovery fetch failed: ${disc.status}`);
     const config = await disc.json() as { authorization_endpoint: string };
     authorizationEndpoint = config.authorization_endpoint;
@@ -83,16 +89,18 @@ export async function GET(req: NextRequest) {
   });
 
   const response = NextResponse.redirect(`${authorizationEndpoint}?${params.toString()}`);
+  const secureCookies = shouldUseSecureCookies(req);
+
   response.cookies.set(OIDC_CV_COOKIE, codeVerifier, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: secureCookies,
     sameSite: 'lax',
     maxAge: PKCE_MAX_AGE,
     path: '/',
   });
   response.cookies.set(OIDC_STATE_COOKIE, stateCookieValue, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: secureCookies,
     sameSite: 'lax',
     maxAge: PKCE_MAX_AGE,
     path: '/',

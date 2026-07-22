@@ -4,6 +4,7 @@ import { users, oidcProviders } from '@/db/schema';
 import { createSession, SESSION_COOKIE_NAME } from '@/lib/auth';
 import { extractClientIP } from '@/lib/cidr';
 import { eq } from 'drizzle-orm';
+import { shouldUseSecureCookies } from '@/lib/request-security';
 
 const OIDC_CV_COOKIE = 'oidc_cv';
 const OIDC_STATE_COOKIE = 'oidc_state';
@@ -32,8 +33,13 @@ interface StateCookie {
   providerId: number | 'env';
 }
 
+function normalizeIssuer(issuer: string): string {
+  return issuer.trim().replace(/\/+$/, '');
+}
+
 async function fetchDiscovery(issuer: string): Promise<OidcDiscovery> {
-  const res = await fetch(`${issuer}/.well-known/openid-configuration`, {
+  const normalizedIssuer = normalizeIssuer(issuer);
+  const res = await fetch(`${normalizedIssuer}/.well-known/openid-configuration`, {
     next: { revalidate: 0 },
   });
   if (!res.ok) throw new Error(`Discovery fetch failed: ${res.status}`);
@@ -160,7 +166,7 @@ export async function GET(request: NextRequest) {
   const now = Math.floor(Date.now() / 1000);
   const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];
 
-  if (payload.iss !== issuer) {
+  if (normalizeIssuer(payload.iss) !== normalizeIssuer(issuer)) {
     console.error('[callback] issuer mismatch', payload.iss, issuer);
     return NextResponse.redirect(new URL(LOGIN_ERROR_URL, request.url));
   }
@@ -192,7 +198,7 @@ export async function GET(request: NextRequest) {
 
   response.cookies.set(SESSION_COOKIE_NAME, sessionId, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: shouldUseSecureCookies(request),
     sameSite: 'strict',
     expires: new Date(expiresAt * 1000),
     path: '/',

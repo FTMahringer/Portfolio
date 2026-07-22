@@ -67,11 +67,6 @@ services:
       ADMIN_EMAIL: admin@example.com
       ADMIN_PASSWORD: secure-password
       API_SECRET: random-secret-key
-      # Optional: Spotify Integration
-      # SPOTIFY_CLIENT_ID: your-spotify-client-id
-      # SPOTIFY_CLIENT_SECRET: your-spotify-client-secret
-      # SPOTIFY_REFRESH_TOKEN: your-spotify-refresh-token
-      # SPOTIFY_REDIRECT_URI: https://your-domain.com/api/spotify/callback
       # Optional: SSO via env vars
       # OIDC_ISSUER: https://accounts.google.com
       # OIDC_CLIENT_ID: your-client-id
@@ -95,11 +90,12 @@ cd Portfolio
 npm install
 
 # Set up environment variables
-cp .env.local.example .env.local
-# Edit .env.local with your values
+cp .env.example .env
+# Edit .env.local with your values (include ADMIN_EMAIL + ADMIN_PASSWORD)
 
-# Initialize the database
+# Initialize schema + seed admin user
 npm run db:push
+npm run db:seed
 
 # Run the development server
 npm run dev
@@ -116,33 +112,7 @@ Visit [http://localhost:3000](http://localhost:3000) for the public site and [ht
 | `ADMIN_PASSWORD` | Default admin password | `secure-password` |
 | `API_SECRET` | Secret for API authentication | `random-secret-key` |
 
-### Optional: Spotify Integration
 
-To enable the Spotify "Now Playing" widget, configure the following environment variables:
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `SPOTIFY_CLIENT_ID` | Spotify app client ID | `829beffbf6fe...` |
-| `SPOTIFY_CLIENT_SECRET` | Spotify app client secret | `19c278a670...` |
-| `SPOTIFY_REFRESH_TOKEN` | OAuth refresh token | Get via authorization flow (see below) |
-| `SPOTIFY_REDIRECT_URI` | Public OAuth callback URL | `https://portfolio.ftmahringer.com/api/spotify/callback` |
-
-**Getting the Spotify refresh token:**
-
-1. Create a Spotify app at https://developer.spotify.com/dashboard
-2. Add redirect URI: `https://your-domain.com/api/spotify/callback`
-3. Set `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, and `SPOTIFY_REDIRECT_URI` in your environment
-4. Visit this URL (replace `YOUR_CLIENT_ID` and use the same domain as `SPOTIFY_REDIRECT_URI`):
-   ```
-   https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://your-domain.com/api/spotify/callback&scope=user-read-currently-playing+user-read-recently-played+user-top-read
-   ```
-5. Authorize the app
-6. Copy the refresh token from the success page
-7. Add it to your environment as `SPOTIFY_REFRESH_TOKEN`
-
-**Important:** The `SPOTIFY_REDIRECT_URI` must match exactly what's configured in your Spotify app settings. Use your public domain (e.g., `https://portfolio.ftmahringer.com/api/spotify/callback`), not internal/VPN domains.
-
-**Note:** If these variables are not set, Spotify features will be automatically disabled.
 
 ### Optional: Analytics
 
@@ -204,10 +174,15 @@ ports:
 The SQLite database is in `/app/data/portfolio.db` inside the container. Make sure it''s persisted in a volume and not shared across multiple container instances.
 
 ### Admin login not working
-If you changed `ADMIN_EMAIL` or `ADMIN_PASSWORD` after the first start, the admin user was already seeded. Either:
-1. Delete the volume and restart (resets database), or
-2. Use the existing credentials, or
-3. Manually update the password via SQL: `npm run db:studio` → users table
+Admin credentials come from `ADMIN_EMAIL` + `ADMIN_PASSWORD`, but they are only used when the user is seeded.
+
+- **Docker:** seed happens automatically on first container start (empty `/app/data`).
+- **Local dev:** run `npm run db:seed` after setting env vars.
+
+If you changed `ADMIN_EMAIL` or `ADMIN_PASSWORD` after first seed, either:
+1. Rerun `npm run db:seed` locally, or
+2. Delete the Docker volume and restart (resets database), or
+3. Update via SQL: `npm run db:studio` → `users` table
 
 ## 📄 License
 
