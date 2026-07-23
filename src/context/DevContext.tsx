@@ -53,8 +53,8 @@ export function DevProvider({ children }: { children: React.ReactNode }) {
       await fetch('/api/admin/logout', { method: 'POST' })
     } catch {}
     setIsDevMode(false)
-    // Redirect to admin login
-    window.location.href = '/admin'
+    // Redirect to public homepage after logout
+    window.location.href = '/'
   }, [])
 
   return (

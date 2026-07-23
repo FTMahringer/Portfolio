@@ -26,7 +26,7 @@ OIDC_ALLOWED_EMAIL=admin@example.com
 
 ## How It Works
 
-1. User clicks **Continue with SSO** on `/admin/login`.
+1. User opens the **Login** button in the site header and clicks **Continue with SSO**.
 2. App fetches `{OIDC_ISSUER}/.well-known/openid-configuration` to discover endpoints.
 3. A PKCE code verifier + challenge (S256) and a random state token are generated.
 4. User is redirected to the provider's authorization endpoint.
@@ -77,9 +77,9 @@ OIDC_REDIRECT_URI=https://your-portfolio.example.com/api/admin/auth/callback
 ## Testing
 
 1. Set all four `OIDC_*` env vars and restart the dev server.
-2. Visit `/admin/login` — a **Continue with SSO** button should appear above the password form.
-3. Click it and complete login at your provider.
-4. You should be redirected to `/admin` and be logged in.
+2. Click the **Login** button in the site header.
+3. A **Continue with SSO** button appears above the password form. Click it and complete login at your provider.
+4. The admin toolbar appears at the top of the page. Click **Dashboard** to open `/admin`.
 
 To verify the discovery endpoint works before testing end-to-end:
 ```bash

@@ -7,7 +7,7 @@ export async function requireAdminSession() {
   const sessionId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
   const session = await validateSession(sessionId);
   if (!session) {
-    redirect('/admin/login');
+    redirect('/');
   }
   return session;
 }

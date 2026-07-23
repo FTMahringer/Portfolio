@@ -13,6 +13,7 @@ import { PageTransition } from "@/components/layout/PageTransition";
 import { Analytics } from "@/components/analytics/Analytics";
 import AdminToolbar from "@/components/admin/AdminToolbar";
 import { getSiteConfig } from "@/lib/config";
+import { ToolbarLayout } from "@/components/admin/ToolbarLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,14 +74,14 @@ export default function RootLayout({
           <DevProvider>
             <SearchProvider>
               <AdminToolbar />
-              <div className="md:pt-10 flex min-h-full flex-col">
+              <ToolbarLayout>
                 <Header />
                 <ReadingProgress />
                 <PageTransition>
                   <div className="flex-1">{children}</div>
                 </PageTransition>
                 <Footer />
-              </div>
+              </ToolbarLayout>
               <SettingsDrawer />
               <SearchModal />
             </SearchProvider>

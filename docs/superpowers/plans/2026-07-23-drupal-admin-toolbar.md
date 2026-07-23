@@ -308,7 +308,7 @@ Expected: build succeeds.
 - [ ] **Step 2: Start dev server and verify toolbar**
 
 Run: `npm run dev`
-Open `http://localhost:3000/admin/login`, log in with seeded admin credentials, then visit a public page.
+Open `http://localhost:3000/`, click the **Login** button in the header, log in with seeded admin credentials.
 Expected:
 - Toolbar visible at top on desktop.
 - Hover over "Content" shows submenu with New Blog Post / New Project / New Experience / Manage Content.

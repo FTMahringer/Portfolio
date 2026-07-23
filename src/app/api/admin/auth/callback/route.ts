@@ -8,7 +8,7 @@ import { shouldUseSecureCookies } from '@/lib/request-security';
 
 const OIDC_CV_COOKIE = 'oidc_cv';
 const OIDC_STATE_COOKIE = 'oidc_state';
-const LOGIN_ERROR_URL = '/admin/login?error=sso_failed';
+const LOGIN_ERROR_URL = '/?error=sso_failed';
 
 interface OidcDiscovery {
   token_endpoint: string;

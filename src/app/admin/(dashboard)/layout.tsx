@@ -47,7 +47,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
 
   useEffect(() => {
     if (!loading && !isDevMode) {
-      router.replace('/admin/login')
+      router.replace('/')
     }
   }, [loading, isDevMode, router])
 

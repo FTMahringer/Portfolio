@@ -10,8 +10,7 @@ export function adminMiddleware(request: NextRequest): NextResponse | null {
 
   if (!isAdminPage && !isAdminApi) return null;
 
-  // Allow login and public auth/status endpoints without an existing admin session.
-  const isLoginPage = normalizedPath === '/admin/login';
+  // Allow public auth/status endpoints without an existing admin session.
   const publicAdminApi = new Set([
     '/api/admin/login',
     '/api/admin/status',
@@ -21,7 +20,7 @@ export function adminMiddleware(request: NextRequest): NextResponse | null {
   ]);
   const isPublicApi = publicAdminApi.has(normalizedPath);
 
-  if (isLoginPage || isPublicApi) return null;
+  if (isPublicApi) return null;
 
   // CIDR bypass — skip cookie check for internal IPs
   const clientIP = extractClientIP(request.headers);
@@ -34,7 +33,7 @@ export function adminMiddleware(request: NextRequest): NextResponse | null {
     if (isAdminApi) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
-    return NextResponse.redirect(new URL('/admin/login', request.url));
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return null; // Cookie present — let the request through; server components will validate DB
