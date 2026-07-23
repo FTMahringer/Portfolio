@@ -12,6 +12,7 @@ import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Analytics } from "@/components/analytics/Analytics";
 import AdminToolbar from "@/components/admin/AdminToolbar";
+import EditContentButton from "@/components/admin/EditContentButton";
 import { getSiteConfig } from "@/lib/config";
 import { ToolbarLayout } from "@/components/admin/ToolbarLayout";
 
@@ -81,6 +82,7 @@ export default function RootLayout({
                   <div className="flex-1">{children}</div>
                 </PageTransition>
                 <Footer />
+                <EditContentButton />
               </ToolbarLayout>
               <SettingsDrawer />
               <SearchModal />

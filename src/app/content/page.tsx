@@ -58,11 +58,11 @@ export default async function AdminContentPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <Link
-              href="/admin/dashboard"
+              href="/"
               className="text-sm mb-2 block"
               style={{ color: "var(--muted)" }}
             >
-              ← Dashboard
+              ← Back to site
             </Link>
             <h1 className="text-2xl font-semibold tracking-tight">Content</h1>
           </div>

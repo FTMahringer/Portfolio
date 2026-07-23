@@ -22,10 +22,10 @@ function ApiDocsGate({ children }: { children: React.ReactNode }) {
         </p>
       </div>
       <a
-        href="/admin"
+        href="/"
         className="inline-block px-6 py-2.5 rounded-lg bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 transition-opacity"
       >
-        Go to Admin Login →
+        Back to site →
       </a>
     </main>
   );
