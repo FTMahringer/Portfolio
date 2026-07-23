@@ -18,6 +18,7 @@ export const adminMenu: AdminMenuItem[] = [
       { id: 'new-experience', label: 'New Experience', href: '/content/new/experience', icon: '💼' },
       { id: 'content-list', label: 'Manage Content', href: '/content', icon: '📂' },
       { id: 'tags', label: 'Tags', href: '/content/tags', icon: '🏷️' },
+      { id: 'media', label: 'Media Library', href: '/content/media', icon: '🖼️' },
     ],
   },
   {
