@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useDevMode } from "@/context/DevContext";
 import { useState } from "react";
 
@@ -21,12 +22,12 @@ function ApiDocsGate({ children }: { children: React.ReactNode }) {
           You need to be logged in as admin to view the API documentation.
         </p>
       </div>
-      <a
+      <Link
         href="/"
         className="inline-block px-6 py-2.5 rounded-lg bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 transition-opacity"
       >
         Back to site →
-      </a>
+      </Link>
     </main>
   );
 }
