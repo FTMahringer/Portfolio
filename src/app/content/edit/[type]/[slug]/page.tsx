@@ -1,8 +1,22 @@
 import { notFound } from 'next/navigation';
 import { requireAdminSession } from '@/lib/session';
+import { getBlogPostBySlug, getProjectBySlug, getExperienceBySlug } from '@/lib/mdx';
+import ContentEditor from '@/components/admin/ContentEditor';
 
 const VALID_TYPES = ['blog', 'projects', 'experience'] as const;
 type ContentType = typeof VALID_TYPES[number];
+
+const TYPE_MAP: Record<ContentType, 'blog' | 'project' | 'experience'> = {
+  blog: 'blog',
+  projects: 'project',
+  experience: 'experience',
+};
+
+const LOADERS = {
+  blog: getBlogPostBySlug,
+  projects: getProjectBySlug,
+  experience: getExperienceBySlug,
+};
 
 export const metadata = { title: 'Edit Content | Dev' };
 
@@ -13,22 +27,19 @@ export default async function EditContentPage({
 }) {
   const { type, slug } = await params;
   if (!VALID_TYPES.includes(type as ContentType)) notFound();
+
   await requireAdminSession();
 
+  const editorType = TYPE_MAP[type as ContentType];
+  const entry = LOADERS[type as ContentType](slug);
+  if (!entry) notFound();
+
   return (
-    <div className="min-h-screen p-8" style={{ background: 'var(--background)', color: 'var(--foreground)' }}>
-      <div className="mx-auto max-w-3xl">
-        <h1 className="text-2xl font-semibold tracking-tight mb-2">Edit {type}</h1>
-        <p className="text-sm mb-6" style={{ color: 'var(--muted)' }}>
-          Slug: <code className="font-mono text-xs">{slug}</code>
-        </p>
-        <div
-          className="rounded-xl border p-8 text-center"
-          style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
-        >
-          <p className="text-[var(--muted)]">Full editor coming in the next phase.</p>
-        </div>
-      </div>
-    </div>
+    <ContentEditor
+      type={editorType}
+      slug={slug}
+      frontmatter={entry.frontmatter as unknown as Record<string, unknown>}
+      content={entry.content}
+    />
   );
 }
