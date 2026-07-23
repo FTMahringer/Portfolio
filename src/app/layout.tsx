@@ -11,6 +11,7 @@ import { SearchModal } from "@/components/search/SearchModal";
 import { ReadingProgress } from "@/components/ui/ReadingProgress";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Analytics } from "@/components/analytics/Analytics";
+import AdminToolbar from "@/components/admin/AdminToolbar";
 import { getSiteConfig } from "@/lib/config";
 
 const geistSans = Geist({
@@ -71,12 +72,15 @@ export default function RootLayout({
         <SettingsProvider>
           <DevProvider>
             <SearchProvider>
-              <Header />
-              <ReadingProgress />
-              <PageTransition>
-                <div className="flex-1">{children}</div>
-              </PageTransition>
-              <Footer />
+              <AdminToolbar />
+              <div className="md:pt-10 flex min-h-full flex-col">
+                <Header />
+                <ReadingProgress />
+                <PageTransition>
+                  <div className="flex-1">{children}</div>
+                </PageTransition>
+                <Footer />
+              </div>
               <SettingsDrawer />
               <SearchModal />
             </SearchProvider>
