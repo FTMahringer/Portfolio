@@ -4,21 +4,42 @@ import { useState } from 'react';
 
 export default function DevSettingsPage() {
   return (
-    <div className="p-8 max-w-2xl">
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-xs font-mono font-semibold text-green-400 uppercase tracking-widest">Dev Dashboard</span>
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <div className="mb-8 flex flex-col gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] px-6 py-6 shadow-sm sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-green-400" />
+            <span className="text-xs font-mono font-semibold uppercase tracking-widest text-green-400">
+              Dev Dashboard
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold text-[var(--foreground)]">Admin Settings</h1>
+          <p className="mt-1 max-w-2xl text-sm text-[var(--muted)]">
+            Manage the credentials and access used to enter the admin area.
+          </p>
         </div>
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Admin Settings</h1>
-        <p className="text-sm text-[var(--muted)] mt-0.5">Manage your admin credentials.</p>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm text-[var(--muted)]">
+          Changes here affect all admin sessions.
+        </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-2">
         <PasswordForm />
         <EmailForm />
       </div>
     </div>
+  );
+}
+
+function Card({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
+  return (
+    <section className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-[var(--foreground)]">{title}</h2>
+        <p className="mt-1 text-sm text-[var(--muted)]">{description}</p>
+      </div>
+      {children}
+    </section>
   );
 }
 
@@ -30,7 +51,8 @@ function PasswordForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMsg(''); setError('');
+    setMsg('');
+    setError('');
     if (form.newPassword !== form.confirm) {
       setError('Passwords do not match');
       return;
@@ -52,11 +74,13 @@ function PasswordForm() {
   }
 
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-      <h2 className="font-semibold text-[var(--foreground)] mb-4">Change Password</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {(['currentPassword', 'newPassword', 'confirm'] as const).map(field => (
-          <div key={field} className="flex flex-col gap-1">
+    <Card
+      title="Change Password"
+      description="Use this when you want to rotate the admin password for the local login flow."
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {(['currentPassword', 'newPassword', 'confirm'] as const).map((field) => (
+          <div key={field} className="space-y-1.5">
             <label className="text-sm text-[var(--muted)]">
               {field === 'currentPassword' ? 'Current password' : field === 'newPassword' ? 'New password' : 'Confirm new password'}
             </label>
@@ -64,22 +88,24 @@ function PasswordForm() {
               type="password"
               required
               value={form[field]}
-              onChange={e => setForm(f => ({ ...f, [field]: e.target.value }))}
-              className="rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
+              onChange={(e) => setForm((current) => ({ ...current, [field]: e.target.value }))}
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--foreground)] outline-none transition-colors focus:border-[var(--accent)]"
             />
           </div>
         ))}
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {msg && <p className="text-sm text-green-400">{msg}</p>}
+
+        {error && <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-400">{error}</p>}
+        {msg && <p className="rounded-xl border border-green-400/20 bg-green-400/10 px-3 py-2 text-sm text-green-400">{msg}</p>}
+
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity disabled:opacity-50"
         >
           {loading ? 'Saving…' : 'Update password'}
         </button>
       </form>
-    </div>
+    </Card>
   );
 }
 
@@ -91,7 +117,8 @@ function EmailForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMsg(''); setError('');
+    setMsg('');
+    setError('');
     setLoading(true);
     const res = await fetch('/api/admin/password', {
       method: 'PUT',
@@ -109,39 +136,43 @@ function EmailForm() {
   }
 
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6">
-      <h2 className="font-semibold text-[var(--foreground)] mb-4">Change Email</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+    <Card
+      title="Change Email"
+      description="Update the login email used for local admin authentication."
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1.5">
           <label className="text-sm text-[var(--muted)]">Current password</label>
           <input
             type="password"
             required
             value={form.currentPassword}
-            onChange={e => setForm(f => ({ ...f, currentPassword: e.target.value }))}
-            className="rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
+            onChange={(e) => setForm((current) => ({ ...current, currentPassword: e.target.value }))}
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--foreground)] outline-none transition-colors focus:border-[var(--accent)]"
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="space-y-1.5">
           <label className="text-sm text-[var(--muted)]">New email</label>
           <input
             type="email"
             required
             value={form.newEmail}
-            onChange={e => setForm(f => ({ ...f, newEmail: e.target.value }))}
-            className="rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
+            onChange={(e) => setForm((current) => ({ ...current, newEmail: e.target.value }))}
+            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--foreground)] outline-none transition-colors focus:border-[var(--accent)]"
           />
         </div>
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {msg && <p className="text-sm text-green-400">{msg}</p>}
+
+        {error && <p className="rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2 text-sm text-red-400">{error}</p>}
+        {msg && <p className="rounded-xl border border-green-400/20 bg-green-400/10 px-3 py-2 text-sm text-green-400">{msg}</p>}
+
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity disabled:opacity-50"
         >
           {loading ? 'Saving…' : 'Update email'}
         </button>
       </form>
-    </div>
+    </Card>
   );
 }

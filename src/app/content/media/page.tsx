@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface MediaFile {
   name: string;
@@ -156,12 +157,13 @@ export default function MediaLibraryPage() {
                 className="group rounded-xl border overflow-hidden flex flex-col"
                 style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
               >
-                <div className="aspect-square bg-[var(--muted-bg)] flex items-center justify-center overflow-hidden">
-                  <img
+                <div className="relative aspect-square bg-[var(--muted-bg)] flex items-center justify-center overflow-hidden">
+                  <Image
                     src={file.url}
                     alt={file.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                   />
                 </div>
                 <div className="p-3 flex flex-col gap-2">

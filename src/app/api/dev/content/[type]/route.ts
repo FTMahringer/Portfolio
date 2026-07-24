@@ -4,7 +4,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { revalidatePath } from 'next/cache'
 import { validateSession, SESSION_COOKIE_NAME } from '@/lib/auth'
-import { ALLOWED_TYPES, TYPE_PATHS, ROUTE_PATHS, resolveType, serializeFrontmatter } from '@/lib/content-api'
+import { ALLOWED_TYPES, ROUTE_PATHS, resolveType, serializeFrontmatter, getContentDir, getContentFilePath } from '@/lib/content-api'
 
 async function checkDevSession(req: NextRequest): Promise<boolean> {
   const sessionId = req.cookies.get(SESSION_COOKIE_NAME)?.value
@@ -27,7 +27,7 @@ export async function GET(
     return NextResponse.json({ error: `Unknown type. Use: ${ALLOWED_TYPES.join(', ')}` }, { status: 400 })
   }
 
-  const dir = path.join(process.cwd(), TYPE_PATHS[contentType])
+  const dir = path.join(process.cwd(), getContentDir(contentType))
   if (!fs.existsSync(dir)) return NextResponse.json([])
 
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
@@ -73,10 +73,10 @@ export async function POST(
     return NextResponse.json({ error: '`content` is required.' }, { status: 400 })
   }
 
-  const dir = path.join(process.cwd(), TYPE_PATHS[contentType])
+  const dir = path.join(process.cwd(), getContentDir(contentType))
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 
-  const filePath = path.resolve(dir, `${slug}.mdx`)
+  const filePath = path.resolve(process.cwd(), getContentFilePath(contentType, slug))
   // Belt-and-suspenders: ensure resolved path stays inside dir
   if (!filePath.startsWith(path.resolve(dir) + path.sep)) {
     return NextResponse.json({ error: 'Invalid slug.' }, { status: 400 })
@@ -98,7 +98,7 @@ export async function POST(
   return NextResponse.json({
     success: true,
     slug,
-    path: `${TYPE_PATHS[contentType]}/${slug}.mdx`,
+    path: getContentFilePath(contentType, slug),
     url: `${ROUTE_PATHS[contentType]}/${slug}`,
   })
 }

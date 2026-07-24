@@ -36,6 +36,7 @@ export default async function EditContentPage({
 
   return (
     <ContentEditor
+      mode="edit"
       type={editorType}
       slug={slug}
       frontmatter={entry.frontmatter as unknown as Record<string, unknown>}

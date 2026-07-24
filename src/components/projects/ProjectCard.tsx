@@ -8,6 +8,7 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   const { frontmatter, slug } = project;
+  const stack = frontmatter.stack ?? [];
 
   return (
     <Link href={`/projects/${slug}`} className="group block h-full">
@@ -27,11 +28,11 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Tech stack */}
         <div className="flex flex-wrap gap-1.5">
-          {frontmatter.stack.slice(0, 4).map(tech => (
+          {stack.slice(0, 4).map((tech) => (
             <Badge key={tech}>{tech}</Badge>
           ))}
-          {frontmatter.stack.length > 4 && (
-            <Badge>+{frontmatter.stack.length - 4}</Badge>
+          {stack.length > 4 && (
+            <Badge>+{stack.length - 4}</Badge>
           )}
         </div>
 

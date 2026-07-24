@@ -31,3 +31,18 @@ export function serializeFrontmatter(fm: Record<string, unknown>): string {
     })
     .join('\n');
 }
+
+export function getContentDir(contentType: ContentType): string {
+  switch (contentType) {
+    case 'projects':
+      return 'content/projects';
+    case 'blog':
+      return 'content/blog';
+    case 'experience':
+      return 'content/experience';
+  }
+}
+
+export function getContentFilePath(contentType: ContentType, slug: string): string {
+  return `${getContentDir(contentType)}/${slug}.mdx`;
+}

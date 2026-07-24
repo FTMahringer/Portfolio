@@ -26,3 +26,38 @@ export function containsScript(src: string): boolean {
   if (/on\w+\s*=/i.test(lower)) return true;
   return false;
 }
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export function extractImageUrls(src: string): string[] {
+  const urls: string[] = [];
+  const seen = new Set<string>();
+
+  const markdownImageRegex = /!\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+  const htmlImageRegex = /<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi;
+
+  for (const regex of [markdownImageRegex, htmlImageRegex]) {
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(src)) !== null) {
+      const url = match[1]?.trim();
+      if (!url || seen.has(url)) continue;
+      seen.add(url);
+      urls.push(url);
+    }
+  }
+
+  return urls;
+}
+
+export function removeImageFromContent(src: string, url: string): string {
+  const escaped = escapeRegExp(url);
+  const markdownImageRegex = new RegExp(`!\\[[^\\]]*\\]\\((?:${escaped})(?:\\s+\"[^\"]*\")?\\)`, 'g');
+  const htmlImageRegex = new RegExp(`<img\\b[^>]*src=[\"']${escaped}[\"'][^>]*>`, 'gi');
+  return src
+    .replace(markdownImageRegex, '')
+    .replace(htmlImageRegex, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trimEnd() + '\n';
+}

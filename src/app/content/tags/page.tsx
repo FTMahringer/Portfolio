@@ -10,11 +10,11 @@ export default async function AdminTagsPage() {
   const initialTags = await syncAndGetAllTags();
 
   return (
-    <div className="p-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[var(--foreground)] mb-1">Tags</h1>
-        <p className="text-sm text-[var(--muted)]">
-          All content tags synced from MDX frontmatter. Create, browse, and manage tags.
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+      <div className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] px-6 py-6 shadow-sm">
+        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-1">Tags</h1>
+        <p className="max-w-3xl text-sm text-[var(--muted)]">
+          All content tags synced from MDX frontmatter. Create, browse, and manage tags from one place.
         </p>
       </div>
       <TagsManager initialTags={initialTags} />

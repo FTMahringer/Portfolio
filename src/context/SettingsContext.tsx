@@ -37,6 +37,24 @@ const DEFAULTS: Settings = {
 };
 
 const COOKIE_KEY = "portfolio_settings";
+const VALID_COLOR_BLIND_MODES = new Set<Settings['colorBlindMode']>([
+  'none',
+  'deuteranopia',
+  'protanopia',
+  'tritanopia',
+  'high-contrast',
+]);
+
+function normalizeSettings(input: unknown): Settings {
+  const saved = input && typeof input === 'object' ? (input as Partial<Settings>) : {};
+  const next: Settings = { ...DEFAULTS, ...saved };
+
+  if (!VALID_COLOR_BLIND_MODES.has(next.colorBlindMode)) {
+    next.colorBlindMode = 'none';
+  }
+
+  return next;
+}
 
 interface SettingsContextValue {
   settings: Settings;
@@ -56,9 +74,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const saved = Cookies.get(COOKIE_KEY);
     if (saved) {
       try {
-        setSettings({ ...DEFAULTS, ...JSON.parse(saved) });
+        setSettings(normalizeSettings(JSON.parse(saved)));
       } catch {
-        // ignore malformed cookie
+        setSettings(DEFAULTS);
       }
     }
     setMounted(true);
@@ -102,7 +120,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       root.style.removeProperty("--tw-transition-duration");
     }
 
-    Cookies.set(COOKIE_KEY, JSON.stringify(settings), { expires: 365 });
+    Cookies.set(COOKIE_KEY, JSON.stringify(normalizeSettings(settings)), { expires: 365 });
   }, [settings, mounted]);
 
   function update<K extends keyof Settings>(key: K, value: Settings[K]) {

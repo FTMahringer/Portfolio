@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 interface MediaFile {
   name: string;
@@ -12,7 +13,7 @@ interface MediaFile {
 interface MediaPickerModalProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (url: string) => void;
+  onAddSelected: (urls: string[]) => void;
 }
 
 function formatBytes(bytes: number): string {
@@ -21,11 +22,12 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-export default function MediaPickerModal({ open, onClose, onSelect }: MediaPickerModalProps) {
+export default function MediaPickerModal({ open, onClose, onAddSelected }: MediaPickerModalProps) {
   const [media, setMedia] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(async () => {
@@ -42,7 +44,10 @@ export default function MediaPickerModal({ open, onClose, onSelect }: MediaPicke
   }, []);
 
   useEffect(() => {
-    if (open) load();
+    if (!open) return;
+    setSelected([]);
+    setQuery('');
+    load();
   }, [open, load]);
 
   async function uploadFiles(files: FileList | null) {
@@ -66,40 +71,43 @@ export default function MediaPickerModal({ open, onClose, onSelect }: MediaPicke
     }
   }
 
-  const filtered = media.filter((m) => m.name.toLowerCase().includes(query.toLowerCase()));
+  const filtered = media.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()));
+
+  function toggleSelection(url: string) {
+    setSelected((current) => (current.includes(url) ? current.filter((entry) => entry !== url) : [...current, url]));
+  }
 
   if (!open) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[500] flex items-center justify-center bg-black/70 p-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+      className="fixed inset-0 z-[600] flex items-center justify-center bg-black/70 p-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div
-        className="w-full max-w-4xl max-h-[80vh] rounded-xl border flex flex-col"
-        style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
-      >
-        <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--border)' }}>
-          <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Media Library</h2>
+      <div className="flex max-h-[85vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] p-4">
+          <div>
+            <h2 className="text-lg font-semibold text-[var(--foreground)]">Media Library</h2>
+            <p className="text-xs text-[var(--muted)]">Select one or more images to add to the editor.</p>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
+            className="text-sm text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
           >
             ✕
           </button>
         </div>
 
-        <div className="p-4 border-b flex flex-col sm:flex-row gap-3" style={{ borderColor: 'var(--border)' }}>
+        <div className="flex flex-col gap-3 border-b border-[var(--border)] p-4 sm:flex-row">
           <input
             type="text"
             placeholder="Search media…"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 rounded-lg border px-3 py-2 text-sm outline-none focus:border-[var(--accent)]"
-            style={{ background: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+            onChange={(event) => setQuery(event.target.value)}
+            className="flex-1 rounded-lg border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)] outline-none transition-colors placeholder:text-[var(--muted)] focus:border-[var(--accent)]"
           />
           <input
             ref={inputRef}
@@ -107,7 +115,7 @@ export default function MediaPickerModal({ open, onClose, onSelect }: MediaPicke
             multiple
             accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/gif,image/webp"
             className="hidden"
-            onChange={(e) => void uploadFiles(e.target.files)}
+            onChange={(event) => void uploadFiles(event.target.files)}
           />
           <button
             type="button"
@@ -125,29 +133,68 @@ export default function MediaPickerModal({ open, onClose, onSelect }: MediaPicke
           ) : filtered.length === 0 ? (
             <p className="text-sm text-[var(--muted)]">No media found.</p>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-              {filtered.map((file) => (
-                <button
-                  key={file.name}
-                  type="button"
-                  onClick={() => {
-                    onSelect(file.url);
-                    onClose();
-                  }}
-                  className="group rounded-lg border overflow-hidden text-left transition-colors hover:border-[var(--accent)]"
-                  style={{ borderColor: 'var(--border)', background: 'var(--background)' }}
-                >
-                  <div className="aspect-square bg-[var(--muted-bg)] flex items-center justify-center overflow-hidden">
-                    <img src={file.url} alt={file.name} className="w-full h-full object-cover" loading="lazy" />
-                  </div>
-                  <div className="p-2">
-                    <p className="text-[10px] truncate font-mono" style={{ color: 'var(--muted)' }}>{file.name}</p>
-                    <p className="text-[10px]" style={{ color: 'var(--muted)' }}>{formatBytes(file.size)}</p>
-                  </div>
-                </button>
-              ))}
+            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
+              {filtered.map((file) => {
+                const isSelected = selected.includes(file.url);
+                return (
+                  <button
+                    key={file.name}
+                    type="button"
+                    onClick={() => toggleSelection(file.url)}
+                    className={`group rounded-xl border text-left transition-colors ${
+                      isSelected
+                        ? 'border-[var(--accent)] bg-[var(--accent)]/10'
+                        : 'border-[var(--border)] bg-[var(--background)] hover:border-[var(--accent)]/50'
+                    }`}
+                  >
+                    <div className="relative aspect-square overflow-hidden rounded-t-xl bg-[var(--muted-bg)]">
+                      <Image
+                        src={file.url}
+                        alt={file.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                      />
+                      {isSelected && (
+                        <span className="absolute right-2 top-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent)] text-[11px] font-semibold text-white shadow-lg">
+                          ×
+                        </span>
+                      )}
+                    </div>
+                    <div className="space-y-1 p-2">
+                      <p className="truncate font-mono text-[10px] text-[var(--muted)]">{file.name}</p>
+                      <p className="text-[10px] text-[var(--muted)]">{formatBytes(file.size)}</p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3 border-t border-[var(--border)] p-4">
+          <p className="text-xs text-[var(--muted)]">{selected.length} selected</p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm text-[var(--muted)] transition-colors hover:bg-[var(--muted-bg)] hover:text-[var(--foreground)]"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (selected.length === 0) return;
+                onAddSelected(selected);
+                onClose();
+              }}
+              disabled={selected.length === 0}
+              className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+            >
+              Add selected
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { TagBadge } from '@/components/ui/TagBadge'
-import { getTagColor, slugifyTag, TAG_COLORS } from '@/lib/constants'
+import { slugifyTag } from '@/lib/constants'
 
 type TagRow = {
   id: number
@@ -70,6 +70,8 @@ export default function TagsManager({ initialTags }: Props) {
   const filtered = tagsList.filter(t =>
     t.name.toLowerCase().includes(search.toLowerCase())
   )
+  const usedCount = tagsList.filter(t => t.usageCount > 0).length
+  const unusedCount = tagsList.length - usedCount
 
   async function openUsageModal(tag: TagRow) {
     setSelected(tag)
@@ -120,70 +122,84 @@ export default function TagsManager({ initialTags }: Props) {
 
   return (
     <div className="space-y-6">
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-sm">
+          <div className="text-xs uppercase tracking-widest text-[var(--muted)]">Total tags</div>
+          <div className="mt-2 text-3xl font-bold text-[var(--foreground)]">{tagsList.length}</div>
+        </div>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-sm">
+          <div className="text-xs uppercase tracking-widest text-[var(--muted)]">Used tags</div>
+          <div className="mt-2 text-3xl font-bold text-[var(--foreground)]">{usedCount}</div>
+        </div>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] px-5 py-4 shadow-sm">
+          <div className="text-xs uppercase tracking-widest text-[var(--muted)]">Unused tags</div>
+          <div className="mt-2 text-3xl font-bold text-[var(--foreground)]">{unusedCount}</div>
+        </div>
+      </div>
+
       {/* Toolbar */}
-      <div className="flex items-center gap-3 flex-wrap">
+      <div className="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm xl:flex-row xl:items-center">
         <input
           type="text"
           placeholder="Search tags…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="flex-1 min-w-[180px] bg-[var(--background)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+          className="flex-1 min-w-[180px] rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--foreground)] placeholder-[var(--muted)] outline-none transition-colors focus:border-[var(--accent)]"
         />
-        {/* Import */}
-        <label className="flex items-center gap-2 px-3 py-2 bg-[var(--muted-bg)] text-[var(--muted)] border border-[var(--border)] rounded-lg text-sm hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors cursor-pointer">
-          {importing ? 'Importing…' : '↑ Import CSV'}
-          <input
-            type="file"
-            accept=".csv,text/csv,text/plain"
-            className="sr-only"
-            onChange={handleImport}
-            disabled={importing}
-          />
-        </label>
-        {/* Export */}
-        <button
-          onClick={handleExport}
-          className="flex items-center gap-2 px-3 py-2 bg-[var(--muted-bg)] text-[var(--muted)] border border-[var(--border)] rounded-lg text-sm hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors cursor-pointer"
-        >
-          ↓ Export CSV
-        </button>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-400/10 text-green-400 border border-green-400/30 rounded-lg text-sm font-medium hover:bg-green-400/20 transition-colors cursor-pointer"
-        >
-          + New Tag
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <label className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--foreground)] cursor-pointer">
+            {importing ? 'Importing…' : '↑ Import CSV'}
+            <input
+              type="file"
+              accept=".csv,text/csv,text/plain"
+              className="sr-only"
+              onChange={handleImport}
+              disabled={importing}
+            />
+          </label>
+          <button
+            onClick={handleExport}
+            className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2.5 text-sm text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--foreground)] cursor-pointer"
+          >
+            ↓ Export CSV
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="rounded-xl border border-green-400/30 bg-green-400/10 px-4 py-2.5 text-sm font-medium text-green-400 transition-colors hover:bg-green-400/20 cursor-pointer"
+          >
+            + New Tag
+          </button>
+        </div>
       </div>
 
       {/* Import result banner */}
       {importResult && (
-        <div className="flex items-center justify-between text-xs bg-green-400/10 border border-green-400/20 text-green-400 rounded-lg px-4 py-2">
+        <div className="flex items-center justify-between rounded-2xl border border-green-400/20 bg-green-400/10 px-4 py-3 text-sm text-green-400">
           <span>Imported {importResult.created} new tag{importResult.created !== 1 ? 's' : ''} · {importResult.skipped} already existed / skipped</span>
-          <button onClick={() => setImportResult(null)} className="ml-4 opacity-60 hover:opacity-100 cursor-pointer">✕</button>
+          <button onClick={() => setImportResult(null)} className="ml-4 cursor-pointer opacity-60 hover:opacity-100">✕</button>
         </div>
       )}
 
-      {/* Stats */}
       <p className="text-xs text-[var(--muted)]">
         {filtered.length} tag{filtered.length !== 1 ? 's' : ''}
         {search ? ` matching "${search}"` : ' total'}
       </p>
 
       {/* Tag table */}
-      <div className="border border-[var(--border)] rounded-xl overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-sm">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-[var(--border)] bg-[var(--muted-bg)] text-[var(--muted)] text-xs uppercase tracking-wider">
-              <th className="text-left px-4 py-3 font-semibold">Tag</th>
-              <th className="text-left px-4 py-3 font-semibold">Slug</th>
-              <th className="text-right px-4 py-3 font-semibold">Used</th>
-              <th className="px-4 py-3" />
+            <tr className="border-b border-[var(--border)] bg-[var(--muted-bg)] text-xs uppercase tracking-wider text-[var(--muted)]">
+              <th className="px-5 py-3 text-left font-semibold">Tag</th>
+              <th className="px-5 py-3 text-left font-semibold">Slug</th>
+              <th className="px-5 py-3 text-right font-semibold">Used</th>
+              <th className="px-5 py-3" />
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--border)]">
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={4} className="text-center py-10 text-[var(--muted)]">
+                <td colSpan={4} className="py-12 text-center text-[var(--muted)]">
                   No tags found.
                 </td>
               </tr>
@@ -193,26 +209,26 @@ export default function TagsManager({ initialTags }: Props) {
                 key={tag.id}
                 className="hover:bg-[var(--muted-bg)] transition-colors"
               >
-                <td className="px-4 py-3">
+                <td className="px-5 py-4">
                   <TagBadge name={tag.name} colorIndex={tag.colorIndex} href={false} />
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-[var(--muted)]">{tag.slug}</td>
-                <td className="px-4 py-3 text-right">
+                <td className="px-5 py-4 font-mono text-xs text-[var(--muted)]">{tag.slug}</td>
+                <td className="px-5 py-4 text-right">
                   <span className={`font-mono text-sm ${tag.usageCount > 0 ? 'text-[var(--foreground)]' : 'text-[var(--muted)]'}`}>
                     {tag.usageCount}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="flex items-center gap-2 justify-end">
+                <td className="px-5 py-4 text-right">
+                  <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => openUsageModal(tag)}
-                      className="text-xs px-2.5 py-1 rounded border border-[var(--border)] text-[var(--muted)] hover:text-[var(--foreground)] hover:border-[var(--accent)] transition-colors cursor-pointer"
+                      className="rounded-lg border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--foreground)] cursor-pointer"
                     >
                       Usage
                     </button>
                     <button
                       onClick={() => handleDelete(tag)}
-                      className="text-xs px-2.5 py-1 rounded border border-[var(--border)] text-[var(--muted)] hover:text-red-400 hover:border-red-400/50 transition-colors cursor-pointer"
+                      className="rounded-lg border border-[var(--border)] px-2.5 py-1.5 text-xs text-[var(--muted)] transition-colors hover:border-red-400/50 hover:text-red-400 cursor-pointer"
                     >
                       Delete
                     </button>
@@ -228,7 +244,7 @@ export default function TagsManager({ initialTags }: Props) {
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/50" onClick={() => setSelected(null)} />
-          <div className="relative z-10 bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
+          <div className="relative z-10 flex max-h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl">
             <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <TagBadge name={selected.name} colorIndex={selected.colorIndex} href={false} />

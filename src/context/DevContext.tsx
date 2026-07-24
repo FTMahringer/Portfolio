@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface DevContextValue {
   isDevMode: boolean
@@ -17,6 +18,7 @@ const DevContext = createContext<DevContextValue>({
 })
 
 export function DevProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   const [isDevMode, setIsDevMode] = useState(false)
   const [loading, setLoading] = useState(true)
 
@@ -54,8 +56,8 @@ export function DevProvider({ children }: { children: React.ReactNode }) {
     } catch {}
     setIsDevMode(false)
     // Redirect to public homepage after logout
-    window.location.href = '/'
-  }, [])
+    router.push('/')
+  }, [router])
 
   return (
     <DevContext.Provider value={{ isDevMode, loading, login, logout }}>

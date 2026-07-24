@@ -24,9 +24,16 @@ export function GiscusComments({ config }: GiscusCommentsProps) {
   const { settings } = useSettings();
   const ref = useRef<HTMLDivElement>(null);
 
+  const hasRequiredConfig = Boolean(
+    config.repo?.trim() &&
+      config.repoId?.trim() &&
+      config.category?.trim() &&
+      config.categoryId?.trim(),
+  );
+
   useEffect(() => {
     const node = ref.current;
-    if (!node || !settings.showComments || !config.enabled) return;
+    if (!node || !settings.showComments || !config.enabled || !hasRequiredConfig) return;
 
     // Determine theme based on current settings
     const giscusTheme = settings.theme === 'light' 
@@ -58,9 +65,9 @@ export function GiscusComments({ config }: GiscusCommentsProps) {
         node.innerHTML = '';
       }
     };
-  }, [settings.showComments, settings.theme, config]);
+  }, [settings.showComments, settings.theme, config, hasRequiredConfig]);
 
-  if (!settings.showComments || !config.enabled) {
+  if (!settings.showComments || !config.enabled || !hasRequiredConfig) {
     return null;
   }
 
