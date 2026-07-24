@@ -14,9 +14,13 @@ export interface TocHeading {
   id: string;
 }
 
-/** Extract h2–h4 headings from raw markdown/MDX source. */
+export interface TocNode extends TocHeading {
+  children: TocNode[];
+}
+
+/** Extract h1–h4 headings from raw markdown/MDX source. */
 export function extractHeadings(content: string): TocHeading[] {
-  const regex = /^(#{2,4})\s+(.+)$/gm;
+  const regex = /^(#{1,4})\s+(.+)$/gm;
   const headings: TocHeading[] = [];
   let m: RegExpExecArray | null;
   while ((m = regex.exec(content)) !== null) {
@@ -27,4 +31,33 @@ export function extractHeadings(content: string): TocHeading[] {
     headings.push({ level: m[1].length, text: raw, id: slugify(raw) });
   }
   return headings;
+}
+
+export function buildTocTree(headings: TocHeading[], depth: 2 | 3): TocNode[] {
+  if (headings.length === 0) return [];
+
+  const minLevel = Math.min(...headings.map((heading) => heading.level));
+  const maxLevel = minLevel + depth - 1;
+  const filtered = headings.filter((heading) => heading.level <= maxLevel);
+  const roots: TocNode[] = [];
+  const stack: TocNode[] = [];
+
+  for (const heading of filtered) {
+    const node: TocNode = { ...heading, children: [] };
+
+    while (stack.length > 0 && stack[stack.length - 1].level >= node.level) {
+      stack.pop();
+    }
+
+    const parent = stack[stack.length - 1];
+    if (parent) {
+      parent.children.push(node);
+    } else {
+      roots.push(node);
+    }
+
+    stack.push(node);
+  }
+
+  return roots;
 }

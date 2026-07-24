@@ -37,7 +37,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <TableOfContents headings={headings} />
+      <TableOfContents headings={headings} depth={3} />
       <Button href="/blog" variant="ghost" className="mb-8 -ml-1">
         ← Back to Blog
       </Button>

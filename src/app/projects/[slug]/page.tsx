@@ -10,6 +10,8 @@ import { getSiteConfig } from '@/lib/config';
 import { ProjectImageGallery } from '@/components/projects/ProjectImageGallery';
 import ProjectContentWrapper from './ProjectContentWrapper';
 import { extractImageUrls } from '@/lib/markdown';
+import { extractHeadings } from '@/lib/toc-utils';
+import { TableOfContents } from '@/components/mdx/TableOfContents';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -37,6 +39,7 @@ export default async function ProjectDetailPage({ params }: Props) {
   const { frontmatter, content } = project;
   const { giscus } = getSiteConfig();
   const stack = frontmatter.stack ?? [];
+  const headings = extractHeadings(content);
   const relatedExperience = (frontmatter.relatedExperience ?? [])
     .map((entry) => getExperienceBySlug(entry))
     .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
@@ -144,20 +147,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         </section>
 
         <aside className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm xl:sticky xl:top-6 xl:h-fit">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--muted)]">Sidebar</h2>
-              <p className="mt-1 text-xs text-[var(--muted)]">Room for future project notes.</p>
-            </div>
-            <span className="rounded-full border border-[var(--border)] px-2.5 py-1 text-[10px] uppercase tracking-wider text-[var(--muted)]">
-              {inlineImages.length}
-            </span>
-          </div>
-
-          <div className="space-y-3 text-sm text-[var(--muted)]">
-            <p>Used images in content: <span className="text-[var(--foreground)]">{inlineImages.length}</span></p>
-            <p>This panel can later hold links, notes, or project stats.</p>
-          </div>
+          <TableOfContents headings={headings} depth={3} variant="panel" />
         </aside>
       </div>
 

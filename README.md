@@ -1,193 +1,183 @@
 # Portfolio
 
-A modern, self-hosted portfolio website built with Next.js 16, featuring a full admin dashboard, MDX-based content management, and comprehensive SEO optimization.
+A modern personal portfolio and blog built with Next.js 16, MDX content, and a custom admin/content workflow.
 
-[![CI](https://github.com/FTMahringer/Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/FTMahringer/Portfolio/actions/workflows/ci.yml)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ftmahringer/portfolio)](https://hub.docker.com/r/ftmahringer/portfolio)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+The site is designed for recruiters, companies, and other developers to browse public work while also giving me a fast way to create and edit content from the browser.
 
-## ✨ Features
+## What’s in this project
 
-### 🎨 Public Portfolio
-- **Responsive Design** — Mobile-first, accessible UI with dark mode support
-- **MDX-Powered Content** — Write blog posts, projects, and experiences in Markdown with React components
-- **Advanced Search** — Fuzzy search across all content with keyboard shortcuts (`Cmd/Ctrl+K`)
-- **SEO Optimized** — OpenGraph images, JSON-LD structured data, dynamic sitemap, robots.txt
-- **GitHub Integration** — Contribution calendar visualization
-- **Contact Form** — Email submissions with file attachments via Resend API
+### Public site
+- Home page with featured projects, recent posts, and stats
+- Projects section with detailed project pages
+- Blog with MDX posts and related-post suggestions
+- Experience timeline and detail pages
+- About, contact, resume, uses, now, tags, testimonials, and other supporting pages
+- Search, comments, SEO metadata, OpenGraph images, and JSON-LD
 
-### 🛠️ Admin Dashboard (`/admin`)
-- **Content Management** — Create, edit, and manage all content types through a visual editor
-- **Markdown Editor** — Live preview with syntax highlighting and drag-and-drop image upload
-- **Database Viewer** — SQL editor and table inspector for SQLite database
-- **Session Management** — View and revoke active admin sessions
-- **SSO/OIDC Support** — Configure multiple identity providers (Google, Microsoft, Okta, PocketID, Authentik, Keycloak, etc.)
-- **OpenAPI Documentation** — Interactive API docs for all admin endpoints
+### Admin and content workflow
+- `/admin` for authentication and admin tools
+- `/content` for creating and editing content in one place
+- `/content/media` for the reusable media library
+- `/settings` for site settings and admin utilities
+- Markdown + HTML preview with script content blocked
+- Media uploads converted to WebP
+- Project slugs are UUID-based and managed automatically
+- Blog and experience slugs remain editable
 
-### 🔐 Authentication
-- **Local Auth** — Argon2-based password hashing, session cookies
-- **SSO/OIDC** — Database-backed provider configuration with env var fallback
-- **Session Management** — SQLite-backed sessions with configurable expiry
+### Content model
+- Projects: `content/projects/*.mdx`
+- Blog posts: `content/blog/*.mdx`
+- Experience entries: `content/experience/*.mdx`
+- General pages: `content/pages/*.mdx`
+- Media uploads: `public/uploads/`
+- Project images: `public/images/projects/`
 
-### 🐳 Production-Ready
-- **Docker** — Optimized amd64 images on Docker Hub and GitHub Container Registry
-- **CI/CD** — Automated linting, type-checking, builds, and releases via GitHub Actions
-- **CodeQL Security Scanning** — Automated vulnerability detection
-- **Dependabot** — Auto-merge for minor/patch dependency updates
+## Tech stack
 
-## 🚀 Quick Start
+- **Framework:** Next.js 16 App Router
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS 4
+- **Content:** MDX, `gray-matter`, `next-mdx-remote`
+- **Database:** SQLite with Drizzle ORM
 
-### Option 1: Docker (Recommended)
+- **Authentication:** Argon2 + session cookies, with optional OIDC/SSO
+- **Search:** Fuse.js
+- **Media processing:** Sharp
+- **Comments:** Giscus
+- **Forms / email:** Resend
 
-```bash
-# Pull the latest image
-docker pull ftmahringer/portfolio:latest
+## Getting started
 
-# Run with required environment variables
-docker run -d \
-  -p 3000:3000 \
-  -v portfolio-data:/app/data \
-  -e ADMIN_EMAIL=admin@example.com \
-  -e ADMIN_PASSWORD=secure-password \
-  -e API_SECRET=random-secret-key \
-  --name portfolio \
-  ftmahringer/portfolio:latest
-```
+### Requirements
+- Node.js 24 or newer
+- npm
 
-Or use **docker-compose.yml**:
-
-```yaml
-version: '3.8'
-services:
-  portfolio:
-    image: ftmahringer/portfolio:latest
-    ports:
-      - "3000:3000"
-    environment:
-      ADMIN_EMAIL: admin@example.com
-      ADMIN_PASSWORD: secure-password
-      API_SECRET: random-secret-key
-      # Optional: SSO via env vars
-      # OIDC_ISSUER: https://accounts.google.com
-      # OIDC_CLIENT_ID: your-client-id
-      # OIDC_CLIENT_SECRET: your-client-secret
-    volumes:
-      - portfolio-data:/app/data
-    restart: unless-stopped
-
-volumes:
-  portfolio-data:
-```
-
-### Option 2: Local Development
+### Install
 
 ```bash
-# Clone the repository
 git clone https://github.com/FTMahringer/Portfolio.git
 cd Portfolio
-
-# Install dependencies
 npm install
+```
 
-# Set up environment variables
+### Configure environment
+
+Create a local `.env` file from your example file and fill in the values you need:
+
+```bash
 cp .env.example .env
-# Edit .env.local with your values (include ADMIN_EMAIL + ADMIN_PASSWORD)
+```
 
-# Initialize schema + seed admin user
+At minimum, set the admin credentials and API secret.
+
+### Initialize the database
+
+```bash
 npm run db:push
 npm run db:seed
+```
 
-# Run the development server
+### Start the dev server
+
+```bash
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) for the public site and [http://localhost:3000/admin](http://localhost:3000/admin) for the admin dashboard.
+Open:
+- Public site: `http://localhost:3000`
+- Admin dashboard: `http://localhost:3000/admin`
+- Content manager: `http://localhost:3000/content`
 
-## 📋 Environment Variables
+## Editing content
 
-### Required
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `ADMIN_EMAIL` | Default admin email (auto-seeded on first start) | `admin@example.com` |
-| `ADMIN_PASSWORD` | Default admin password | `secure-password` |
-| `API_SECRET` | Secret for API authentication | `random-secret-key` |
+### Creating and editing
+- Use `/content/new/[type]` to create new content
+- Use `/content/edit/[type]/[slug]` to edit existing entries
+- Use the preview/write toggle to switch between source and rendered view
 
+### Projects
+- Project slugs are UUIDs and hidden in the editor UI
+- Change the project title as needed; the slug stays managed automatically
+- Inline images used in the MDX content are tracked for the project page gallery
+- Cover images are handled separately from inline content images
 
+### Blog and experience
+- Blog and experience entries keep editable slugs
+- Heading anchors are generated automatically for MDX content
+- Related content and tags are handled through frontmatter
 
-### Optional: Analytics
+### Media library
+- Upload images through the media picker or `/content/media`
+- Uploaded images are stored in `public/uploads/`
+- Images are converted to WebP on upload
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | Umami website ID | `abc-123-def` |
-| `NEXT_PUBLIC_UMAMI_URL` | Umami analytics server URL | `https://analytics.example.com` |
-| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Plausible domain | `your-domain.com` |
+## Available scripts
 
-Analytics are only loaded in production and require configuration in `config/site.yaml`.
-
-### Optional: Other
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_URL` | SQLite database path | `file:./data/portfolio.db` |
-| `NEXT_PUBLIC_BASE_URL` | Public URL for OG images and canonical links | `http://localhost:3000` |
-| `RESEND_API_KEY` | API key for email submissions | - |
-| `CONTACT_EMAIL` | Email address to receive contact form submissions | - |
-| `OIDC_ISSUER` | OIDC provider issuer URL (env var fallback) | - |
-| `OIDC_CLIENT_ID` | OIDC client ID (env var fallback) | - |
-| `OIDC_CLIENT_SECRET` | OIDC client secret (env var fallback) | - |
-
-## 🐳 Docker Tags
-
-We publish amd64 images to both Docker Hub and GitHub Container Registry:
-
-| Tag | Description | Example |
-|-----|-------------|---------|
-| `latest` | Latest stable release | `ftmahringer/portfolio:latest` |
-| `X.Y.Z` | Exact version | `ftmahringer/portfolio:2.1.0` |
-| `X.Y` | Latest patch in X.Y.* | `ftmahringer/portfolio:2.1` |
-| `X` | Latest minor/patch in X.* | `ftmahringer/portfolio:2` |
-
-**Recommendation:** Use `X.Y` for production (e.g., `2.1`) to get patch updates automatically while avoiding breaking changes.
-
-## 🛠️ Tech Stack
-
-- **Framework:** [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
-- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
-- **Database:** [SQLite](https://www.sqlite.org/) + [Drizzle ORM](https://orm.drizzle.team/)
-- **Auth:** [Argon2](https://github.com/ranisalt/node-argon2) + [jose](https://github.com/panva/jose) (OIDC)
-- **Content:** [MDX](https://mdxjs.com/) + [gray-matter](https://github.com/jonschlinkert/gray-matter)
-- **Search:** [Fuse.js](https://fusejs.io/)
-- **Email:** [Resend](https://resend.com/)
-
-## 🐛 Troubleshooting
-
-### Port 3000 already in use
 ```bash
-# Change port in docker run
-docker run -p 8080:3000 ...
-
-# Or in docker-compose.yml
-ports:
-  - "8080:3000"
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run validate:content
+npm run db:generate
+npm run db:migrate
+npm run db:push
+npm run db:studio
+npm run db:seed
 ```
 
-### Database locked errors
-The SQLite database is in `/app/data/portfolio.db` inside the container. Make sure it''s persisted in a volume and not shared across multiple container instances.
+### Script notes
+- `npm run validate:content` checks content files and frontmatter
+- `npm run db:seed` seeds the default admin user from environment variables
+- `npm run db:push` is the easiest way to initialize a fresh local database
 
-### Admin login not working
-Admin credentials come from `ADMIN_EMAIL` + `ADMIN_PASSWORD`, but they are only used when the user is seeded.
+## Environment variables
 
-- **Docker:** seed happens automatically on first container start (empty `/app/data`).
-- **Local dev:** run `npm run db:seed` after setting env vars.
+### Required
 
-If you changed `ADMIN_EMAIL` or `ADMIN_PASSWORD` after first seed, either:
-1. Rerun `npm run db:seed` locally, or
-2. Delete the Docker volume and restart (resets database), or
-3. Update via SQL: `npm run db:studio` → `users` table
+| Variable | Description |
+| --- | --- |
+| `ADMIN_EMAIL` | Default admin email address |
+| `ADMIN_PASSWORD` | Default admin password |
+| `API_SECRET` | Secret used by admin/content API routes |
 
-## 📄 License
+### Common optional variables
 
-[MIT](LICENSE) — Feel free to use this template for your own portfolio!
+| Variable | Description |
+| --- | --- |
+| `DATABASE_URL` | SQLite database path |
+| `NEXT_PUBLIC_BASE_URL` | Public site URL for canonical links and social metadata |
+| `RESEND_API_KEY` | Enables email submissions |
+| `CONTACT_EMAIL` | Destination inbox for contact form submissions |
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | Umami analytics website ID |
+| `NEXT_PUBLIC_UMAMI_URL` | Umami analytics server URL |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Plausible analytics domain |
+| `OIDC_ISSUER` | OIDC issuer URL for SSO fallback |
+| `OIDC_CLIENT
+_ID` | OIDC client ID fallback |
+| `OIDC_CLIENT_SECRET` | OIDC client secret fallback |
 
----
+## Troubleshooting
 
-**Need help?** Open an issue on [GitHub](https://github.com/FTMahringer/Portfolio/issues).
+### Admin login does not work
+- Make sure `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set before seeding
+- Run `npm run db:seed` again after changing those values
+
+### Content changes do not show up
+- Check that the content file is in the correct folder
+- Re-run `npm run validate:content`
+- Restart the dev server if needed
+
+### Database errors
+- Use `npm run db:studio` to inspect the SQLite database
+- For a clean local reset, delete the database file and run `npm run db:push` + `npm run db:seed` again
+
+## Contributing
+
+This repository is actively evolving as the portfolio and admin workflow grow.
+
+If you add new content features, remember to update the relevant docs and content validation rules so the editor and public site stay in sync.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

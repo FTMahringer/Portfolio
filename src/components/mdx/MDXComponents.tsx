@@ -1,19 +1,50 @@
+import { isValidElement, type ReactNode } from 'react';
 import type { MDXComponents } from 'mdx/types';
 import { CodeBlock } from './CodeBlock';
+import { slugify } from '@/lib/toc-utils';
+
+function getHeadingText(children: ReactNode): string {
+  if (typeof children === 'string' || typeof children === 'number') {
+    return String(children);
+  }
+
+  if (Array.isArray(children)) {
+    return children.map((child) => getHeadingText(child)).join('');
+  }
+
+  if (isValidElement(children)) {
+    const nestedChildren = children.props as { children?: ReactNode };
+    return getHeadingText(nestedChildren.children);
+  }
+
+  return '';
+}
+
+function headingId(children: ReactNode): string | undefined {
+  const text = getHeadingText(children).trim();
+  return text ? slugify(text) : undefined;
+}
 
 export const mdxComponents: MDXComponents = {
-  h1: (props) => <h1 className="text-3xl font-bold mt-8 mb-4 text-[var(--foreground)]" {...props} />,
+  h1: (props) => {
+    const { children, ...rest } = props;
+    const id = headingId(children);
+    return <h1 {...rest} id={id} className="scroll-mt-24 text-3xl font-bold mt-8 mb-4 text-[var(--foreground)]">{children}</h1>;
+  },
   h2: (props) => {
-    const id = typeof props.children === 'string' ? props.children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') : undefined;
-    return <h2 id={id} className="text-2xl font-semibold mt-8 mb-3 text-[var(--foreground)] border-b border-[var(--border)] pb-2" {...props} />;
+    const { children, ...rest } = props;
+    const id = headingId(children);
+    return <h2 {...rest} id={id} className="scroll-mt-24 text-2xl font-semibold mt-8 mb-3 text-[var(--foreground)] border-b border-[var(--border)] pb-2">{children}</h2>;
   },
   h3: (props) => {
-    const id = typeof props.children === 'string' ? props.children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') : undefined;
-    return <h3 id={id} className="text-xl font-semibold mt-6 mb-2 text-[var(--foreground)]" {...props} />;
+    const { children, ...rest } = props;
+    const id = headingId(children);
+    return <h3 {...rest} id={id} className="scroll-mt-24 text-xl font-semibold mt-6 mb-2 text-[var(--foreground)]">{children}</h3>;
   },
   h4: (props) => {
-    const id = typeof props.children === 'string' ? props.children.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') : undefined;
-    return <h4 id={id} className="text-lg font-semibold mt-4 mb-2 text-[var(--foreground)]" {...props} />;
+    const { children, ...rest } = props;
+    const id = headingId(children);
+    return <h4 {...rest} id={id} className="scroll-mt-24 text-lg font-semibold mt-4 mb-2 text-[var(--foreground)]">{children}</h4>;
   },
   p: (props) => <p className="leading-7 mb-4 text-[var(--foreground)]" {...props} />,
   a: (props) => <a className="text-[var(--accent)] hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,

@@ -1,8 +1,8 @@
-# Implementation Plan - Selected Features
+# Implementation Plan - Curated Future Work
 
-Implementation plan for the approved features from our ideas reorganization.
+Implementation plan for the portfolio ideas that are worth pursuing after the current editor/content work.
 
-## ✅ Completed (Session 2026-05-03)
+## ✅ Completed
 
 ### Quick Wins
 - [x] **Code block copy button** - Hover-to-show copy functionality
@@ -20,136 +20,89 @@ Implementation plan for the approved features from our ideas reorganization.
 
 **Status**: Folder structure created, example template ready
 
-## 📋 High Priority (Next Up)
+## 📋 High Priority
 
 ### Portfolio Stats
-- [ ] Count total projects, blog posts, years of experience
-- [ ] Display prominently on homepage hero
+- [ ] Count total projects, blog posts, and years of experience
+- [ ] Display prominently on the homepage hero
 - [ ] Animated counter components
 - [ ] Real-time calculation from content
 
 ### Timeline View
 - [ ] Visual timeline component
 - [ ] Combine experience + projects by date
-- [ ] Interactive timeline with filtering
-- [ ] Placement: Homepage or `/timeline` page
+- [ ] Interactive filtering for timeline entries
+- [ ] Placement decision: homepage section or `/timeline` page
 
 ### Related Posts
 - [ ] Tag-based similarity algorithm
-- [ ] Display 2-3 related posts at end of blog
-- [ ] Fallback to recent posts if no matches
-
-## 📌 Medium Priority
-
-### Series Support (for Blog)
-- [ ] Add `series` and `seriesOrder` to blog frontmatter
-- [ ] Series navigation component (prev/next in series)
-- [ ] Series overview page
-- [ ] Series archive/listing
-- **Purpose**: OpenClaw/Hermes will auto-create series
+- [ ] Display 2-3 related posts at the end of blog posts
+- [ ] Fallback to recent posts when no strong matches exist
 
 ### Education Section
 - [ ] Add `content/education/` folder
-- [ ] Education MDX schema (school, degree, dates, description)
-- [ ] Display on resume page
-- [ ] Optionally show on about page
+- [ ] Education MDX schema with school, degree, dates, and description
+- [ ] Surface education data on the resume page
+- [ ] Reuse education data for resume generation
 
-## 🔗 Integrations
+### Automated PDF Resume Generation
+- [ ] Generate a resume PDF from existing content sources
+- [ ] Pull data from experience, education, skills, and bio/avatar metadata
+- [ ] Add a download action on the resume page
+- [ ] Keep the output maintainable with a reusable template
+- [ ] Start with `@react-pdf/renderer` unless a better fit emerges
+
+## 📌 Medium Priority
+
+### Series Support for Blog
+- [ ] Add `series` and `seriesOrder` to blog frontmatter
+- [ ] Series navigation component for previous/next posts
+- [ ] Series overview page
+- [ ] Series archive/listing
 
 ### GitHub Activity Widget
-- [ ] Fetch recent commits/PRs via GitHub API
-- [ ] Display on homepage or about page
-- [ ] Cache with SWR or React Query
-- [ ] Fallback when API rate limited
+- [ ] Fetch recent commits or PRs via GitHub API
+- [ ] Display on the homepage or about page
+- [ ] Cache the response for a good UX
+- [ ] Show a fallback state when the API is unavailable
 
-### Spotify / Stats.fm Widget
-- [ ] Stats.fm API integration for music taste
-- [ ] Currently playing / top tracks display
-- [ ] Optional placement on `/now` page
-- [ ] Respect privacy (only show if opted in)
+### Content Discovery Extras
+- [ ] Archives page for posts grouped by year/month
+- [ ] Bookmarks collection for curated links
+- [ ] Changelog page for visible portfolio updates
+- [ ] Revision history hints based on content changes
 
-## 🤖 Automation Features
+### Light Image/Content Polish
+- [ ] Progressive image loading placeholders
+- [ ] Better image loading transitions for content-heavy pages
 
-### GitHub Repo Auto-Importer
-- [ ] CLI script to fetch repos from GitHub API
-- [ ] Generate project MDX from README
-- [ ] Extract tags from topics
-- [ ] Auto-populate demo/github URLs
-- [ ] **Integration**: Works with OpenClaw/Hermes
+## 🔧 Low Priority
 
-### Webhooks for Automation
-- [ ] POST /api/webhooks/content endpoint
-- [ ] Accept blog/project/experience creation
-- [ ] Validate webhook signatures
-- [ ] Support for OpenClaw/Hermes agents
+### Automation and Tooling
+- [ ] GitHub repo auto-importer for project MDX generation
+- [ ] Webhooks endpoint for external content creation
+- [ ] Local git hooks for validation helpers
 
-## 📄 PDF Resume Generation
+### Small Visibility Extras
+- [ ] Search analytics for content discovery insights
+- [ ] Simple view counter if it ever adds value
 
-This is a big feature - auto-generate resume PDF from existing data:
+## 🎯 Suggested Order
 
-### Data Sources
-- Experience entries (`content/experience/`)
-- Education entries (`content/education/`)
-- Skills from about page
-- Avatar and bio from `config/site.yaml`
-
-### Implementation Options
-1. **@react-pdf/renderer** - React components to PDF
-2. **Puppeteer** - Render `/resume` page to PDF
-3. **jsPDF** - Manual PDF construction
-
-### Features
-- [ ] Auto-generate on download button click
-- [ ] Optional: Regenerate on content change
-- [ ] Template-based layout
-- [ ] Multiple style options (classic, modern, minimal)
-- [ ] Export as PNG option
-
-**Recommended approach**: Use @react-pdf/renderer for clean, maintainable PDF generation.
-
-## 🎯 Dependencies & Order
-
-```mermaid
-graph TD
-    A[Education Section] --> B[PDF Resume]
-    C[Testimonials] --> D[Homepage Enhancement]
-    E[Portfolio Stats] --> D
-    F[Timeline View] --> D
-    G[Series Support] --> H[OpenClaw Integration]
-    I[Webhooks] --> H
-    J[GitHub Auto-Import] --> H
-```
-
-Suggested implementation order:
-1. ✅ Code blocks + Skills (DONE)
-2. **Testimonials** (in progress)
-3. **Portfolio stats** + **Timeline** (homepage enhancements)
-4. **Related posts** (content discovery)
-5. **Education** + **Series support**
-6. **GitHub activity** + **Spotify** (nice-to-haves)
-7. **PDF resume** (complex but valuable)
-8. **Webhooks** + **GitHub importer** (automation layer)
+1. Testimonials
+2. Portfolio stats
+3. Timeline view
+4. Related posts
+5. Education section
+6. Automated PDF resume generation
+7. Series support
+8. GitHub activity widget
+9. Content discovery extras
+10. Low-priority automation helpers
 
 ## Notes
 
-- Files prefixed with `_` are ignored by content loaders (e.g., `_example.mdx`)
-- All features should respect existing theme/settings system
-- Maintain mobile-first responsive design
-- Keep bundle size in check (lazy load heavy features)
-- Document all new frontmatter fields in validation script
-
-## Time Estimates
-
-- Testimonials: ~30min
-- Portfolio stats: ~20min
-- Timeline view: ~1hr
-- Related posts: ~30min
-- Series support: ~45min
-- Education section: ~30min
-- GitHub activity: ~45min
-- Spotify widget: ~1hr
-- PDF resume: ~2-3hrs
-- Webhooks: ~1hr
-- GitHub importer: ~1.5hrs
-
-**Total**: ~10-12 hours of focused work
+- Keep the portfolio focused on content, work samples, and credibility.
+- Avoid over-engineering or features that only add maintenance burden.
+- Anything that does not directly help visitors understand the work should stay out of the core plan.
+- All new frontmatter fields should be documented in the validation script when added.
