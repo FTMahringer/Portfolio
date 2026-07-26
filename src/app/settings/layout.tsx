@@ -5,9 +5,14 @@ import { usePathname } from 'next/navigation';
 
 const SETTINGS_NAV = [
   { href: '/settings/settings', label: 'Settings', icon: '⚙️' },
+  { href: '/settings/site', label: 'Site', icon: '🌐' },
+  { href: '/settings/integrations', label: 'Integrations', icon: '🔗' },
+  { href: '/settings/features', label: 'Features', icon: '🧩' },
+  { href: '/settings/homepage', label: 'Homepage', icon: '🏠' },
   { href: '/settings/auth-providers', label: 'Auth Providers', icon: '🔒' },
   { href: '/settings/sessions', label: 'Sessions', icon: '🔑' },
   { href: '/settings/db', label: 'Database', icon: '🗄️' },
+  { href: '/settings/git-provider', label: 'Git Provider', icon: '🔌' },
   { href: '/settings/api-docs', label: 'API Docs', icon: '📖' },
 ];
 

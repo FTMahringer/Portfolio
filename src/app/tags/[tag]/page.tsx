@@ -4,6 +4,7 @@ import { getTagBySlug, slugifyTag } from '@/lib/tags';
 import { TagBadge } from '@/components/ui/TagBadge';
 import ProjectCard from '@/components/projects/ProjectCard';
 import BlogCard from '@/components/blog/BlogCard';
+import { isFeatureEnabled } from '@/lib/site-settings';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -18,12 +19,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TagPage({ params }: Props) {
   const { tag: tagSlug } = await params;
 
-  const projects = getAllProjects().filter(p =>
-    (p.frontmatter.tags ?? []).some(t => slugifyTag(t) === tagSlug)
-  );
-  const posts = getAllBlogPosts().filter(p =>
-    p.frontmatter.tags.some(t => slugifyTag(t) === tagSlug)
-  );
+  const projects = isFeatureEnabled('projects')
+    ? getAllProjects().filter(p =>
+      (p.frontmatter.tags ?? []).some(t => slugifyTag(t) === tagSlug)
+    )
+    : [];
+  const posts = isFeatureEnabled('blog')
+    ? getAllBlogPosts().filter(p =>
+      p.frontmatter.tags.some(t => slugifyTag(t) === tagSlug)
+    )
+    : [];
 
   if (projects.length === 0 && posts.length === 0) notFound();
 

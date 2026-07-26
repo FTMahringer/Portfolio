@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/session";
 import { getAllProjects, getAllBlogPosts, getAllExperience } from "@/lib/mdx";
 import Link from "next/link";
+import { shouldShowFeatureInContentManager } from "@/lib/site-settings";
 
 export default async function AdminContentPage() {
   await requireAdminSession();
@@ -20,27 +21,27 @@ export default async function AdminContentPage() {
   };
 
   const rows: ContentRow[] = [
-    ...projects.map((p) => ({
+    ...(shouldShowFeatureInContentManager('projects') ? projects.map((p) => ({
       type: "project",
       title: p.frontmatter.title ?? p.slug,
       slug: p.slug,
       date: p.frontmatter.startDate ?? "",
       href: `/projects/${p.slug}`,
-    })),
-    ...posts.map((p) => ({
+    })) : []),
+    ...(shouldShowFeatureInContentManager('blog') ? posts.map((p) => ({
       type: "blog",
       title: p.frontmatter.title ?? p.slug,
       slug: p.slug,
       date: p.frontmatter.publishedAt ?? "",
       href: `/blog/${p.slug}`,
-    })),
-    ...experience.map((e) => ({
+    })) : []),
+    ...(shouldShowFeatureInContentManager('experience') ? experience.map((e) => ({
       type: "experience",
       title: e.frontmatter.title ?? e.slug,
       slug: e.slug,
       date: e.frontmatter.startDate ?? "",
       href: `/experience/${e.slug}`,
-    })),
+    })) : []),
   ].sort((a, b) => (b.date > a.date ? 1 : -1));
 
   const typeColors: Record<string, string> = {

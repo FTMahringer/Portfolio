@@ -18,6 +18,7 @@
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@ftmahringer/git-provider-core": "^0.1.0",
     "@giscus/react": "^3.1.0",
     "@radix-ui/react-dialog": "^1.1.21",
     "@radix-ui/react-dropdown-menu": "^2.1.22",

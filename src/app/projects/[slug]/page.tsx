@@ -7,6 +7,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { GiscusComments } from '@/components/comments/GiscusComments';
 import { getSiteConfig } from '@/lib/config';
+import { isFeatureEnabled, shouldShowExperienceRelations } from '@/lib/site-settings';
 import { ProjectImageGallery } from '@/components/projects/ProjectImageGallery';
 import ProjectContentWrapper from './ProjectContentWrapper';
 import { extractImageUrls } from '@/lib/markdown';
@@ -18,11 +19,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
+  if (!isFeatureEnabled('projects')) return [];
   return getAllProjects().map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!isFeatureEnabled('projects')) return {};
   const project = getProjectBySlug(slug);
   if (!project) return {};
   return {
@@ -32,6 +35,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
+  if (!isFeatureEnabled('projects')) notFound();
+
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
@@ -40,9 +45,11 @@ export default async function ProjectDetailPage({ params }: Props) {
   const { giscus } = getSiteConfig();
   const stack = frontmatter.stack ?? [];
   const headings = extractHeadings(content);
-  const relatedExperience = (frontmatter.relatedExperience ?? [])
-    .map((entry) => getExperienceBySlug(entry))
-    .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
+  const relatedExperience = shouldShowExperienceRelations()
+    ? (frontmatter.relatedExperience ?? [])
+      .map((entry) => getExperienceBySlug(entry))
+      .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry))
+    : [];
   const inlineImages = extractImageUrls(content).filter((url) => url !== (frontmatter.image ?? ''));
 
   return (

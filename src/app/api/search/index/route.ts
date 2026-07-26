@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import type { SearchItem } from '@/lib/search-types'
+import { isFeatureEnabled } from '@/lib/site-settings'
 
 function readDir(dir: string, type: SearchItem['type'], hrefPrefix: string): SearchItem[] {
   if (!fs.existsSync(dir)) return []
@@ -29,9 +30,9 @@ function readDir(dir: string, type: SearchItem['type'], hrefPrefix: string): Sea
 export async function GET() {
   const cwd = process.cwd()
   const items: SearchItem[] = [
-    ...readDir(path.join(cwd, 'content/projects'), 'project', '/projects'),
-    ...readDir(path.join(cwd, 'content/blog'), 'blog', '/blog'),
-    ...readDir(path.join(cwd, 'content/experience'), 'experience', '/experience'),
+    ...(isFeatureEnabled('projects') ? readDir(path.join(cwd, 'content/projects'), 'project', '/projects') : []),
+    ...(isFeatureEnabled('blog') ? readDir(path.join(cwd, 'content/blog'), 'blog', '/blog') : []),
+    ...(isFeatureEnabled('experience') ? readDir(path.join(cwd, 'content/experience'), 'experience', '/experience') : []),
   ]
 
   return NextResponse.json(items, {

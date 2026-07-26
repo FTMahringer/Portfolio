@@ -1,4 +1,6 @@
 import { getAllBlogPosts } from '@/lib/mdx';
+import { isFeatureEnabled } from '@/lib/site-settings';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import BlogClient from './BlogClient';
 
@@ -8,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+  if (!isFeatureEnabled('blog')) notFound();
+
   const posts = getAllBlogPosts();
   const allTags = [...new Set(posts.flatMap(p => p.frontmatter.tags))].sort();
 

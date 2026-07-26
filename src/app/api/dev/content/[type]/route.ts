@@ -5,6 +5,7 @@ import matter from 'gray-matter'
 import { revalidatePath } from 'next/cache'
 import { validateSession, SESSION_COOKIE_NAME } from '@/lib/auth'
 import { ALLOWED_TYPES, ROUTE_PATHS, resolveType, serializeFrontmatter, getContentDir, getContentFilePath } from '@/lib/content-api'
+import { shouldShowFeatureInContentManager } from '@/lib/site-settings'
 
 async function checkDevSession(req: NextRequest): Promise<boolean> {
   const sessionId = req.cookies.get(SESSION_COOKIE_NAME)?.value
@@ -25,6 +26,9 @@ export async function GET(
   const contentType = resolveType(type)
   if (!contentType) {
     return NextResponse.json({ error: `Unknown type. Use: ${ALLOWED_TYPES.join(', ')}` }, { status: 400 })
+  }
+  if (!shouldShowFeatureInContentManager(contentType)) {
+    return NextResponse.json({ error: 'Content type is disabled.' }, { status: 404 })
   }
 
   const dir = path.join(process.cwd(), getContentDir(contentType))
@@ -52,6 +56,9 @@ export async function POST(
   const contentType = resolveType(type)
   if (!contentType) {
     return NextResponse.json({ error: `Unknown type. Use: ${ALLOWED_TYPES.join(', ')}` }, { status: 400 })
+  }
+  if (!shouldShowFeatureInContentManager(contentType)) {
+    return NextResponse.json({ error: 'Content type is disabled.' }, { status: 404 })
   }
 
   let body: { slug: string; frontmatter: Record<string, unknown>; content: string; overwrite?: boolean }

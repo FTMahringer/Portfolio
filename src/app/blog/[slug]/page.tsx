@@ -9,6 +9,8 @@ import { formatDate } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { GiscusComments } from '@/components/comments/GiscusComments';
 import { getSiteConfig } from '@/lib/config';
+import { isFeatureEnabled } from '@/lib/site-settings';
+import { notFound } from 'next/navigation';
 import { getRelatedPosts } from '@/lib/related';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
 
@@ -17,20 +19,24 @@ interface Props {
 }
 
 export async function generateStaticParams() {
+  if (!isFeatureEnabled('blog')) return [];
   return getAllBlogPosts().map(p => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!isFeatureEnabled('blog')) return {};
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
   return { title: post.frontmatter.title, description: post.frontmatter.summary };
 }
 
 export default async function BlogPostPage({ params }: Props) {
+  if (!isFeatureEnabled('blog')) notFound();
+
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
-  if (!post) return null;
+  if (!post) notFound();
   const headings = extractHeadings(post.content);
   const { giscus } = getSiteConfig();
   const relatedPosts = getRelatedPosts(slug, post.frontmatter.tags || []);

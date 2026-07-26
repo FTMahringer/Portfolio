@@ -1,5 +1,7 @@
 import { getAllExperience } from '@/lib/mdx';
 import { ExperienceCard } from '@/components/experience/ExperienceCard';
+import { isFeatureEnabled } from '@/lib/site-settings';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -8,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function ExperiencePage() {
+  if (!isFeatureEnabled('experience')) notFound();
+
   const experiences = getAllExperience();
 
   return (

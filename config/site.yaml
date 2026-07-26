@@ -56,3 +56,50 @@ sidebar_skills:
     items: ["Java", "Spring Boot", "Node.js"]
   - category: "Infrastructure"
     items: ["Docker", "K3s", "Linux", "GitHub Actions"]
+
+features:
+  projects:
+    enabled: true
+    label: "Projects"
+    route: "/projects"
+    showInNavigation: true
+    showInContentManager: true
+    showOnHomepage: true
+  blog:
+    enabled: true
+    label: "Blog"
+    route: "/blog"
+    showInNavigation: true
+    showInContentManager: true
+    showOnHomepage: true
+  experience:
+    enabled: true
+    label: "Experience"
+    route: "/experience"
+    showInNavigation: true
+    showInContentManager: true
+    showOnHomepage: true
+    showInProjectRelations: true
+
+homepage:
+  stats:
+    enabled: true
+    items:
+      - id: "years-experience"
+        label: "Years Experience"
+        source: "computed"
+        computedKey: "yearsOfExperience"
+        suffix: "+"
+        enabled: true
+      - id: "projects"
+        label: "Projects"
+        source: "computed"
+        computedKey: "totalProjects"
+        suffix: "+"
+        enabled: true
+      - id: "blog-posts"
+        label: "Blog Posts"
+        source: "computed"
+        computedKey: "totalBlogPosts"
+        suffix: "+"
+        enabled: true
