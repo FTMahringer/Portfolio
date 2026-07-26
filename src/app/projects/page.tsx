@@ -1,4 +1,6 @@
 import { getAllProjects } from '@/lib/mdx';
+import { isFeatureEnabled } from '@/lib/site-settings';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ProjectsClient from './ProjectsClient';
 
@@ -8,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
+  if (!isFeatureEnabled('projects')) notFound();
+
   const projects = getAllProjects();
   const allTags = [...new Set(projects.flatMap(p => p.frontmatter.tags ?? []))].sort();
 

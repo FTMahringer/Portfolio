@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import { getSiteSettings, shouldShowFeatureInNavigation } from '@/lib/site-settings';
 import { VersionInfo } from './VersionInfo';
 
 export default function Footer() {
+  const settings = getSiteSettings();
+
   return (
     <footer className="border-t border-[var(--border)] mt-auto bg-[var(--muted-bg)]/30">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
@@ -10,9 +13,9 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <h3 className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">Navigation</h3>
             <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Home</Link>
-            <Link href="/projects" className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Projects</Link>
-            <Link href="/blog" className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Blog</Link>
-            <Link href="/experience" className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Experience</Link>
+            {shouldShowFeatureInNavigation('projects') && <Link href={settings.features.projects.route} className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">{settings.features.projects.label}</Link>}
+            {shouldShowFeatureInNavigation('blog') && <Link href={settings.features.blog.route} className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">{settings.features.blog.label}</Link>}
+            {shouldShowFeatureInNavigation('experience') && <Link href={settings.features.experience.route} className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">{settings.features.experience.label}</Link>}
             <Link href="/skills" className="text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors">Skills</Link>
           </div>
 

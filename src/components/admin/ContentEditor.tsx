@@ -35,6 +35,7 @@ interface ContentEditorProps {
   slug: string;
   frontmatter: Record<string, unknown>;
   content: string;
+  showExperienceRelations?: boolean;
 }
 
 const PROJECT_STATUS_OPTIONS = ['Completed', 'Work in Progress', 'Archived', 'Idea'];
@@ -180,6 +181,7 @@ export default function ContentEditor({
   slug,
   frontmatter,
   content: initialContent,
+  showExperienceRelations = true,
 }: ContentEditorProps) {
   const router = useRouter();
   const [form, setForm] = useState<Record<string, unknown>>(() => {
@@ -660,7 +662,7 @@ export default function ContentEditor({
             </div>
           )}
 
-          {type === 'project' && (
+          {type === 'project' && showExperienceRelations && (
             <div className="mt-5 border-t border-[var(--border)] pt-5">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div>
@@ -726,12 +728,14 @@ export default function ContentEditor({
 
       <MediaPreviewModal open={Boolean(previewImageUrl)} url={previewImageUrl} onClose={() => setPreviewImageUrl(null)} />
 
-      <ExperiencePickerModal
-        open={relatedModalOpen}
-        selected={splitCommaList(form.relatedExperience)}
-        onChange={(next) => setField('relatedExperience', next)}
-        onClose={() => setRelatedModalOpen(false)}
-      />
+      {showExperienceRelations && (
+        <ExperiencePickerModal
+          open={relatedModalOpen}
+          selected={splitCommaList(form.relatedExperience)}
+          onChange={(next) => setField('relatedExperience', next)}
+          onClose={() => setRelatedModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

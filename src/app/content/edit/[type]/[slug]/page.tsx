@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { requireAdminSession } from '@/lib/session';
 import { getBlogPostBySlug, getProjectBySlug, getExperienceBySlug } from '@/lib/mdx';
 import ContentEditor from '@/components/admin/ContentEditor';
+import { shouldShowExperienceRelations, shouldShowFeatureInContentManager, type ContentFeatureKey } from '@/lib/site-settings';
 
 const VALID_TYPES = ['blog', 'projects', 'experience'] as const;
 type ContentType = typeof VALID_TYPES[number];
@@ -27,6 +28,7 @@ export default async function EditContentPage({
 }) {
   const { type, slug } = await params;
   if (!VALID_TYPES.includes(type as ContentType)) notFound();
+  if (!shouldShowFeatureInContentManager(contentTypeToFeature(type as ContentType))) notFound();
 
   await requireAdminSession();
 
@@ -41,6 +43,11 @@ export default async function EditContentPage({
       slug={slug}
       frontmatter={entry.frontmatter as unknown as Record<string, unknown>}
       content={entry.content}
+      showExperienceRelations={shouldShowExperienceRelations()}
     />
   );
+}
+
+function contentTypeToFeature(type: ContentType): ContentFeatureKey {
+  return type === 'projects' ? 'projects' : type;
 }

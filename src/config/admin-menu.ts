@@ -1,3 +1,5 @@
+import type { ContentFeatureKey } from '@/lib/site-settings';
+
 export interface AdminMenuItem {
   id: string;
   label: string;
@@ -5,6 +7,7 @@ export interface AdminMenuItem {
   icon?: string;
   children?: AdminMenuItem[];
   external?: boolean;
+  featureKey?: ContentFeatureKey;
 }
 
 export const adminMenu: AdminMenuItem[] = [
@@ -13,9 +16,9 @@ export const adminMenu: AdminMenuItem[] = [
     label: 'Content',
     icon: '📝',
     children: [
-      { id: 'new-blog', label: 'New Blog Post', href: '/content/new/blog', icon: '📝' },
-      { id: 'new-project', label: 'New Project', href: '/content/new/projects', icon: '🚀' },
-      { id: 'new-experience', label: 'New Experience', href: '/content/new/experience', icon: '💼' },
+      { id: 'new-blog', label: 'New Blog Post', href: '/content/new/blog', icon: '📝', featureKey: 'blog' },
+      { id: 'new-project', label: 'New Project', href: '/content/new/projects', icon: '🚀', featureKey: 'projects' },
+      { id: 'new-experience', label: 'New Experience', href: '/content/new/experience', icon: '💼', featureKey: 'experience' },
       { id: 'content-list', label: 'Manage Content', href: '/content', icon: '📂' },
       { id: 'tags', label: 'Tags', href: '/content/tags', icon: '🏷️' },
       { id: 'media', label: 'Media Library', href: '/content/media', icon: '🖼️' },

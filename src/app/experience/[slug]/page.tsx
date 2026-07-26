@@ -4,6 +4,7 @@ import { mdxComponents } from '@/components/mdx/MDXComponents';
 import Badge from '@/components/ui/Badge';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { isFeatureEnabled } from '@/lib/site-settings';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -11,11 +12,13 @@ interface Props {
 }
 
 export async function generateStaticParams() {
+  if (!isFeatureEnabled('experience')) return [];
   return getAllExperience().map(e => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  if (!isFeatureEnabled('experience')) return {};
   const exp = getExperienceBySlug(slug);
   if (!exp) return {};
   return {
@@ -45,6 +48,8 @@ function formatPeriod(start?: string, end?: string): string {
 }
 
 export default async function ExperienceDetailPage({ params }: Props) {
+  if (!isFeatureEnabled('experience')) notFound();
+
   const { slug } = await params;
   const exp = getExperienceBySlug(slug);
   if (!exp) notFound();

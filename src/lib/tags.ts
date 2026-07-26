@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import path from "path";
 import fs from "fs";
 import { getAllProjects, getAllBlogPosts } from "./mdx";
+import { isFeatureEnabled } from "./site-settings";
 import { slugifyTag, hashTagColor } from "./constants";
 export { TAG_COLORS, hashTagColor, slugifyTag, getTagColor } from "./constants";
 export type { TagColor } from "./constants";
@@ -39,19 +40,25 @@ export async function syncAndGetAllTags() {
 
   const counts = new Map<string, number>();
   try {
-    for (const p of getAllProjects()) {
-      for (const t of p.frontmatter.tags ?? []) {
-        counts.set(t, (counts.get(t) ?? 0) + 1);
+    if (isFeatureEnabled('projects')) {
+      for (const p of getAllProjects()) {
+        for (const t of p.frontmatter.tags ?? []) {
+          counts.set(t, (counts.get(t) ?? 0) + 1);
+        }
       }
     }
-    for (const p of getAllBlogPosts()) {
-      for (const t of p.frontmatter.tags ?? []) {
-        counts.set(t, (counts.get(t) ?? 0) + 1);
+    if (isFeatureEnabled('blog')) {
+      for (const p of getAllBlogPosts()) {
+        for (const t of p.frontmatter.tags ?? []) {
+          counts.set(t, (counts.get(t) ?? 0) + 1);
+        }
       }
     }
   } catch {
     // content may not exist yet
   }
+
+  await db.update(tags).set({ usageCount: 0 });
 
   for (const [name, count] of counts) {
     const slug = slugifyTag(name);
@@ -150,21 +157,25 @@ export async function importTagsFromCsv(
 // Returns { projects: string[], posts: string[] } of slugs that use a given tag name
 export function getTagUsage(tagName: string) {
   const slug = slugifyTag(tagName);
-  const projects = getAllProjects()
-    .filter((p) =>
-      (p.frontmatter.tags ?? []).some((t) => slugifyTag(t) === slug),
-    )
-    .map((p) => ({
-      slug: p.slug,
-      title: p.frontmatter.title,
-      type: "project" as const,
-    }));
-  const posts = getAllBlogPosts()
-    .filter((p) => p.frontmatter.tags.some((t) => slugifyTag(t) === slug))
-    .map((p) => ({
-      slug: p.slug,
-      title: p.frontmatter.title,
-      type: "post" as const,
-    }));
+  const projects = isFeatureEnabled('projects')
+    ? getAllProjects()
+      .filter((p) =>
+        (p.frontmatter.tags ?? []).some((t) => slugifyTag(t) === slug),
+      )
+      .map((p) => ({
+        slug: p.slug,
+        title: p.frontmatter.title,
+        type: "project" as const,
+      }))
+    : [];
+  const posts = isFeatureEnabled('blog')
+    ? getAllBlogPosts()
+      .filter((p) => p.frontmatter.tags.some((t) => slugifyTag(t) === slug))
+      .map((p) => ({
+        slug: p.slug,
+        title: p.frontmatter.title,
+        type: "post" as const,
+      }))
+    : [];
   return [...projects, ...posts];
 }

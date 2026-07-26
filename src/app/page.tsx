@@ -9,6 +9,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { personSchema, websiteSchema } from "@/lib/jsonld";
 import { PortfolioStats } from "@/components/home/PortfolioStats";
 import { getPortfolioStats } from "@/lib/stats";
+import { resolveHomepageStats } from "@/lib/homepage-stats";
+import { shouldShowFeatureOnHomepage } from "@/lib/site-settings";
 
 
 const HERO_SKILLS = [
@@ -22,12 +24,14 @@ const HERO_SKILLS = [
 ];
 
 export default function HomePage() {
-  const allProjects = getAllProjects();
+  const showProjects = shouldShowFeatureOnHomepage('projects');
+  const showBlog = shouldShowFeatureOnHomepage('blog');
+  const allProjects = showProjects ? getAllProjects() : [];
   const featured = allProjects.filter((p) => p.frontmatter.featured);
-  const latestPosts = getAllBlogPosts().slice(0, 3);
+  const latestPosts = showBlog ? getAllBlogPosts().slice(0, 3) : [];
   const config = getSiteConfig();
   const { site } = config;
-  const stats = getPortfolioStats();
+  const stats = resolveHomepageStats(config, getPortfolioStats());
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-24">
@@ -52,7 +56,7 @@ export default function HomePage() {
           ))}
         </div>
         <div className="flex flex-wrap gap-3 pt-2">
-          <Button href="/projects">View Projects</Button>
+          {showProjects && <Button href="/projects">View Projects</Button>}
           <Button href="/contact" variant="secondary">
             Get in Touch
           </Button>
@@ -71,18 +75,16 @@ export default function HomePage() {
       </section>
 
       {/* Portfolio Stats */}
-      <section className="py-8">
-        <PortfolioStats
-          totalProjects={stats.totalProjects}
-          totalBlogPosts={stats.totalBlogPosts}
-          yearsOfExperience={stats.yearsOfExperience}
-        />
-      </section>
+      {stats.length > 0 && (
+        <section className="py-8">
+          <PortfolioStats stats={stats} />
+        </section>
+      )}
 
 
 
       {/* Featured Projects */}
-      {featured.length > 0 && (
+      {showProjects && featured.length > 0 && (
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-[var(--foreground)]">
@@ -100,7 +102,7 @@ export default function HomePage() {
       )}
 
       {/* Latest Blog Posts */}
-      {latestPosts.length > 0 && (
+      {showBlog && latestPosts.length > 0 && (
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-[var(--foreground)]">

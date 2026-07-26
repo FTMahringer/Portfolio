@@ -1,33 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import type { ResolvedHomepageStat } from '@/lib/homepage-stats';
 
 interface PortfolioStatsProps {
-  totalProjects: number;
-  totalBlogPosts: number;
-  yearsOfExperience: number;
+  stats: ResolvedHomepageStat[];
 }
 
-export function PortfolioStats({ totalProjects, totalBlogPosts, yearsOfExperience }: PortfolioStatsProps) {
+export function PortfolioStats({ stats }: PortfolioStatsProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const stats = [
-    { label: 'Years Experience', value: yearsOfExperience },
-    { label: 'Projects', value: totalProjects },
-    { label: 'Blog Posts', value: totalBlogPosts },
-  ];
+  if (stats.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-3 gap-6 max-w-2xl mx-auto">
+    <div className="grid gap-6 max-w-2xl mx-auto sm:grid-cols-2 md:grid-cols-3">
       {stats.map((stat, index) => {
         const delay = index * 0.1;
         return (
           <div
-            key={stat.label}
+            key={stat.id}
             className="text-center"
             style={{
               opacity: mounted ? 1 : 0,
@@ -36,7 +31,7 @@ export function PortfolioStats({ totalProjects, totalBlogPosts, yearsOfExperienc
             }}
           >
             <div className="text-4xl md:text-5xl font-bold text-[var(--accent)] mb-2">
-              {stat.value}+
+              {stat.value}{stat.suffix}
             </div>
             <div className="text-sm md:text-base text-[var(--muted)] uppercase tracking-wide">
               {stat.label}
