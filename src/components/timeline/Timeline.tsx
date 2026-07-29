@@ -3,18 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { TimelineEntry } from '@/lib/timeline';
+import { useTranslations } from '@/context/TranslationContext';
 
 interface TimelineProps {
   entries: TimelineEntry[];
 }
 
 export function Timeline({ entries }: TimelineProps) {
+  const { locale, t } = useTranslations();
   const [filter, setFilter] = useState<'all' | 'experience' | 'education' | 'project'>('all');
 
   const filtered = filter === 'all' ? entries : entries.filter(e => e.type === filter);
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(date);
+    return new Intl.DateTimeFormat(locale === 'de' ? 'de-DE' : 'en-US', { month: 'short', year: 'numeric' }).format(date);
   };
 
   const getTypeColor = (type: string) => {
@@ -27,7 +29,7 @@ export function Timeline({ entries }: TimelineProps) {
   };
 
   const getTypeBadge = (type: string) => {
-    return type.charAt(0).toUpperCase() + type.slice(1);
+    return t(`public.timeline.filters.${type}`, type.charAt(0).toUpperCase() + type.slice(1));
   };
 
   return (
@@ -44,7 +46,7 @@ export function Timeline({ entries }: TimelineProps) {
                 : 'bg-[var(--card)] text-[var(--muted)] hover:text-[var(--foreground)]'
             }`}
           >
-            {f.charAt(0).toUpperCase() + f.slice(1)}
+            {t(`public.timeline.filters.${f}`, f.charAt(0).toUpperCase() + f.slice(1))}
           </button>
         ))}
       </div>
@@ -87,7 +89,7 @@ export function Timeline({ entries }: TimelineProps) {
                 <div className="text-sm text-[var(--muted)] mb-2">
                   {formatDate(entry.date)}
                   {entry.endDate && ` - ${formatDate(entry.endDate)}`}
-                  {!entry.endDate && entry.type === 'experience' && ' - Present'}
+                  {!entry.endDate && entry.type === 'experience' && ` - ${t('public.timeline.present', 'Present')}`}
                 </div>
 
                 {entry.description && (

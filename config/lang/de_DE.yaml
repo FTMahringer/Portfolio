@@ -1,0 +1,782 @@
+site:
+  name: "Portfolio"
+  tagline: "Entwickler-Portfolio und Content-Hub"
+
+language:
+  label: "Sprache"
+  description: "Wähle die Sprache der Website."
+  options:
+    en: "Englisch"
+    de: "Deutsch"
+
+nav:
+  home: "Startseite"
+  about: "Über mich"
+  projects: "Projekte"
+  blog: "Blog"
+  contact: "Kontakt"
+  skills: "Fähigkeiten"
+  now: "Jetzt"
+  uses: "Verwendet"
+  homelab: "Homelab"
+  rss: "RSS-Feed"
+  impressum: "Impressum"
+  datenschutz: "Datenschutz"
+  github: "GitHub"
+  linkedin: "LinkedIn"
+
+chrome:
+  header:
+    login: "Login"
+  footer:
+    navigation: "Navigation"
+    discovery: "Entdecken"
+    legal: "Rechtliches & Social"
+    builtWith: "Mit Next.js & Tailwind CSS gebaut."
+    getInTouch: "Kontakt aufnehmen"
+
+public:
+  home:
+    meta:
+      title: "Fynn M. – Softwareentwickler"
+      description: "Persönliches Portfolio von Fynn M. – Softwareentwickler & Systems Engineer. Projekte, Erfahrung und Blog."
+      ogTitle: "Fynn M. – Softwareentwickler"
+      ogDescription: "Persönliches Portfolio von Fynn M. – Softwareentwickler & Systems Engineer."
+    hero:
+      greeting: "Hallo, ich bin"
+      projects: "Projekte ansehen"
+      contact: "Kontakt aufnehmen"
+      resume: "Lebenslauf ↓"
+      aboutPrompt: "Möchtest du mehr über mich wissen?"
+      aboutLink: "Über mich →"
+    sections:
+      featuredProjects: "Ausgewählte Projekte"
+      allProjects: "Alle Projekte →"
+      latestPosts: "Neueste Beiträge"
+      allPosts: "Alle Beiträge →"
+  about:
+    meta:
+      title: "Über mich"
+      description: "Erfahre mehr über Fynn M. – Softwareentwickler & Systems Engineer."
+    fallback: "About-Inhalt folgt in Kürze."
+    sidebar:
+      skills: "Fähigkeiten"
+  contact:
+    meta:
+      title: "Kontakt"
+      description: "Kontaktiere mich über das Kontaktformular, E-Mail, GitHub oder LinkedIn."
+    heading: "Kontakt"
+    intro: "Ich bin offen für Möglichkeiten, Kooperationen und spannende Gespräche."
+    form:
+      heading: "Nachricht senden"
+      intro: "Ich melde mich so schnell wie möglich."
+      success: "Nachricht gesendet!"
+      successReplyPrefix: "Ich melde mich in Kürze bei"
+      successReplySuffix: "."
+      another: "Weitere Nachricht senden"
+      fields:
+        name: "Name"
+        email: "E-Mail"
+        subject: "Betreff"
+        message: "Nachricht"
+        attachments: "Anhänge (optional, max. 10 MB gesamt)"
+      placeholders:
+        name: "Dein Name"
+        email: "dein@beispiel.de"
+        subject: "Worum geht es?"
+        message: "Deine Nachricht..."
+      actions:
+        sending: "Wird gesendet…"
+        send: "Nachricht senden →"
+      errors:
+        generic: "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+        network: "Netzwerkfehler. Bitte versuche es erneut."
+    social:
+      heading: "Kontakt aufnehmen"
+      description: "Finde mich auf einer dieser Plattformen."
+  now:
+    meta:
+      title: "Jetzt"
+      description: "Woran ich gerade arbeite."
+    heading: "Jetzt"
+    fallback: "Now-Inhalt folgt in Kürze."
+  resume:
+    meta:
+      title: "Lebenslauf"
+      description: "Lade den Lebenslauf von Fynn M. – Softwareentwickler & Systems Engineer herunter."
+    heading: "Lebenslauf / CV"
+    intro: "Lade meinen aktuellen Lebenslauf als PDF herunter für einen schnellen Überblick über Erfahrung und Fähigkeiten."
+    button: "↓ Lebenslauf herunterladen (PDF)"
+    updatedLabel: "Zuletzt aktualisiert:"
+  skills:
+    meta:
+      title: "Fähigkeiten"
+      description: "Technologien, Tools und Plattformen, mit denen ich arbeite."
+    heading: "Fähigkeiten"
+    intro: "Technologien und Werkzeuge, mit denen ich arbeite. Die Einstufung ist selbst eingeschätzt."
+    categories:
+      frontend: "Frontend"
+      backend: "Backend"
+      infrastructure: "Infrastruktur & DevOps"
+      networking: "Netzwerke"
+      databases: "Datenbanken"
+      tools: "Tools"
+    levels:
+      beginner: "Anfänger"
+      intermediate: "Fortgeschritten"
+      proficient: "Versiert"
+      advanced: "Sehr fortgeschritten"
+      expert: "Experte"
+  timeline:
+    meta:
+      title: "Zeitleiste"
+      description: "Eine Zeitleiste meines beruflichen Werdegangs, meiner Ausbildung und Projekte."
+    heading: "Zeitleiste"
+    intro: "Ein chronologischer Blick auf meinen beruflichen Werdegang, meine Ausbildung und Projekte."
+    filters:
+      all: "Alle"
+      experience: "Erfahrung"
+      education: "Ausbildung"
+      project: "Projekt"
+    present: "Aktuell"
+  testimonials:
+    meta:
+      title: "Referenzen"
+      description: "Was Kolleginnen, Kollegen und Kundinnen und Kunden über die Zusammenarbeit mit mir sagen."
+    heading: "Referenzen"
+    intro: "Was Kolleginnen, Kollegen und Kundinnen und Kunden über die Zusammenarbeit mit mir sagen."
+    empty: "Noch keine Referenzen vorhanden."
+    at: "bei"
+  uses:
+    meta:
+      title: "Verwendet"
+      description: "Hardware, Software und Editor-Setup, auf das ich setze."
+    heading: "Verwendet"
+    fallback: "Uses-Inhalt folgt in Kürze."
+  homelab:
+    meta:
+      title: "Homelab"
+      description: "Homelab-Inhalt folgt in Kürze."
+    heading: "Homelab"
+    fallback: "Homelab-Inhalt folgt in Kürze."
+  datenschutz:
+    meta:
+      title: "Datenschutzerklärung"
+      description: "Datenschutzerklärung und Informationen zum Datenschutz."
+    heading: "Datenschutzerklärung"
+    fallback: "Datenschutz-Inhalt folgt in Kürze."
+  impressum:
+    meta:
+      title: "Impressum"
+      description: "Impressum und Kontaktinformationen."
+    heading: "Impressum"
+    fallback: "Impressum-Inhalt folgt in Kürze."
+  blog:
+    meta:
+      title: "Blog"
+      description: "Gedanken zu Technik, Homelab-Infrastruktur und Softwareentwicklung."
+      ogTitle: "Blog"
+      ogDescription: "Gedanken zu Technik, Homelab-Infrastruktur und Softwareentwicklung."
+      detailSuffix: "Blog"
+    heading: "Blog"
+    intro: "Gedanken zu Technik, Homelab und Softwareentwicklung."
+    empty: "Noch keine Beiträge — folgt in Kürze."
+    emptyTag: "Keine Beiträge mit diesem Tag."
+    filters:
+      all: "Alle"
+    back: "← Zurück zum Blog"
+    related: "Verwandte Beiträge"
+    postLabel: "Blogbeitrag"
+  projects:
+    meta:
+      title: "Projekte"
+      description: "Eine Auswahl meiner Softwareprojekte — Web-Apps, Backend-Systeme und Infrastruktur."
+      ogTitle: "Projekte"
+      ogDescription: "Eine Auswahl meiner Softwareprojekte — Web-Apps, Backend-Systeme und Infrastruktur."
+      detailSuffix: "Projekt"
+    heading: "Projekte"
+    intro: "Dinge, die ich gebaut habe, baue oder bauen möchte."
+    empty: "Keine Projekte gefunden."
+    filters:
+      all: "Alle"
+    back: "← Zurück zu den Projekten"
+    metadata:
+      overview: "Projektübersicht und Fakten."
+      content: "Markdown und HTML werden inline gerendert."
+      relatedExperience: "Verknüpfte Erfahrung"
+      noRelatedExperience: "Noch keine verknüpfte Erfahrung vorhanden."
+      projectLabel: "Projekt"
+      categoryDefault: "Nicht kategorisiert"
+      stack: "Stack"
+      github: "↗ GitHub"
+      liveDemo: "↗ Live-Demo"
+      imagesTitle: "Im Inhalt verwendete Bilder"
+      imagePreview: "Bildvorschau"
+      close: "Schließen"
+  experience:
+    meta:
+      title: "Erfahrung"
+      description: "Meine Berufserfahrung, Praktika und Praxisprojekte."
+      ogTitle: "Erfahrung"
+      ogDescription: "Meine Berufserfahrung, Praktika und Praxisprojekte."
+      detailSuffix: "Erfahrung"
+    heading: "Erfahrung"
+    intro: "Arbeitgeber, Praktika und reale Projektarbeit. Klicke auf eine Karte für die Details."
+    empty: "Erfahrungseinträge folgen in Kürze."
+    back: "← Zurück zur Erfahrung"
+    metadata:
+      keyHighlights: "Wichtige Punkte"
+      techStack: "Technischer Stack"
+      visitCompanyWebsite: "Firmenwebsite besuchen"
+      relatedProjects: "Verwandte Projekte"
+      present: "Aktuell"
+      detailJson: "experience.json"
+  search:
+    button: "Suchen"
+    placeholder: "Projekte, Blog oder Erfahrung durchsuchen…"
+    loading: "Lädt…"
+    types:
+      blog: "Blog"
+      project: "Projekt"
+      experience: "Erfahrung"
+    noContent: "Keine Inhalte gefunden."
+    noResultsPrefix: "Keine Ergebnisse für"
+    navigate: "navigieren"
+    open: "öffnen"
+    resultsSingular: "Ergebnis"
+    resultsPlural: "Ergebnisse"
+  toc:
+    ariaLabel: "Inhaltsverzeichnis"
+    contents: "Inhalt"
+    page: "Auf dieser Seite"
+    panelDescription: "Springe zu Abschnitten in diesem Projekt."
+    pageDescription: "Springe zu Abschnitten und Unterabschnitten."
+
+toolbar:
+  menu:
+    content:
+      title: "Inhalt"
+      overview: "Übersicht"
+      manageContent: "Inhalte verwalten"
+      blog: "Blog"
+      newPost: "Neuer Beitrag"
+      tags: "Tags"
+      projects: "Projekte"
+      newProject: "Neues Projekt"
+      experience: "Erfahrung"
+      newEntry: "Neuer Eintrag"
+      media: "Medien / Werkzeuge"
+      mediaLibrary: "Medienbibliothek"
+    tools:
+      title: "Werkzeuge"
+      database: "Datenbank"
+      sessions: "Sessions"
+      authProviders: "Auth-Provider"
+      apiDocs: "API-Doku"
+    settings:
+      title: "Einstellungen"
+      general: "Allgemein"
+      content: "Inhalt"
+      publishing: "Veröffentlichung"
+      system: "System"
+      settings: "Einstellungen"
+      site: "Website"
+      homepage: "Startseite"
+      features: "Funktionen"
+      integrations: "Integrationen"
+      gitProvider: "Git-Provider"
+      authProviders: "Auth-Provider"
+      sessions: "Sessions"
+      database: "Datenbank"
+      apiDocs: "API-Doku"
+
+admin:
+  toolbar:
+    brand: "Admin"
+    logout: "Abmelden"
+  login:
+    title: "Admin-Login"
+    close: "Schließen"
+    continueWith: "Weiter mit"
+    or: "oder"
+    fields:
+      email: "E-Mail"
+      password: "Passwort"
+    actions:
+      signIn: "Anmelden"
+    states:
+      signingIn: "Meldet an…"
+    error:
+      invalidCredentials: "Ungültige Zugangsdaten"
+
+settings:
+  language:
+    title: "Sprache"
+    description: "Wähle die Sprache der Website."
+    label: "Sprache"
+  drawer:
+    trigger:
+      label: "Einstellungen"
+      open: "Einstellungen öffnen"
+      close: "Einstellungen schließen"
+    eyebrow: "Einstellungen"
+    title: "Website-Einstellungen"
+    description: "Passe Darstellung, Lesbarkeit und Inhaltsanzeige an."
+    close: "Einstellungen schließen"
+    sections:
+      appearance: "Darstellung"
+      projects: "Projekte"
+      experience: "Erfahrung"
+      accessibility: "Barrierefreiheit"
+    appearance:
+      title: "Design und Typografie"
+      hint: "Wähle das Aussehen und die Schrift für den Fließtext."
+      theme:
+        label: "Theme"
+        hint: "Farbschema"
+        options:
+          system: "System"
+          dark: "Dunkel"
+          light: "Hell"
+      fontFamily:
+        label: "Schriftfamilie"
+        hint: "Schriftstil für den Fließtext"
+        options:
+          sans: "Sans-Serif"
+          serif: "Serif"
+          mono: "Monospace"
+    accent:
+      title: "Akzent und Bewegung"
+      hint: "Passe Akzentfarbe und Bewegungsverhalten an."
+      label: "Akzentfarbe"
+      labelHint: "Hervorhebungs- / Linkfarbe"
+      options:
+        cyan: "Cyan"
+        purple: "Lila"
+        orange: "Orange"
+        green: "Grün"
+    motion:
+      title: "Bewegung"
+      sectionHint: "Deaktiviere Animationen, wenn du weniger Übergänge möchtest."
+      label: "Bewegung reduzieren"
+      hint: "Alle Animationen deaktivieren"
+    projects:
+      title: "Projektlayout"
+      hint: "Lege fest, wie Projektkarten angeordnet werden."
+      view:
+        label: "Ansicht"
+        hint: "Layoutstil"
+        options:
+          grid: "Raster"
+          list: "Liste"
+      cardSize:
+        label: "Kartengröße"
+        hint: "Größe der Rasterkarten"
+        options:
+          sm: "Klein"
+          md: "Mittel"
+          lg: "Groß"
+    experience:
+      title: "Leseerlebnis"
+      hint: "Steuere, wie umfangreich Inhalte standardmäßig wirken."
+      expand:
+        label: "Automatisch ausklappen"
+        hint: "Vollen Inhalt standardmäßig anzeigen"
+      comments:
+        label: "Kommentare anzeigen"
+        hint: "Giscus-Kommentare anzeigen"
+    accessibility:
+      title: "Textgröße"
+      hint: "Skaliere alle Texte auf der Website."
+      fontSize:
+        label: "Schriftgröße"
+        hint: "Skaliert alle Texte global"
+      colorBlind:
+        title: "Farbsehen"
+        hint: "Farben für unterschiedliche Sehformen simulieren oder anpassen."
+        options:
+          none: "Keine"
+          deuteranopia: "Deuteranopie (Rot-Grün)"
+          protanopia: "Protanopie (Rot-Grün)"
+          tritanopia: "Tritanopie (Blau-Gelb)"
+          highContrast: "Hoher Kontrast"
+    footer:
+      prefix: "Einstellungen werden in Cookies gespeichert"
+      reset: "Zurücksetzen"
+  forms:
+    badge: "Site Control"
+    loading: "Einstellungen werden geladen…"
+    actions:
+      save: "Einstellungen speichern"
+      saving: "Speichert…"
+    messages:
+      saved: "Einstellungen gespeichert."
+    errors:
+      load: "Einstellungen konnten nicht geladen werden."
+      save: "Einstellungen konnten nicht gespeichert werden."
+  layout:
+    back: "Zurück zur Website"
+    title: "Admin-Einstellungen"
+    groups:
+      general: "Allgemein"
+      site: "Website"
+      publishing: "Veröffentlichung"
+      system: "System"
+    items:
+      general: "Einstellungen"
+      site: "Website"
+      homepage: "Startseite"
+      features: "Funktionen"
+      integrations: "Integrationen"
+      gitProvider: "Git-Provider"
+      authProviders: "Auth-Provider"
+      sessions: "Sessions"
+      database: "Datenbank"
+      apiDocs: "API-Doku"
+  pages:
+    admin:
+      badge: "Dev Dashboard"
+      title: "Admin-Einstellungen"
+      description: "Verwalte die Zugangsdaten und Berechtigungen für den Admin-Bereich."
+      notice: "Änderungen hier betreffen alle Admin-Sessions."
+      errors:
+        passwordMismatch: "Passwörter stimmen nicht überein"
+        passwordUpdateFailed: "Passwort konnte nicht aktualisiert werden"
+        emailUpdateFailed: "E-Mail konnte nicht aktualisiert werden"
+      messages:
+        passwordUpdated: "Passwort aktualisiert"
+        emailUpdated: "E-Mail aktualisiert"
+      actions:
+        saving: "Speichert…"
+        updatePassword: "Passwort aktualisieren"
+        updateEmail: "E-Mail aktualisieren"
+      password:
+        title: "Passwort ändern"
+        description: "Nutze dies, wenn du das Admin-Passwort für die lokale Anmeldung ändern möchtest."
+        fields:
+          current: "Aktuelles Passwort"
+          new: "Neues Passwort"
+          confirm: "Neues Passwort bestätigen"
+      email:
+        title: "E-Mail ändern"
+        description: "Aktualisiere die Login-E-Mail für die lokale Admin-Anmeldung."
+        fields:
+          currentPassword: "Aktuelles Passwort"
+          newEmail: "Neue E-Mail"
+    site:
+      title: "Website-Identität"
+      description: "Bearbeite die Haupt-Website, Social-Profile und die Skill-Einstellungen der Seitenleiste aus config/site.yaml."
+      sections:
+        main:
+          title: "Haupt-Website"
+          description: "Diese Werte speisen Metadaten, Startseiten-Texte und Kontaktlinks."
+        social:
+          title: "Social-Links"
+          description: "Speichere Benutzernamen oder IDs für die öffentliche Website."
+        skills:
+          title: "Skills in der Seitenleiste"
+          description: "Gruppen, die in der About-Seitenleiste angezeigt werden. Einträge sind kommasepariert."
+      fields:
+        title: "Titel"
+        tagline: "Tagline"
+        url: "URL"
+        email: "E-Mail"
+        location: "Ort"
+        avatar: "Avatar"
+        bio: "Bio"
+        github: "GitHub"
+        linkedin: "LinkedIn"
+        twitter: "Twitter"
+        instagram: "Instagram"
+        youtube: "YouTube"
+        category: "Kategorie"
+        items: "Einträge"
+      actions:
+        remove: "Entfernen"
+        addSkillGroup: "Skill-Gruppe hinzufügen"
+    homepage:
+      title: "Startseite"
+      description: "Konfiguriere die Kennzahlen auf der Startseite. Berechnete Einträge nutzen Live-Daten; manuelle Einträge verwenden einen gespeicherten Wert."
+      sections:
+        stats:
+          title: "Kennzahlen"
+          enabled: "Kennzahlen-Bereich aktiviert"
+      actions:
+        addStat: "Kennzahl hinzufügen"
+        moveUp: "Nach oben"
+        moveDown: "Nach unten"
+        remove: "Entfernen"
+      fields:
+        label: "Beschriftung"
+        suffix: "Suffix"
+        source: "Quelle"
+        computedKey: "Berechneter Schlüssel"
+        manualValue: "Manueller Wert"
+        enabled: "Aktiv"
+      sources:
+        computed: "Berechnet"
+        manual: "Manuell"
+      computedKeys:
+        yearsOfExperience: "Jahre Erfahrung"
+        totalProjects: "Projekte insgesamt"
+        totalBlogPosts: "Blogbeiträge insgesamt"
+    features:
+      title: "Sichtbarkeit von Funktionen"
+      description: "Deaktiviere Portfolio-Funktionen überall dort, wo sie in der öffentlichen und Admin-UI auftauchen."
+      cardDescription: "Steuert die Sichtbarkeit dieser Funktion."
+      fields:
+        label: "Beschriftung"
+        route: "Route"
+        enabled: "Aktiv"
+        showInNavigation: "In Navigation anzeigen"
+        showInContentManager: "Im Content-Manager anzeigen"
+        showOnHomepage: "Auf der Startseite anzeigen"
+        showInProjectRelationPicker: "Im Projekt-Beziehungswähler anzeigen"
+    integrations:
+      title: "Integrationen"
+      description: "Bearbeite Kontaktversand, Kommentare und Analytics-Einstellungen aus config/site.yaml."
+      sections:
+        contact:
+          title: "Kontakt"
+        comments:
+          title: "Kommentare / Giscus"
+        analytics:
+          title: "Analytics"
+      fields:
+        resendFrom: "Absender (Resend)"
+        contactRecipient: "Kontakt-Empfänger"
+        enabled: "Aktiv"
+        reactionsEnabled: "Reaktionen aktiviert"
+        emitMetadata: "Metadaten senden"
+        provider: "Anbieter"
+        umamiEnabled: "Umami aktiviert"
+        umamiWebsiteId: "Umami Website-ID"
+        umamiScriptUrl: "Umami Script-URL"
+        plausibleEnabled: "Plausible aktiviert"
+        plausibleDomain: "Plausible-Domain"
+        plausibleScriptUrl: "Plausible Script-URL"
+      giscusFields:
+        repo: "Repo"
+        repoId: "Repo-ID"
+        category: "Kategorie"
+        categoryId: "Kategorie-ID"
+        mapping: "Zuordnung"
+        inputPosition: "Position des Eingabefelds"
+        theme: "Theme"
+        lang: "Sprache"
+      providerOptions:
+        none: "Keine"
+        umami: "Umami"
+        plausible: "Plausible"
+    sessions:
+      badge: "Dev Dashboard"
+      title: "Sessions"
+      description: "Verwalte aktive Login-Sessions."
+      activeSingle: "aktive Session"
+      activePlural: "aktive Sessions"
+      loading: "Lädt…"
+      empty: "Keine aktiven Sessions."
+      actions:
+        revokeOthers: "Alle anderen widerrufen"
+        refresh: "Aktualisieren"
+        revoke: "Widerrufen"
+      columns:
+        id: "ID"
+        ip: "IP"
+        browser: "Browser"
+        created: "Erstellt"
+        expires: "Läuft ab"
+      errors:
+        load: "Sessions konnten nicht geladen werden"
+    db:
+      title: "Datenbank"
+      description: "Durchsuche Tabellen und führe SQL-Abfragen gegen die SQLite-Datenbank aus."
+      tables: "Tabellen"
+      loading: "Lädt…"
+      editor:
+        title: "SQL-Editor"
+        hint: "Strg+Enter zum Ausführen"
+      actions:
+        run: "Ausführen"
+      results:
+        title: "Ergebnisse"
+        rowSingle: "Zeile"
+        rowPlural: "Zeilen"
+        null: "NULL"
+      errors:
+        network: "Netzwerkfehler"
+    gitProvider:
+      badge: "Paket-Test"
+      title: "Git-Provider Core"
+      description: "Teste das lokal installierte Paket @ftmahringer/git-provider-core über seine öffentliche Client-API."
+      sections:
+        connection:
+          title: "Verbindungsdaten"
+          description: "Verwendet eine Server-Route, damit zukünftige Tokens oder Keys nicht im Browser landen."
+        detectedProvider:
+          title: "Erkannter Provider"
+        repository:
+          title: "Repository"
+        readme:
+          title: "README"
+        docs:
+          title: "Doku"
+        activity:
+          title: "Letzte Aktivität"
+      fields:
+        repoUrl: "Repository-URL"
+        repoName: "Repository-Name"
+        provider: "Provider"
+        docsUrl: "Optionale Doku-URL"
+      providerOptions:
+        auto: "Automatisch erkennen"
+        forgejo: "Forgejo-kompatibel"
+        github: "GitHub"
+      actions:
+        testing: "Testet…"
+        testConnection: "Verbindung testen"
+      empty: "Starte einen Test, um Provider-Erkennung, Repo-Metadaten, README, Doku und Aktivität zu sehen."
+      errors:
+        title: "Test fehlgeschlagen"
+        invalidJson: "Ungültige JSON-Antwort"
+        requestFailed: "Anfrage fehlgeschlagen"
+      meta:
+        provider: "Provider"
+        host: "Host"
+        baseUrl: "Basis-URL"
+        repo: "Repo"
+        name: "Name"
+        defaultBranch: "Standard-Branch"
+        language: "Sprache"
+        stars: "Sterne"
+        forks: "Forks"
+        updated: "Aktualisiert"
+        unknown: "Unbekannt"
+      readme:
+        source: "Quelle"
+        chars: "Zeichen"
+      docs:
+        source: "Quelle"
+        page: "Seite"
+        pages: "Seiten"
+        charsTotal: "Zeichen gesamt"
+        empty: "Es wurde keine Doku-URL angegeben oder gefunden."
+      commit:
+        noMessage: "Keine Commit-Nachricht"
+        unknownAuthor: "Unbekannter Autor"
+        unknownDate: "Unbekanntes Datum"
+        empty: "Keine Commits zurückgegeben."
+    authProviders:
+      title: "Auth-Provider"
+      description: "Verwalte OIDC-/SSO-Identitätsanbieter für den Admin-Login."
+      loading: "Lädt…"
+      empty: "Noch keine Auth-Provider konfiguriert."
+      confirmDelete: "Provider löschen"
+      optional: "optional"
+      table:
+        provider: "Provider"
+        issuer: "Issuer"
+        enabled: "Aktiv"
+        actions: "Aktionen"
+      actions:
+        addProvider: "Provider hinzufügen"
+        edit: "Bearbeiten"
+        delete: "Löschen"
+        disableProvider: "Provider deaktivieren"
+        enableProvider: "Provider aktivieren"
+        copy: "Kopieren"
+        cancel: "Abbrechen"
+        saving: "Speichert…"
+        saveChanges: "Änderungen speichern"
+      modal:
+        editTitle: "Identitätsanbieter bearbeiten"
+        addTitle: "Identitätsanbieter hinzufügen"
+        description: "Konfiguriere einen OIDC-/SSO-Identitätsanbieter für den Admin-Login."
+      fields:
+        providerType: "Provider-Typ"
+        name: "Name"
+        issuerUrl: "Issuer-URL"
+        clientId: "Client-ID"
+        clientSecret: "Client Secret"
+        callbackUrl: "Redirect-/Callback-URL"
+        allowedEmail: "Erlaubte E-Mail"
+      placeholders:
+        name: "Mein Identitätsanbieter"
+        clientId: "deine-client-id"
+        clientSecret: "dein-client-secret"
+        keepSecret: "Als *** belassen, um den aktuellen Wert zu behalten"
+        allowedEmail: "anyone@example.com"
+      providerTypes:
+        oidc: "OIDC (Allgemein)"
+        google: "Google"
+        microsoft: "Microsoft"
+        entra: "Microsoft Entra"
+        okta: "Okta"
+        zitadel: "Zitadel"
+        pocketid: "PocketID"
+        authentik: "Authentik"
+        keycloak: "Keycloak"
+      subFields:
+        tenantId: "Tenant-ID"
+        domain: "Domain"
+        instance: "Instanz"
+        applicationSlug: "Anwendungs-Slug"
+        realm: "Realm"
+    apiDocs:
+      title: "API-Dokumentation"
+      description: "Interaktive OpenAPI-Referenz für die Portfolio-API."
+      gate:
+        title: "Admin-Zugriff erforderlich"
+        description: "Du musst als Admin angemeldet sein, um die API-Dokumentation zu sehen."
+        back: "Zurück zur Website"
+      baseUrl: "Basis-URL:"
+      openApiJson: "openapi.json ↗"
+      auth:
+        title: "Authentifizierung"
+        description: "Schreibende Endpunkte benötigen Authorization: Bearer <API_SECRET>. Das Secret wird vom Site-Besitzer über die Umgebungsvariable API_SECRET gesetzt. Öffentliche (nur lesbare) Endpunkte brauchen keine Authentifizierung."
+      filter:
+        label: "Filter:"
+        all: "Alle"
+      endpoint:
+        auth: "Auth"
+        parameters: "Parameter"
+        required: "erforderlich"
+        oneOf: "eines von:"
+        responses: "Antworten"
+        exampleCurl: "Beispiel (cURL)"
+        copy: "Kopieren"
+        copied: "✓ Kopiert"
+
+public_settings:
+  title: "Öffentliche Einstellungen"
+  description: "Passe sichtbare Website-Optionen an, ohne Inhaltsdaten zu ändern."
+  sections:
+    language:
+      title: "Sprache"
+      description: "Wechsle die Sprache der Oberfläche."
+    appearance:
+      title: "Darstellung"
+      description: "Stimme das visuelle Design der öffentlichen UI ab."
+
+forms:
+  actions:
+    save: "Speichern"
+    cancel: "Abbrechen"
+    delete: "Löschen"
+    edit: "Bearbeiten"
+  fields:
+    search: "Suchen"
+    email: "E-Mail"
+    name: "Name"
+
+errors:
+  generic: "Etwas ist schiefgelaufen."
+  notFound: "Diese Seite konnte nicht gefunden werden."
+  forbidden: "Du hast keine Berechtigung, diese Seite zu sehen."
+
+content:
+  title: "Inhalt"
+  empty: "Keine Inhalte verfügbar."
+  labels:
+    featured: "Hervorgehoben"
+    published: "Veröffentlicht"

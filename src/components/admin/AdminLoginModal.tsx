@@ -2,6 +2,7 @@
 
 import { useState, useEffect, FormEvent } from 'react';
 import { useDevMode } from '@/context/DevContext';
+import { useTranslations } from '@/context/TranslationContext';
 
 interface SsoProvider { id: string; name: string; type: string }
 
@@ -17,6 +18,7 @@ interface AdminLoginModalProps {
 
 export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps) {
   const { login } = useDevMode();
+  const { t } = useTranslations();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [providers, setProviders] = useState<SsoProvider[]>([]);
@@ -50,7 +52,7 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
       onClose();
       window.location.reload();
     } else {
-      setError('Invalid credentials');
+      setError(t('admin.login.error.invalidCredentials'));
       setLoading(false);
     }
   }
@@ -70,13 +72,13 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
       >
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--foreground)' }}>
-            Admin Login
+            {t('admin.login.title')}
           </h1>
           <button
             type="button"
             onClick={onClose}
             className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
-            aria-label="Close"
+            aria-label={t('admin.login.close')}
           >
             ✕
           </button>
@@ -93,14 +95,14 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
                   style={{ borderColor: 'var(--border)', color: 'var(--foreground)', background: 'var(--background)' }}
                 >
                   <span>{PROVIDER_ICONS[p.type] ?? '🔑'}</span>
-                  Continue with {p.name}
+                  {t('admin.login.continueWith')} {p.name}
                 </a>
               ))}
             </div>
 
             <div className="flex items-center gap-3 my-4">
               <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
-              <span className="text-xs" style={{ color: 'var(--muted)' }}>or</span>
+              <span className="text-xs" style={{ color: 'var(--muted)' }}>{t('admin.login.or')}</span>
               <div className="flex-1 border-t" style={{ borderColor: 'var(--border)' }} />
             </div>
           </>
@@ -109,7 +111,7 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <label htmlFor="admin-login-email" className="text-sm font-medium" style={{ color: 'var(--muted)' }}>
-              Email
+              {t('admin.login.fields.email')}
             </label>
             <input
               id="admin-login-email"
@@ -124,7 +126,7 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
 
           <div className="flex flex-col gap-1">
             <label htmlFor="admin-login-password" className="text-sm font-medium" style={{ color: 'var(--muted)' }}>
-              Password
+              {t('admin.login.fields.password')}
             </label>
             <input
               id="admin-login-password"
@@ -149,7 +151,7 @@ export default function AdminLoginModal({ open, onClose }: AdminLoginModalProps)
             className="mt-1 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-50"
             style={{ background: loading ? 'var(--muted)' : 'var(--accent)' }}
           >
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? t('admin.login.states.signingIn') : t('admin.login.actions.signIn')}
           </button>
         </form>
       </div>

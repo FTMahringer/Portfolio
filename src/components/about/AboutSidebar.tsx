@@ -30,7 +30,7 @@ const SOCIAL_DEFS: { key: string; icon: string; label: string; href: (val: strin
   },
 ]
 
-export function AboutSidebar() {
+export function AboutSidebar({ skillsLabel = 'Skills' }: { skillsLabel?: string }) {
   const config = getSiteConfig()
   const { site, social, sidebar_skills } = config
 
@@ -104,7 +104,7 @@ export function AboutSidebar() {
       {/* Skills — GitHub achievements style */}
       {sidebar_skills && sidebar_skills.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">Skills</h2>
+          <h2 className="text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">{skillsLabel}</h2>
           {sidebar_skills.map((cat: { category: string; items: string[] }) => (
             <div key={cat.category}>
               <div className="text-xs text-[var(--muted)] mb-1.5">{cat.category}</div>

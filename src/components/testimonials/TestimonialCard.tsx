@@ -3,12 +3,14 @@
 import Image from 'next/image';
 import { Quote } from 'lucide-react';
 import type { Testimonial } from '@/lib/testimonials';
+import { useTranslations } from '@/context/TranslationContext';
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
 }
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps) {
+  const { t } = useTranslations();
   const { frontmatter, content } = testimonial;
 
   return (
@@ -47,7 +49,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
             )}
           </div>
           <div className="text-sm text-[var(--muted)]">
-            {frontmatter.role} at {frontmatter.company}
+            {frontmatter.role} {t('public.testimonials.at', 'at')} {frontmatter.company}
           </div>
         </div>
       </div>
