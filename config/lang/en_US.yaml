@@ -1,0 +1,782 @@
+site:
+  name: "Portfolio"
+  tagline: "Developer portfolio and content hub"
+
+language:
+  label: "Language"
+  description: "Choose the site language."
+  options:
+    en: "English"
+    de: "German"
+
+nav:
+  home: "Home"
+  about: "About"
+  projects: "Projects"
+  blog: "Blog"
+  contact: "Contact"
+  skills: "Skills"
+  now: "Now"
+  uses: "Uses"
+  homelab: "Homelab"
+  rss: "RSS Feed"
+  impressum: "Imprint"
+  datenschutz: "Privacy"
+  github: "GitHub"
+  linkedin: "LinkedIn"
+
+chrome:
+  header:
+    login: "Login"
+  footer:
+    navigation: "Navigation"
+    discovery: "Discovery"
+    legal: "Legal & Social"
+    builtWith: "Built with Next.js & Tailwind CSS."
+    getInTouch: "Get in touch"
+
+public:
+  home:
+    meta:
+      title: "Fynn M. – Software Developer"
+      description: "Personal portfolio of Fynn M. – Software Developer & Systems Engineer. Projects, experience, and blog."
+      ogTitle: "Fynn M. – Software Developer"
+      ogDescription: "Personal portfolio of Fynn M. – Software Developer & Systems Engineer."
+    hero:
+      greeting: "Hi, I'm"
+      projects: "View Projects"
+      contact: "Get in Touch"
+      resume: "Resume ↓"
+      aboutPrompt: "Want to know more about me?"
+      aboutLink: "About me →"
+    sections:
+      featuredProjects: "Featured Projects"
+      allProjects: "All projects →"
+      latestPosts: "Latest Posts"
+      allPosts: "All posts →"
+  about:
+    meta:
+      title: "About Me"
+      description: "Learn more about Fynn M. – Software Developer & Systems Engineer."
+    fallback: "About content coming soon."
+    sidebar:
+      skills: "Skills"
+  contact:
+    meta:
+      title: "Contact"
+      description: "Get in touch via the contact form, email, GitHub, or LinkedIn."
+    heading: "Contact"
+    intro: "I'm open to opportunities, collaborations, and interesting conversations."
+    form:
+      heading: "Send a Message"
+      intro: "I'll get back to you as soon as I can."
+      success: "Message sent!"
+      successReplyPrefix: "I'll reply to"
+      successReplySuffix: "shortly."
+      another: "Send another"
+      fields:
+        name: "Name"
+        email: "Email"
+        subject: "Subject"
+        message: "Message"
+        attachments: "Attachments (optional, max 10 MB total)"
+      placeholders:
+        name: "Your name"
+        email: "your@email.com"
+        subject: "What's this about?"
+        message: "Your message..."
+      actions:
+        sending: "Sending…"
+        send: "Send Message →"
+      errors:
+        generic: "Something went wrong. Please try again."
+        network: "Network error. Please try again."
+    social:
+      heading: "Get in Touch"
+      description: "Find me on any of these platforms."
+  now:
+    meta:
+      title: "Now"
+      description: "What I am currently working on."
+    heading: "Now"
+    fallback: "Now content coming soon."
+  resume:
+    meta:
+      title: "Resume"
+      description: "Download the resume of Fynn M. – Software Developer & Systems Engineer."
+    heading: "Resume / CV"
+    intro: "Download my current resume as a PDF for a quick overview of my experience and skills."
+    button: "↓ Download Resume (PDF)"
+    updatedLabel: "Last updated:"
+  skills:
+    meta:
+      title: "Skills"
+      description: "Technologies, tools, and platforms I work with."
+    heading: "Skills"
+    intro: "Technologies and tools I work with. Proficiency levels are self-assessed."
+    categories:
+      frontend: "Frontend"
+      backend: "Backend"
+      infrastructure: "Infrastructure & DevOps"
+      networking: "Networking"
+      databases: "Databases"
+      tools: "Tools"
+    levels:
+      beginner: "Beginner"
+      intermediate: "Intermediate"
+      proficient: "Proficient"
+      advanced: "Advanced"
+      expert: "Expert"
+  timeline:
+    meta:
+      title: "Timeline"
+      description: "A timeline of my professional journey, education, and projects."
+    heading: "Timeline"
+    intro: "A chronological view of my professional journey, education, and projects."
+    filters:
+      all: "All"
+      experience: "Experience"
+      education: "Education"
+      project: "Project"
+    present: "Present"
+  testimonials:
+    meta:
+      title: "Testimonials"
+      description: "What colleagues and clients say about working with me."
+    heading: "Testimonials"
+    intro: "What colleagues and clients say about working with me."
+    empty: "No testimonials yet."
+    at: "at"
+  uses:
+    meta:
+      title: "Uses"
+      description: "Hardware, software and editor setup I rely on."
+    heading: "Uses"
+    fallback: "Uses content coming soon."
+  homelab:
+    meta:
+      title: "Homelab"
+      description: "Homelab content coming soon."
+    heading: "Homelab"
+    fallback: "Homelab content coming soon."
+  datenschutz:
+    meta:
+      title: "Privacy Policy"
+      description: "Privacy policy and data protection information."
+    heading: "Privacy Policy"
+    fallback: "Privacy policy content coming soon."
+  impressum:
+    meta:
+      title: "Legal Notice"
+      description: "Legal notice and contact information."
+    heading: "Legal Notice"
+    fallback: "Legal notice content coming soon."
+  blog:
+    meta:
+      title: "Blog"
+      description: "Thoughts on tech, home lab infrastructure, and software development."
+      ogTitle: "Blog"
+      ogDescription: "Thoughts on tech, home lab infrastructure, and software development."
+      detailSuffix: "Blog"
+    heading: "Blog"
+    intro: "Thoughts on tech, home lab, and software development."
+    empty: "No posts yet — coming soon."
+    emptyTag: "No posts with this tag."
+    filters:
+      all: "All"
+    back: "← Back to Blog"
+    related: "Related Posts"
+    postLabel: "Blog post"
+  projects:
+    meta:
+      title: "Projects"
+      description: "A showcase of my software projects — web apps, backend systems, and infrastructure."
+      ogTitle: "Projects"
+      ogDescription: "A showcase of my software projects — web apps, backend systems, and infrastructure."
+      detailSuffix: "Project"
+    heading: "Projects"
+    intro: "Things I've built, am building, or plan to build."
+    empty: "No projects found."
+    filters:
+      all: "All"
+    back: "← Back to Projects"
+    metadata:
+      overview: "Project overview and facts."
+      content: "Markdown and HTML render inline."
+      relatedExperience: "Related Experience"
+      noRelatedExperience: "No related experience linked yet."
+      projectLabel: "Project"
+      categoryDefault: "Uncategorized"
+      stack: "Stack"
+      github: "↗ GitHub"
+      liveDemo: "↗ Live Demo"
+      imagesTitle: "Images used in content"
+      imagePreview: "Image preview"
+      close: "Close"
+  experience:
+    meta:
+      title: "Experience"
+      description: "My work experience, internships, and real-world projects."
+      ogTitle: "Experience"
+      ogDescription: "My work experience, internships, and real-world projects."
+      detailSuffix: "Experience"
+    heading: "Experience"
+    intro: "Employers, internships, and real-world project work. Click any card for full details."
+    empty: "Experience entries coming soon."
+    back: "← Back to Experience"
+    metadata:
+      keyHighlights: "Key Highlights"
+      techStack: "Tech Stack"
+      visitCompanyWebsite: "Visit company website"
+      relatedProjects: "Related Projects"
+      present: "Present"
+      detailJson: "experience.json"
+  search:
+    button: "Search"
+    placeholder: "Search projects, blog, experience…"
+    loading: "Loading…"
+    types:
+      blog: "Blog"
+      project: "Project"
+      experience: "Experience"
+    noContent: "No content found."
+    noResultsPrefix: "No results for"
+    navigate: "navigate"
+    open: "open"
+    resultsSingular: "result"
+    resultsPlural: "results"
+  toc:
+    ariaLabel: "Table of contents"
+    contents: "Contents"
+    page: "On this page"
+    panelDescription: "Jump to sections in this project."
+    pageDescription: "Jump to sections and subsections."
+
+toolbar:
+  menu:
+    content:
+      title: "Content"
+      overview: "Overview"
+      manageContent: "Manage Content"
+      blog: "Blog"
+      newPost: "New Post"
+      tags: "Tags"
+      projects: "Projects"
+      newProject: "New Project"
+      experience: "Experience"
+      newEntry: "New Entry"
+      media: "Media / Utilities"
+      mediaLibrary: "Media Library"
+    tools:
+      title: "Tools"
+      database: "Database"
+      sessions: "Sessions"
+      authProviders: "Auth Providers"
+      apiDocs: "API Docs"
+    settings:
+      title: "Settings"
+      general: "General"
+      content: "Content"
+      publishing: "Publishing"
+      system: "System"
+      settings: "Settings"
+      site: "Site"
+      homepage: "Homepage"
+      features: "Features"
+      integrations: "Integrations"
+      gitProvider: "Git Provider"
+      authProviders: "Auth Providers"
+      sessions: "Sessions"
+      database: "Database"
+      apiDocs: "API Docs"
+
+admin:
+  toolbar:
+    brand: "Admin"
+    logout: "Logout"
+  login:
+    title: "Admin Login"
+    close: "Close"
+    continueWith: "Continue with"
+    or: "or"
+    fields:
+      email: "Email"
+      password: "Password"
+    actions:
+      signIn: "Sign in"
+    states:
+      signingIn: "Signing in…"
+    error:
+      invalidCredentials: "Invalid credentials"
+
+settings:
+  language:
+    title: "Language"
+    description: "Choose the site language."
+    label: "Language"
+  drawer:
+    trigger:
+      label: "Settings"
+      open: "Open settings"
+      close: "Close settings"
+    eyebrow: "Preferences"
+    title: "Site settings"
+    description: "Tweak appearance, readability, and content display."
+    close: "Close settings"
+    sections:
+      appearance: "Appearance"
+      projects: "Projects"
+      experience: "Experience"
+      accessibility: "Accessibility"
+    appearance:
+      title: "Theme and typography"
+      hint: "Choose the overall look and body font."
+      theme:
+        label: "Theme"
+        hint: "Color scheme"
+        options:
+          system: "System"
+          dark: "Dark"
+          light: "Light"
+      fontFamily:
+        label: "Font Family"
+        hint: "Body text font style"
+        options:
+          sans: "Sans-serif"
+          serif: "Serif"
+          mono: "Monospace"
+    accent:
+      title: "Accent and motion"
+      hint: "Adjust the highlight color and motion preference."
+      label: "Accent Color"
+      labelHint: "Highlight / link color"
+      options:
+        cyan: "Cyan"
+        purple: "Purple"
+        orange: "Orange"
+        green: "Green"
+    motion:
+      title: "Motion"
+      sectionHint: "Disable animations if you prefer fewer transitions."
+      label: "Reduce Motion"
+      hint: "Disable all animations"
+    projects:
+      title: "Project layout"
+      hint: "Pick how project cards are arranged."
+      view:
+        label: "View"
+        hint: "Layout style"
+        options:
+          grid: "Grid"
+          list: "List"
+      cardSize:
+        label: "Card Size"
+        hint: "Grid card size"
+        options:
+          sm: "SM"
+          md: "MD"
+          lg: "LG"
+    experience:
+      title: "Reading experience"
+      hint: "Control how full the content feels by default."
+      expand:
+        label: "Auto-expand"
+        hint: "Show full content by default"
+      comments:
+        label: "Show Comments"
+        hint: "Display Giscus comments"
+    accessibility:
+      title: "Text size"
+      hint: "Scale all text across the site."
+      fontSize:
+        label: "Font Size"
+        hint: "Scales all text globally"
+      colorBlind:
+        title: "Color vision"
+        hint: "Simulate or adjust colors for color vision differences."
+        options:
+          none: "None"
+          deuteranopia: "Deuteranopia (red-green)"
+          protanopia: "Protanopia (red-green)"
+          tritanopia: "Tritanopia (blue-yellow)"
+          highContrast: "High Contrast"
+    footer:
+      prefix: "Preferences saved in cookies"
+      reset: "Reset"
+  forms:
+    badge: "Site Control"
+    loading: "Loading settings…"
+    actions:
+      save: "Save settings"
+      saving: "Saving…"
+    messages:
+      saved: "Settings saved."
+    errors:
+      load: "Failed to load settings."
+      save: "Failed to save settings."
+  layout:
+    back: "Back to site"
+    title: "Admin Settings"
+    groups:
+      general: "General"
+      site: "Site"
+      publishing: "Publishing"
+      system: "System"
+    items:
+      general: "Settings"
+      site: "Site"
+      homepage: "Homepage"
+      features: "Features"
+      integrations: "Integrations"
+      gitProvider: "Git Provider"
+      authProviders: "Auth Providers"
+      sessions: "Sessions"
+      database: "Database"
+      apiDocs: "API Docs"
+  pages:
+    admin:
+      badge: "Dev Dashboard"
+      title: "Admin Settings"
+      description: "Manage the credentials and access used to enter the admin area."
+      notice: "Changes here affect all admin sessions."
+      errors:
+        passwordMismatch: "Passwords do not match"
+        passwordUpdateFailed: "Failed to update password"
+        emailUpdateFailed: "Failed to update email"
+      messages:
+        passwordUpdated: "Password updated"
+        emailUpdated: "Email updated"
+      actions:
+        saving: "Saving…"
+        updatePassword: "Update password"
+        updateEmail: "Update email"
+      password:
+        title: "Change Password"
+        description: "Use this when you want to rotate the admin password for the local login flow."
+        fields:
+          current: "Current password"
+          new: "New password"
+          confirm: "Confirm new password"
+      email:
+        title: "Change Email"
+        description: "Update the login email used for local admin authentication."
+        fields:
+          currentPassword: "Current password"
+          newEmail: "New email"
+    site:
+      title: "Site Identity"
+      description: "Edit the main site, social profile, and sidebar skill settings stored in config/site.yaml."
+      sections:
+        main:
+          title: "Main site"
+          description: "These values feed metadata, homepage copy, and contact links."
+        social:
+          title: "Social links"
+          description: "Store usernames or IDs used by the public site."
+        skills:
+          title: "Sidebar skills"
+          description: "Groups shown in the About page sidebar. Items are comma-separated."
+      fields:
+        title: "Title"
+        tagline: "Tagline"
+        url: "URL"
+        email: "Email"
+        location: "Location"
+        avatar: "Avatar"
+        bio: "Bio"
+        github: "GitHub"
+        linkedin: "LinkedIn"
+        twitter: "Twitter"
+        instagram: "Instagram"
+        youtube: "YouTube"
+        category: "Category"
+        items: "Items"
+      actions:
+        remove: "Remove"
+        addSkillGroup: "Add skill group"
+    homepage:
+      title: "Homepage"
+      description: "Configure showcase numbers shown on the homepage. Computed entries use live app data; manual entries use a saved value."
+      sections:
+        stats:
+          title: "Stats"
+          enabled: "Stats section enabled"
+      actions:
+        addStat: "Add stat"
+        moveUp: "Move up"
+        moveDown: "Move down"
+        remove: "Remove"
+      fields:
+        label: "Label"
+        suffix: "Suffix"
+        source: "Source"
+        computedKey: "Computed key"
+        manualValue: "Manual value"
+        enabled: "Enabled"
+      sources:
+        computed: "Computed"
+        manual: "Manual"
+      computedKeys:
+        yearsOfExperience: "Years of experience"
+        totalProjects: "Total projects"
+        totalBlogPosts: "Total blog posts"
+    features:
+      title: "Feature Visibility"
+      description: "Disable portfolio features everywhere they appear in public and admin UI."
+      cardDescription: "Controls visibility for this feature."
+      fields:
+        label: "Label"
+        route: "Route"
+        enabled: "Enabled"
+        showInNavigation: "Show in navigation"
+        showInContentManager: "Show in content manager"
+        showOnHomepage: "Show on homepage"
+        showInProjectRelationPicker: "Show in project relation picker"
+    integrations:
+      title: "Integrations"
+      description: "Edit contact delivery, comments, and analytics settings stored in config/site.yaml."
+      sections:
+        contact:
+          title: "Contact"
+        comments:
+          title: "Comments / Giscus"
+        analytics:
+          title: "Analytics"
+      fields:
+        resendFrom: "Resend from"
+        contactRecipient: "Contact recipient"
+        enabled: "Enabled"
+        reactionsEnabled: "Reactions enabled"
+        emitMetadata: "Emit metadata"
+        provider: "Provider"
+        umamiEnabled: "Umami enabled"
+        umamiWebsiteId: "Umami website ID"
+        umamiScriptUrl: "Umami script URL"
+        plausibleEnabled: "Plausible enabled"
+        plausibleDomain: "Plausible domain"
+        plausibleScriptUrl: "Plausible script URL"
+      giscusFields:
+        repo: "Repo"
+        repoId: "Repo ID"
+        category: "Category"
+        categoryId: "Category ID"
+        mapping: "Mapping"
+        inputPosition: "Input position"
+        theme: "Theme"
+        lang: "Language"
+      providerOptions:
+        none: "None"
+        umami: "Umami"
+        plausible: "Plausible"
+    sessions:
+      badge: "Dev Dashboard"
+      title: "Sessions"
+      description: "Manage active login sessions."
+      activeSingle: "active session"
+      activePlural: "active sessions"
+      loading: "Loading…"
+      empty: "No active sessions."
+      actions:
+        revokeOthers: "Revoke all others"
+        refresh: "Refresh"
+        revoke: "Revoke"
+      columns:
+        id: "ID"
+        ip: "IP"
+        browser: "Browser"
+        created: "Created"
+        expires: "Expires"
+      errors:
+        load: "Failed to load sessions"
+    db:
+      title: "Database"
+      description: "Browse tables and run SQL queries against the SQLite database."
+      tables: "Tables"
+      loading: "Loading…"
+      editor:
+        title: "SQL Editor"
+        hint: "Ctrl+Enter to run"
+      actions:
+        run: "Run"
+      results:
+        title: "Results"
+        rowSingle: "row"
+        rowPlural: "rows"
+        null: "NULL"
+      errors:
+        network: "Network error"
+    gitProvider:
+      badge: "Package Test"
+      title: "Git Provider Core"
+      description: "Test the locally installed @ftmahringer/git-provider-core package through its public client API."
+      sections:
+        connection:
+          title: "Connection input"
+          description: "Uses a server route so future tokens or keys can stay off the browser."
+        detectedProvider:
+          title: "Detected provider"
+        repository:
+          title: "Repository"
+        readme:
+          title: "README"
+        docs:
+          title: "Docs"
+        activity:
+          title: "Latest activity"
+      fields:
+        repoUrl: "Repository URL"
+        repoName: "Repository name"
+        provider: "Provider"
+        docsUrl: "Optional docs URL"
+      providerOptions:
+        auto: "Auto detect"
+        forgejo: "Forgejo-compatible"
+        github: "GitHub"
+      actions:
+        testing: "Testing…"
+        testConnection: "Test connection"
+      empty: "Run a test to see provider detection, repo metadata, README, docs, and activity results."
+      errors:
+        title: "Test failed"
+        invalidJson: "Invalid JSON response"
+        requestFailed: "Request failed"
+      meta:
+        provider: "Provider"
+        host: "Host"
+        baseUrl: "Base URL"
+        repo: "Repo"
+        name: "Name"
+        defaultBranch: "Default branch"
+        language: "Language"
+        stars: "Stars"
+        forks: "Forks"
+        updated: "Updated"
+        unknown: "Unknown"
+      readme:
+        source: "Source"
+        chars: "chars"
+      docs:
+        source: "Source"
+        page: "page"
+        pages: "pages"
+        charsTotal: "chars total"
+        empty: "No docs URL was provided or discovered."
+      commit:
+        noMessage: "No commit message"
+        unknownAuthor: "Unknown author"
+        unknownDate: "Unknown date"
+        empty: "No commits returned."
+    authProviders:
+      title: "Auth Providers"
+      description: "Manage OIDC / SSO identity providers for admin login."
+      loading: "Loading…"
+      empty: "No auth providers configured yet."
+      confirmDelete: "Delete provider"
+      optional: "optional"
+      table:
+        provider: "Provider"
+        issuer: "Issuer"
+        enabled: "Enabled"
+        actions: "Actions"
+      actions:
+        addProvider: "Add Provider"
+        edit: "Edit"
+        delete: "Delete"
+        disableProvider: "Disable provider"
+        enableProvider: "Enable provider"
+        copy: "Copy"
+        cancel: "Cancel"
+        saving: "Saving…"
+        saveChanges: "Save Changes"
+      modal:
+        editTitle: "Edit Identity Provider"
+        addTitle: "Add Identity Provider"
+        description: "Configure an OIDC / SSO identity provider for admin login."
+      fields:
+        providerType: "Provider Type"
+        name: "Name"
+        issuerUrl: "Issuer URL"
+        clientId: "Client ID"
+        clientSecret: "Client Secret"
+        callbackUrl: "Redirect / Callback URL"
+        allowedEmail: "Allowed Email"
+      placeholders:
+        name: "My Identity Provider"
+        clientId: "your-client-id"
+        clientSecret: "your-client-secret"
+        keepSecret: "Leave as *** to keep current"
+        allowedEmail: "anyone@example.com"
+      providerTypes:
+        oidc: "OIDC (Generic)"
+        google: "Google"
+        microsoft: "Microsoft"
+        entra: "Microsoft Entra"
+        okta: "Okta"
+        zitadel: "Zitadel"
+        pocketid: "PocketID"
+        authentik: "Authentik"
+        keycloak: "Keycloak"
+      subFields:
+        tenantId: "Tenant ID"
+        domain: "Domain"
+        instance: "Instance"
+        applicationSlug: "Application Slug"
+        realm: "Realm"
+    apiDocs:
+      title: "API Documentation"
+      description: "Interactive OpenAPI reference for the portfolio API."
+      gate:
+        title: "Admin Access Required"
+        description: "You need to be logged in as admin to view the API documentation."
+        back: "Back to site"
+      baseUrl: "Base URL:"
+      openApiJson: "openapi.json ↗"
+      auth:
+        title: "Authentication"
+        description: "Write endpoints require Authorization: Bearer <API_SECRET>. The secret is set by the site owner via the API_SECRET environment variable. Public (read-only) endpoints need no auth."
+      filter:
+        label: "Filter:"
+        all: "All"
+      endpoint:
+        auth: "Auth"
+        parameters: "Parameters"
+        required: "required"
+        oneOf: "one of:"
+        responses: "Responses"
+        exampleCurl: "Example (cURL)"
+        copy: "Copy"
+        copied: "✓ Copied"
+
+public_settings:
+  title: "Public settings"
+  description: "Adjust the visible site options without touching content data."
+  sections:
+    language:
+      title: "Language"
+      description: "Switch the interface language."
+    appearance:
+      title: "Appearance"
+      description: "Tune the visual theme for the public UI."
+
+forms:
+  actions:
+    save: "Save"
+    cancel: "Cancel"
+    delete: "Delete"
+    edit: "Edit"
+  fields:
+    search: "Search"
+    email: "Email"
+    name: "Name"
+
+errors:
+  generic: "Something went wrong."
+  notFound: "That page could not be found."
+  forbidden: "You do not have permission to view this page."
+
+content:
+  title: "Content"
+  empty: "No content available."
+  labels:
+    featured: "Featured"
+    published: "Published"

@@ -40,7 +40,15 @@ const SOCIAL_DEFS: { key: string; label: string; icon: string; href: (v: string)
   },
 ]
 
-export function SocialLinks() {
+interface SocialLinksProps {
+  heading?: string;
+  description?: string;
+}
+
+export function SocialLinks({
+  heading = 'Get in Touch',
+  description = 'Find me on any of these platforms.',
+}: SocialLinksProps) {
   const { social, site } = getSiteConfig()
 
   const links = SOCIAL_DEFS.filter(def => {
@@ -50,9 +58,9 @@ export function SocialLinks() {
 
   return (
     <div className="md:w-64 lg:w-72 flex-shrink-0">
-      <h2 className="text-xl font-bold text-[var(--foreground)] mb-1">Get in Touch</h2>
+      <h2 className="text-xl font-bold text-[var(--foreground)] mb-1">{heading}</h2>
       <p className="text-sm text-[var(--muted)] mb-6">
-        Find me on any of these platforms.
+        {description}
       </p>
 
       <div className="space-y-3">

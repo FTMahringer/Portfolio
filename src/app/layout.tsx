@@ -1,20 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { SettingsProvider } from "@/context/SettingsContext";
 import { DevProvider } from "@/context/DevContext";
 import { SearchProvider } from "@/context/SearchContext";
-import { SettingsDrawer } from "@/components/settings/SettingsDrawer";
-import { SearchModal } from "@/components/search/SearchModal";
-import { ReadingProgress } from "@/components/ui/ReadingProgress";
-import { PageTransition } from "@/components/layout/PageTransition";
 import { Analytics } from "@/components/analytics/Analytics";
-import AdminToolbar from "@/components/admin/AdminToolbar";
-import EditContentButton from "@/components/admin/EditContentButton";
 import { getSiteConfig } from "@/lib/config";
-import { ToolbarLayout } from "@/components/admin/ToolbarLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -75,18 +66,7 @@ export default function RootLayout({
         <SettingsProvider>
           <DevProvider>
             <SearchProvider>
-              <AdminToolbar />
-              <ToolbarLayout>
-                <Header />
-                <ReadingProgress />
-                <PageTransition>
-                  <div className="flex-1">{children}</div>
-                </PageTransition>
-                <Footer />
-                <EditContentButton />
-              </ToolbarLayout>
-              <SettingsDrawer />
-              <SearchModal />
+              {children}
             </SearchProvider>
           </DevProvider>
         </SettingsProvider>

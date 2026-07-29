@@ -1,7 +1,11 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Cookies from "js-cookie";
+
+import { getLocaleFromPath } from "@/lib/locale-routing";
+import { DEFAULT_LOCALE_CODE, isLocaleCode, type LocaleCode } from "@/lib/locale-registry";
 
 export interface Settings {
   theme: "dark" | "light" | "system";
@@ -19,7 +23,7 @@ export interface Settings {
   projectsCardSize: "sm" | "md" | "lg";
   experienceExpanded: boolean;
   showComments: boolean;
-  locale: "en";
+  locale: LocaleCode;
 }
 
 const DEFAULTS: Settings = {
@@ -33,7 +37,7 @@ const DEFAULTS: Settings = {
   projectsCardSize: "md",
   experienceExpanded: false,
   showComments: true,
-  locale: "en",
+  locale: DEFAULT_LOCALE_CODE,
 };
 
 const COOKIE_KEY = "portfolio_settings";
@@ -53,6 +57,10 @@ function normalizeSettings(input: unknown): Settings {
     next.colorBlindMode = 'none';
   }
 
+  if (!isLocaleCode(next.locale)) {
+    next.locale = DEFAULT_LOCALE_CODE;
+  }
+
   return next;
 }
 
@@ -67,6 +75,7 @@ const SettingsContext = createContext<SettingsContextValue>({
 });
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
   const [mounted, setMounted] = useState(false);
 
@@ -81,6 +90,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const pathLocale = getLocaleFromPath(pathname);
+    if (!pathLocale) {
+      return;
+    }
+
+    setSettings((prev) => (prev.locale === pathLocale ? prev : { ...prev, locale: pathLocale }));
+  }, [pathname]);
 
   useEffect(() => {
     if (!mounted) return;

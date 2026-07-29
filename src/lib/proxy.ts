@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { SESSION_COOKIE_NAME } from './constants';
 import { isInternalIP, extractClientIP } from './cidr';
+import { localeForPath, stripLocaleFromPath } from './locale-routing';
+
+const PROTECTED_PAGE_PREFIXES = new Set(['/admin', '/content', '/settings']);
 
 export function adminMiddleware(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
   const normalizedPath = pathname.replace(/\/+$/, '') || '/';
-  const isAdminPage = normalizedPath.startsWith('/admin');
+  const pathWithoutLocale = stripLocaleFromPath(normalizedPath);
+  const isAdminPage =
+    PROTECTED_PAGE_PREFIXES.has(pathWithoutLocale) ||
+    Array.from(PROTECTED_PAGE_PREFIXES).some((prefix) => pathWithoutLocale.startsWith(`${prefix}/`));
   const isAdminApi = normalizedPath.startsWith('/api/admin');
 
   if (!isAdminPage && !isAdminApi) return null;
@@ -33,7 +40,9 @@ export function adminMiddleware(request: NextRequest): NextResponse | null {
     if (isAdminApi) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
-    return NextResponse.redirect(new URL('/', request.url));
+
+    const locale = localeForPath(normalizedPath);
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
   return null; // Cookie present — let the request through; server components will validate DB
