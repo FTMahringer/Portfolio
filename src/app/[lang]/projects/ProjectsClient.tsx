@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useSettings } from '@/context/SettingsContext'
+import { useTranslations } from '@/context/TranslationContext'
 import ProjectGrid from '@/components/projects/ProjectGrid'
 import { ProjectList } from '@/components/projects/ProjectList'
 import { TagBadge } from '@/components/ui/TagBadge'
@@ -21,6 +22,7 @@ const SIZE_COLS: Record<string, string> = {
 
 export default function ProjectsClient({ projects, allTags }: Props) {
   const { settings } = useSettings()
+  const { locale } = useTranslations()
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   const filtered = selectedTag
@@ -54,9 +56,9 @@ export default function ProjectsClient({ projects, allTags }: Props) {
       )}
 
       {settings.projectsView === 'list' ? (
-        <ProjectList projects={filtered} />
+        <ProjectList projects={filtered} locale={locale} />
       ) : (
-        <ProjectGrid projects={filtered} colsClass={SIZE_COLS[settings.projectsCardSize]} />
+        <ProjectGrid projects={filtered} locale={locale} colsClass={SIZE_COLS[settings.projectsCardSize]} />
       )}
     </div>
   )

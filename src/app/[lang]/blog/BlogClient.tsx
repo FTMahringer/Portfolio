@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from '@/context/TranslationContext'
 import BlogCard from '@/components/blog/BlogCard'
 import { TagBadge } from '@/components/ui/TagBadge'
 import type { BlogPost } from '@/lib/types'
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function BlogClient({ posts, allTags }: Props) {
+  const { locale } = useTranslations()
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   const filtered = selectedTag
@@ -47,7 +49,7 @@ export default function BlogClient({ posts, allTags }: Props) {
       {filtered.length > 0 ? (
         <div className="space-y-4">
           {filtered.map(post => (
-            <BlogCard key={post.slug} post={post} />
+            <BlogCard key={post.slug} post={post} locale={locale} />
           ))}
         </div>
       ) : (

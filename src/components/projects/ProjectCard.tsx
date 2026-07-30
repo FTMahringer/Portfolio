@@ -1,17 +1,20 @@
 import Link from 'next/link';
 import Badge from '@/components/ui/Badge';
 import type { Project } from '@/lib/types';
+import { buildLocalePath } from '@/lib/locale-routing';
+import type { LocaleCode } from '@/lib/locale-registry';
 
 interface ProjectCardProps {
   project: Project;
+  locale: LocaleCode;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, locale }: ProjectCardProps) {
   const { frontmatter, slug } = project;
   const stack = frontmatter.stack ?? [];
 
   return (
-    <Link href={`/projects/${slug}`} className="group block h-full">
+    <Link href={buildLocalePath(locale, `/projects/${slug}`)} className="group block h-full">
       <div className="h-full border border-[var(--border)] rounded-lg p-5 bg-[var(--card)] hover:border-[var(--accent)]/50 transition-all duration-200 flex flex-col">
         <div className="flex items-start justify-between gap-2 mb-3">
           <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors line-clamp-1">

@@ -15,6 +15,7 @@ import { resolveHomepageStats } from "@/lib/homepage-stats";
 import { shouldShowFeatureOnHomepage } from "@/lib/site-settings";
 import { getTranslations } from "@/lib/i18n";
 import type { TranslationMap } from "@/lib/translation-types";
+import type { LocaleCode } from "@/lib/locale-registry";
 
 const HERO_SKILLS = [
   "Next.js",
@@ -85,11 +86,11 @@ export default async function HomePage({ params }: PageParams) {
           ))}
         </div>
         <div className="flex flex-wrap gap-3 pt-2">
-          {showProjects && <Button href="/projects">{tr(t, 'public.home.hero.projects', 'View Projects')}</Button>}
-          <Button href="/contact" variant="secondary">
+          {showProjects && <Button href={`/${lang}/projects`}>{tr(t, 'public.home.hero.projects', 'View Projects')}</Button>}
+          <Button href={`/${lang}/contact`} variant="secondary">
             {tr(t, 'public.home.hero.contact', 'Get in Touch')}
           </Button>
-          <Button href="/resume" variant="ghost">
+          <Button href={`/${lang}/resume`} variant="ghost">
             {tr(t, 'public.home.hero.resume', 'Resume ↓')}
           </Button>
         </div>
@@ -97,7 +98,7 @@ export default async function HomePage({ params }: PageParams) {
           <span className="text-sm text-[var(--muted)]">
             {tr(t, 'public.home.hero.aboutPrompt', 'Want to know more about me?')}{" "}
           </span>
-          <Button href="/about" variant="ghost">
+          <Button href={`/${lang}/about`} variant="ghost">
             {tr(t, 'public.home.hero.aboutLink', 'About me →')}
           </Button>
         </div>
@@ -116,13 +117,13 @@ export default async function HomePage({ params }: PageParams) {
               {tr(t, 'public.home.sections.featuredProjects', 'Featured Projects')}
             </h2>
             <Link
-              href="/projects"
+              href={`/${lang}/projects`}
               className="text-sm text-[var(--accent)] hover:underline"
             >
               {tr(t, 'public.home.sections.allProjects', 'All projects →')}
             </Link>
           </div>
-          <ProjectGrid projects={featured} />
+          <ProjectGrid projects={featured} locale={lang as LocaleCode} />
         </section>
       )}
 
@@ -133,7 +134,7 @@ export default async function HomePage({ params }: PageParams) {
               {tr(t, 'public.home.sections.latestPosts', 'Latest Posts')}
             </h2>
             <Link
-              href="/blog"
+              href={`/${lang}/blog`}
               className="text-sm text-[var(--accent)] hover:underline"
             >
               {tr(t, 'public.home.sections.allPosts', 'All posts →')}
@@ -141,7 +142,7 @@ export default async function HomePage({ params }: PageParams) {
           </div>
           <div className="grid gap-4">
             {latestPosts.map((post) => (
-              <BlogCard key={post.slug} post={post} />
+              <BlogCard key={post.slug} post={post} locale={lang as LocaleCode} />
             ))}
           </div>
         </section>

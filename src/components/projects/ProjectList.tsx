@@ -2,12 +2,15 @@
 
 import Link from 'next/link'
 import type { Project } from '@/lib/types'
+import { buildLocalePath } from '@/lib/locale-routing'
+import type { LocaleCode } from '@/lib/locale-registry'
 
 interface Props {
   projects: Project[]
+  locale: LocaleCode
 }
 
-export function ProjectList({ projects }: Props) {
+export function ProjectList({ projects, locale }: Props) {
   if (projects.length === 0) {
     return <p className="text-[var(--muted)]">No projects found.</p>
   }
@@ -17,7 +20,7 @@ export function ProjectList({ projects }: Props) {
       {projects.map(project => (
         <Link
           key={project.slug}
-          href={`/projects/${project.slug}`}
+          href={buildLocalePath(locale, `/projects/${project.slug}`)}
           className="group flex gap-5 border border-[var(--border)] rounded-lg p-5 hover:border-[var(--accent)] transition-colors bg-[var(--card)]"
         >
           <div className="flex-1 min-w-0">

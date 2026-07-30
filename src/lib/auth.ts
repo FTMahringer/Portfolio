@@ -1,4 +1,4 @@
-import { db } from '@/db';
+import { db, sqlite } from '@/db';
 import { sessions } from '@/db/schema';
 import { eq, and, gt } from 'drizzle-orm';
 
@@ -7,7 +7,21 @@ import { SESSION_MAX_AGE_SECONDS } from './constants';
 
 const SESSION_MAX_AGE = SESSION_MAX_AGE_SECONDS;
 
+const authRuntime = globalThis as typeof globalThis & {
+  __portfolioAuthBootResetDone?: boolean;
+};
+
+async function resetSessionsOnBootIfNeeded() {
+  if (authRuntime.__portfolioAuthBootResetDone) {
+    return;
+  }
+
+  sqlite.exec('DELETE FROM sessions;');
+  authRuntime.__portfolioAuthBootResetDone = true;
+}
+
 export async function createSession(userId: number, ip?: string, userAgent?: string) {
+  await resetSessionsOnBootIfNeeded();
   const id = crypto.randomUUID();
   const expiresAt = Math.floor(Date.now() / 1000) + SESSION_MAX_AGE;
 
@@ -24,6 +38,7 @@ export async function createSession(userId: number, ip?: string, userAgent?: str
 }
 
 export async function validateSession(sessionId: string | undefined) {
+  await resetSessionsOnBootIfNeeded();
   if (!sessionId) return null;
 
   const now = Math.floor(Date.now() / 1000);

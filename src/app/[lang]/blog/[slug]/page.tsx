@@ -13,9 +13,11 @@ import { isFeatureEnabled } from '@/lib/site-settings';
 import { notFound } from 'next/navigation';
 import { getRelatedPosts } from '@/lib/related';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
+import { buildLocalePath } from '@/lib/locale-routing';
+import type { LocaleCode } from '@/lib/locale-registry';
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -34,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   if (!isFeatureEnabled('blog')) notFound();
 
-  const { slug } = await params;
+  const { lang, slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) notFound();
   const headings = extractHeadings(post.content);
@@ -44,7 +46,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
       <TableOfContents headings={headings} depth={3} />
-      <Button href="/blog" variant="ghost" className="mb-8 -ml-1">
+      <Button href={buildLocalePath(lang as LocaleCode, '/blog')} variant="ghost" className="mb-8 -ml-1">
         ← Back to Blog
       </Button>
 
@@ -70,7 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
       </article>
 
       {/* Related Posts */}
-      <RelatedPosts posts={relatedPosts} />
+      <RelatedPosts posts={relatedPosts} locale={lang as LocaleCode} />
 
       {/* Comments */}
       {giscus?.enabled && (

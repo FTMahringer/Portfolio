@@ -13,6 +13,8 @@ import { PageTransition } from "@/components/layout/PageTransition";
 import { ToolbarLayout } from "@/components/admin/ToolbarLayout";
 import AdminToolbar from "@/components/admin/AdminToolbar";
 import EditContentButton from "@/components/admin/EditContentButton";
+import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
+import { PublicSettingsDrawerProvider } from "@/context/PublicSettingsDrawerContext";
 
 export function generateStaticParams() {
   return Object.keys(LOCALES).map((lang) => ({ lang }));
@@ -35,18 +37,21 @@ export default async function LangLayout({
 
   return (
     <TranslationProvider locale={lang} translations={translations}>
-      <AdminToolbar />
-      <ToolbarLayout>
-        <Header />
-        <ReadingProgress />
-        <PageTransition>
-          <div className="flex-1">{children}</div>
-        </PageTransition>
-        <Footer />
-        <EditContentButton />
-      </ToolbarLayout>
-      <SettingsDrawer />
-      <SearchModal />
+      <PublicSettingsDrawerProvider>
+        <AdminToolbar />
+        <ToolbarLayout>
+          <Header />
+          <ReadingProgress />
+          <PageTransition>
+            <div className="flex-1">{children}</div>
+          </PageTransition>
+          <Footer />
+          <EditContentButton />
+        </ToolbarLayout>
+        <SettingsDrawer />
+        <ScrollToTopButton />
+        <SearchModal />
+      </PublicSettingsDrawerProvider>
     </TranslationProvider>
   );
 }

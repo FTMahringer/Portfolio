@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useSettings } from "@/context/SettingsContext";
-import PublicSettingsPanel, {
-  type PublicSettingsSectionKey,
-} from "./PublicSettingsPanel";
-import PublicSettingsTrigger from "./PublicSettingsTrigger";
+import PublicSettingsPanel from "./PublicSettingsPanel";
 
 export function SettingsDrawer() {
   const { settings, update } = useSettings();
-  const [open, setOpen] = useState(false);
-  const [section, setSection] = useState<PublicSettingsSectionKey>("appearance");
 
   return (
     <>
@@ -40,18 +34,7 @@ export function SettingsDrawer() {
         </defs>
       </svg>
 
-      <PublicSettingsTrigger open={open} onClick={() => setOpen((current) => !current)} />
-
-      <PublicSettingsPanel
-        open={open}
-        section={section}
-        onSectionChange={setSection}
-        onClose={() => setOpen(false)}
-        settings={settings}
-        update={update}
-      />
+      <PublicSettingsPanel settings={settings} update={update} />
     </>
   );
 }
-
-export type { PublicSettingsSectionKey } from "./PublicSettingsPanel";

@@ -6,9 +6,10 @@ import ProjectCard from '@/components/projects/ProjectCard';
 import BlogCard from '@/components/blog/BlogCard';
 import { isFeatureEnabled } from '@/lib/site-settings';
 import type { Metadata } from 'next';
+import type { LocaleCode } from '@/lib/locale-registry';
 
 interface Props {
-  params: Promise<{ tag: string }>;
+  params: Promise<{ lang: string; tag: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TagPage({ params }: Props) {
-  const { tag: tagSlug } = await params;
+  const { lang, tag: tagSlug } = await params;
 
   const projects = isFeatureEnabled('projects')
     ? getAllProjects().filter(p =>
@@ -62,7 +63,7 @@ export default async function TagPage({ params }: Props) {
             Projects <span className="text-[var(--muted)] font-normal text-base">({projects.length})</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {projects.map(p => <ProjectCard key={p.slug} project={p} />)}
+            {projects.map(p => <ProjectCard key={p.slug} project={p} locale={lang as LocaleCode} />)}
           </div>
         </section>
       )}
@@ -73,7 +74,7 @@ export default async function TagPage({ params }: Props) {
             Blog Posts <span className="text-[var(--muted)] font-normal text-base">({posts.length})</span>
           </h2>
           <div className="space-y-4">
-            {posts.map(p => <BlogCard key={p.slug} post={p} />)}
+            {posts.map(p => <BlogCard key={p.slug} post={p} locale={lang as LocaleCode} />)}
           </div>
         </section>
       )}

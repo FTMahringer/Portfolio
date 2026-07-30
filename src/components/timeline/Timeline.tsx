@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { TimelineEntry } from '@/lib/timeline';
 import { useTranslations } from '@/context/TranslationContext';
+import { buildLocalePath } from '@/lib/locale-routing';
 
 interface TimelineProps {
   entries: TimelineEntry[];
@@ -67,7 +68,7 @@ export function Timeline({ entries }: TimelineProps) {
                   <div className="flex-1">
                     {entry.slug ? (
                       <Link
-                        href={`/projects/${entry.slug}`}
+                        href={buildLocalePath(locale, `/projects/${entry.slug}`)}
                         className="text-lg font-semibold text-[var(--foreground)] hover:text-[var(--accent)] transition-colors"
                       >
                         {entry.title}

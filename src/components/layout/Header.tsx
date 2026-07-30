@@ -9,6 +9,7 @@ import { useDevMode } from '@/context/DevContext';
 import AdminLoginModal from '@/components/admin/AdminLoginModal';
 import { buildLocalePath } from '@/lib/locale-routing';
 import { useTranslations } from '@/context/TranslationContext';
+import PublicSettingsTrigger from '@/components/settings/PublicSettingsTrigger';
 
 type PublicNavigationSettings = {
   features: Record<ContentFeatureKey, FeatureSettings>;
@@ -75,6 +76,7 @@ export default function Header() {
           </nav>
           <div className="flex items-center gap-2">
             <SearchButton />
+            <PublicSettingsTrigger />
             {showLogin && (
               <button
                 type="button"

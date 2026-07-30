@@ -1,11 +1,14 @@
 import Link from 'next/link';
-import { BlogPost } from '@/lib/mdx';
+import type { BlogPost } from '@/lib/types';
+import { buildLocalePath } from '@/lib/locale-routing';
+import type { LocaleCode } from '@/lib/locale-registry';
 
 interface RelatedPostsProps {
   posts: BlogPost[];
+  locale: LocaleCode;
 }
 
-export function RelatedPosts({ posts }: RelatedPostsProps) {
+export function RelatedPosts({ posts, locale }: RelatedPostsProps) {
   if (posts.length === 0) return null;
 
   const formatDate = (dateString: string) => {
@@ -21,7 +24,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
         {posts.map((post) => (
           <Link
             key={post.slug}
-            href={`/blog/${post.slug}`}
+            href={buildLocalePath(locale, `/blog/${post.slug}`)}
             className="group block p-4 bg-[var(--card)] border border-[var(--border)] rounded-lg hover:border-[var(--accent)] transition-all"
           >
             <h3 className="font-semibold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors mb-2">

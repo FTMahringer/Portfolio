@@ -6,9 +6,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { isFeatureEnabled } from '@/lib/site-settings';
 import type { Metadata } from 'next';
+import { buildLocalePath } from '@/lib/locale-routing';
+import type { LocaleCode } from '@/lib/locale-registry';
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ lang: string; slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -50,7 +52,7 @@ function formatPeriod(start?: string, end?: string): string {
 export default async function ExperienceDetailPage({ params }: Props) {
   if (!isFeatureEnabled('experience')) notFound();
 
-  const { slug } = await params;
+  const { lang, slug } = await params;
   const exp = getExperienceBySlug(slug);
   if (!exp) notFound();
 
@@ -65,7 +67,7 @@ export default async function ExperienceDetailPage({ params }: Props) {
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
       <Link
-        href="/experience"
+        href={buildLocalePath(lang as LocaleCode, '/experience')}
         className="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--accent)] transition-colors mb-8"
       >
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -179,7 +181,7 @@ export default async function ExperienceDetailPage({ params }: Props) {
                   return (
                     <Link
                       key={proj.slug}
-                      href={`/projects/${proj.slug}`}
+                      href={buildLocalePath(lang as LocaleCode, `/projects/${proj.slug}`)}
                       className="flex items-center justify-between gap-2 p-3 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:border-[var(--accent)]/50 transition-colors group text-sm"
                     >
                       <span className="text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors truncate font-medium">

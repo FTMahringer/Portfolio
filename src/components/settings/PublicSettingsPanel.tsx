@@ -3,20 +3,12 @@
 import { useEffect, useRef } from "react";
 import type { Settings } from "@/context/SettingsContext";
 import { useTranslations } from "@/context/TranslationContext";
+import { usePublicSettingsDrawer } from "@/context/PublicSettingsDrawerContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import PublicSettingsSection from "./PublicSettingsSection";
-
-export type PublicSettingsSectionKey =
-  | "appearance"
-  | "projects"
-  | "experience"
-  | "accessibility";
+import type { PublicSettingsSectionKey } from "./public-settings-types";
 
 interface PublicSettingsPanelProps {
-  open: boolean;
-  section: PublicSettingsSectionKey;
-  onSectionChange: (section: PublicSettingsSectionKey) => void;
-  onClose: () => void;
   settings: Settings;
   update: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
 }
@@ -29,14 +21,11 @@ const SECTION_ORDER: PublicSettingsSectionKey[] = [
 ];
 
 export default function PublicSettingsPanel({
-  open,
-  section,
-  onSectionChange,
-  onClose,
   settings,
   update,
 }: PublicSettingsPanelProps) {
   const { t } = useTranslations();
+  const { open, section, setSection, closeDrawer } = usePublicSettingsDrawer();
   const panelRef = useRef<HTMLElement | null>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const openRef = useRef(open);
@@ -52,7 +41,7 @@ export default function PublicSettingsPanel({
       (focusTarget ?? panelRef.current)?.focus();
 
       const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape") onClose();
+        if (event.key === "Escape") closeDrawer();
       };
 
       document.addEventListener("keydown", onKeyDown);
@@ -67,7 +56,7 @@ export default function PublicSettingsPanel({
 
     openRef.current = open;
     return undefined;
-  }, [open, onClose]);
+  }, [open, closeDrawer]);
 
   const accentOptions = [
     { value: "cyan", label: t("settings.drawer.accent.options.cyan"), color: "#06b6d4" },
@@ -92,8 +81,8 @@ export default function PublicSettingsPanel({
     <>
       <div
         aria-hidden="true"
-        className="fixed inset-0 z-[260] cursor-default bg-[color:rgba(15,23,42,0.28)] backdrop-blur-[2px]"
-        onClick={onClose}
+        className="fixed inset-0 z-[340] cursor-default bg-[color:rgba(15,23,42,0.28)] backdrop-blur-[2px]"
+        onClick={closeDrawer}
       />
 
       <aside
@@ -102,7 +91,7 @@ export default function PublicSettingsPanel({
         aria-modal="true"
         aria-labelledby="public-settings-title"
         tabIndex={-1}
-        className="fixed bottom-4 left-4 right-4 z-[270] max-h-[calc(100vh-2rem)] overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] shadow-[0_24px_60px_rgba(15,23,42,0.18)] sm:left-auto sm:right-6 sm:w-[24rem] sm:max-w-[calc(100vw-3rem)]"
+        className="fixed top-16 left-4 right-4 z-[350] max-h-[calc(100vh-5rem)] overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] shadow-[0_24px_60px_rgba(15,23,42,0.18)] sm:left-auto sm:right-6 sm:w-[24rem] sm:max-w-[calc(100vw-3rem)]"
       >
         <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] bg-[var(--muted-bg)]/45 px-4 py-4">
           <div>
@@ -120,7 +109,7 @@ export default function PublicSettingsPanel({
           <button
             type="button"
             data-settings-initial-focus="true"
-            onClick={onClose}
+            onClick={closeDrawer}
             className="grid size-9 place-items-center rounded-full border border-[var(--border)] bg-[var(--background)] text-[var(--muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             aria-label={t("settings.drawer.close")}
           >
@@ -137,7 +126,7 @@ export default function PublicSettingsPanel({
                 <button
                   key={key}
                   type="button"
-                  onClick={() => onSectionChange(key)}
+                  onClick={() => setSection(key)}
                   className={`rounded-full px-3 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${isActive ? "bg-[var(--accent)] text-white" : "bg-[var(--muted-bg)] text-[var(--muted)] hover:text-[var(--foreground)]"}`}
                 >
                   {t(`settings.drawer.sections.${key}`)}
@@ -147,7 +136,7 @@ export default function PublicSettingsPanel({
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-11rem)] overflow-y-auto px-4 py-4">
+        <div className="max-h-[calc(100vh-10rem)] overflow-y-auto px-4 py-4">
           {activeSection === "appearance" && (
             <div className="space-y-4">
               <LanguageSwitcher />

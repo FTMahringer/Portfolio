@@ -1,14 +1,11 @@
 "use client";
 
 import { useTranslations } from "@/context/TranslationContext";
+import { usePublicSettingsDrawer } from "@/context/PublicSettingsDrawerContext";
 
-interface PublicSettingsTriggerProps {
-  open: boolean;
-  onClick: () => void;
-}
-
-export default function PublicSettingsTrigger({ open, onClick }: PublicSettingsTriggerProps) {
+export default function PublicSettingsTrigger() {
   const { t } = useTranslations();
+  const { open, toggleDrawer } = usePublicSettingsDrawer();
 
   return (
     <button
@@ -16,10 +13,10 @@ export default function PublicSettingsTrigger({ open, onClick }: PublicSettingsT
       aria-label={open ? t('settings.drawer.trigger.close') : t('settings.drawer.trigger.open')}
       aria-expanded={open}
       aria-haspopup="dialog"
-      onClick={onClick}
-      className="fixed bottom-4 right-4 z-[280] inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)] px-4 py-3 text-sm font-medium text-[var(--foreground)] shadow-[0_12px_30px_rgba(15,23,42,0.12)] backdrop-blur-md transition-transform hover:-translate-y-0.5 hover:bg-[var(--muted-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] sm:bottom-6 sm:right-6"
+      onClick={toggleDrawer}
+      className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--muted-bg)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
     >
-      <span className="grid size-8 place-items-center rounded-full bg-[var(--muted-bg)] text-[var(--accent)]">
+      <span className="grid size-6 place-items-center rounded-md bg-[var(--background)] text-[var(--accent)]">
         ⚙
       </span>
       <span className="whitespace-nowrap">{t('settings.drawer.trigger.label')}</span>
